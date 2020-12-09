@@ -1,0 +1,17 @@
+FROM php:7.3-apache
+
+# enable rewrite for Laravel pretty URLs
+RUN a2enmod rewrite
+# change apache webroot from / to /public/
+RUN sed -i s/"DocumentRoot \/var\/www\/html"/"DocumentRoot \/var\/www\/html\/public"/ /etc/apache2/sites-available/000-default.conf
+
+RUN apt-get update \
+    && apt-get install -y \
+       libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install xml opcache pdo_mysql
+
+ADD web /var/www/html
+RUN chmod +w -R /var/www/html/bootstrap/cache
+RUN chmod +w -R /var/www/html/storage
