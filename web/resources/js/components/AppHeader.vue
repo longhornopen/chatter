@@ -2,7 +2,7 @@
 export default {
     data() {
         return {
-            //
+            course_name: this.$store.getters.course_summary.name,
         };
     }
 }
@@ -10,7 +10,7 @@ export default {
 
 <template>
     <div class="d-flex justify-content-between">
-        <div>(Chatter logo) ABC 123: Name of Course</div>
+        <div>{{ course_name }}</div>
         <div>Search: [______] (Search)</div>
         <div><i class="fas fa-cog"></i> <font-awesome-icon icon="cog"/> Settings</div>
     </div>

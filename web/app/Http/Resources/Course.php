@@ -17,7 +17,7 @@ class Course extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'topics' => Post::collection($this->topics),
+            'posts' => Post::collection($this->posts),
         ];
     }
 }

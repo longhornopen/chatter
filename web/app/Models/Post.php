@@ -16,12 +16,12 @@ class Post extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function posts(): HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function readPosts(): HasMany
+    public function readComments(): HasMany
     {
         return $this->hasMany(CommentReadUsers::class);
     }

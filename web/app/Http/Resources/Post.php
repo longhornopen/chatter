@@ -20,8 +20,8 @@ class Post extends JsonResource
             'body' => $this->body,
             'pinned' => $this->pinned,
             'created_at' => $this->created_at,
-            'num_posts' => $this->posts->count(),
-            'num_read_posts' => $this->readPosts
+            'num_comments' => $this->comments->count(),
+            'num_read_comments' => $this->readComments
                 ->where('course_user_id',$request->attributes->get('course_user_id'))
                 ->count(),
         ];

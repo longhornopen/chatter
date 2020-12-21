@@ -2,7 +2,7 @@
 export default {
     data() {
         return {
-            //
+            'post': this.$store.getters.currently_viewed_post,
         };
     }
 }
@@ -10,15 +10,15 @@ export default {
 
 <template>
     <div>
-        <div style="border-left:solid 3px red;">
-        <div style="font-weight:bold;font-size:120%;">What is Chatter?</div>
-        <div style="font-style:italic;font-size:80%;">Chris, 12/08/2020 11:14AM</div>
-        <div>So, what is this "Chatter" thing?  Does <b>anybody</b> know?</div>
+        <div>
+            <div style="font-weight:bold;font-size:120%;">{{ post.title }}</div>
+            <div style="font-style:italic;font-size:80%;">{{ post.author_user_name }}, {{ post.created_at }}</div>
+            <div>{{ post.body }}</div>
         </div>
         <div style="padding-left:20px;">
-            <div style="border-left:solid 2px green;margin-bottom:10px;"><comment-display></comment-display></div>
-            <div style="border-left:solid 2px green;margin-bottom:10px;"><comment-display></comment-display></div>
-            <div style="border-left:solid 2px green;margin-bottom:10px;"><comment-display></comment-display></div>
+            <div v-for="comment in post.comments">
+                <comment-display :comment="comment"></comment-display>
+            </div>
             <comment-create></comment-create>
         </div>
     </div>
