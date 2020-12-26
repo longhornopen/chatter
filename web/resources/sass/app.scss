@@ -6,3 +6,45 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.app-title-bar {
+    .app-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .app-title {
+
+    }
+}
+
+.app-header-bar {
+    background-color: $pink;
+
+    .btn-search-submit {
+        @include button-variant($green, $blue, $red);
+    }
+
+    .settings-control {
+        a:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.app-post-list {
+    background-color: $teal;
+
+    .btn-post-topic {
+        @include button-variant($green, $blue, $red);
+        width: 100%;
+    }
+
+    .app-post-list-body {
+
+    }
+}
+
+.app-post-display {
+    background-color: $cyan;
+}
