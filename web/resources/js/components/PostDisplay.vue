@@ -13,12 +13,14 @@ export default {
     methods: {
         pin(pinned) {
             console.log('set pinned for this post to '+pinned);
+            this.$store.getters.currently_viewed_post.pinned = pinned;
         },
         remove() {
             console.log('remove this post');
         },
         lock(locked) {
             console.log('set locked for this post to '+locked);
+            this.$store.getters.currently_viewed_post.locked = locked;
         },
     },
 }
@@ -27,49 +29,45 @@ export default {
 <template>
     <div class="app-post-display">
         <div>
-            <div>
+            <h2>
                 {{ post.title }}
-            </div>
+            </h2>
             <div>
                 {{ post.author_user_name }} {{ post.created_at }}
             </div>
-            <div>
+            <div class="post-display-body">
                 {{ post.body }}
             </div>
-            <div>
-                <div>
-                    <button
-                        class="btn"
-                        :class="user_is_teacher?'':'d-none'"
-                        @click="pin(true)"
-                    >Pin</button>
-                    <button
-                        class="btn"
-                        :class="user_is_teacher?'':'d-none'"
-                        @click="pin(false)"
-                    >Unpin</button>
-                    <button
-                        class="btn"
-                        :class="user_is_teacher?'':'d-none'"
-                        @click="remove()"
-                    >Remove</button>
-                    <button
-                        class="btn"
-                        :class="user_is_teacher?'':'d-none'"
-                        @click="lock(true)"
-                    >Lock</button>
-                    <button
-                        class="btn"
-                        :class="user_is_teacher?'':'d-none'"
-                        @click="lock(false)"
-                    >Unlock</button>
+            <!-- <div> -->
+                <div class="btn-groups">
+                    <div class="left">
+                        <button
+                            class="btn btn-blue"
+                            :class="user_is_teacher?'':'d-none'"
+                            @click="pin(!post.pinned)"
+                        >{{post.pinned ? "Unpin" : "Pin"}}</button>
+                        <button
+                            class="btn btn-blue"
+                            :class="user_is_teacher?'':'d-none'"
+                            @click="remove()"
+                        >Remove</button>
+                        <button
+                            class="btn btn-blue"
+                            :class="user_is_teacher?'':'d-none'"
+                            @click="lock(!post.locked)"
+                        >{{post.locked ? "Unlock" : "Lock"}}</button>
+                    </div>
+                    
+                    <div class="right">
+                        <button class="btn btn-orange">Comment</button>
+                    </div>
                 </div>
-                <div>
-                    <button class="btn">Comment</button>
-                </div>
-            </div>
+                <!-- <div>
+                    <button class="btn btn-orange">Comment</button>
+                </div> -->
+            <!-- </div> -->
         </div>
-        <div style="padding-left:20px;">
+        <div class="comments">
             <div v-for="comment in post.comments">
                 <comment-display :comment="comment"></comment-display>
             </div>

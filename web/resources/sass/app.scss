@@ -9,17 +9,27 @@
 
 .app-title-bar {
     .app-logo {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
+        margin: 0 10px 0 0;
     }
 
     .app-title {
-
+        font-size: x-large;
+        font-weight: 900;
     }
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
 }
 
 .app-header-bar {
-    background-color: $pink;
+    background-color: $gray;
+    padding: 10px;
+
+    .justify-content-between {
+        align-items: center;
+    }
 
     .btn-search-submit {
         @include button-variant($green, $blue, $red);
@@ -30,21 +40,143 @@
             cursor: pointer;
         }
     }
+    .course_name {
+        color: $white;
+        font-size: large;
+    }
+    .form-inline {
+        .form-control, .form-control:focus {
+            background-color: $darkgray;
+            border-radius: 6px;
+            border: none;
+            color: $white;
+            margin: 0 10px 0 0;
+        }
+        // .form-control:focus, .btn-search-submit:focus {
+        //     box-shadow: 0 0 0 0.2rem rgba(179, 92, 34, 0.25);
+        // }
+
+        .btn-search-submit {
+            background-color: $darkgray;
+            border: none;
+            border-radius: 6px;
+        }
+        .btn-search-submit:hover {
+            background-color: $orange;
+        }
+    }
+    .settings-control {
+        font-size: 1.5rem;
+    }
 }
 
 .app-post-list {
-    background-color: $teal;
-
+    background-color: $lightgray;
+    padding: 10px;
+    height: 100%;
+    .nav-tabs {
+        display: flex;
+        .nav-item {
+            flex: 1;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            background-color: $gray;
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+            a, a:hover, a:visited {
+                color: $white;
+            }
+            .nav-link {
+                height: 100%;
+            }
+            .nav-link.active {
+                background: $darkgray;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+        } 
+        
+    }
     .btn-post-topic {
-        @include button-variant($green, $blue, $red);
+        // @include button-variant($green, $blue, $red);
         width: 100%;
+        background-color: $orange;
+        color: $white;
+        border-radius: 0;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        position: absolute;
+        bottom: 0;
     }
 
     .app-post-list-body {
+        background-color: $body-bg;
+        height: 100%;
+        position: relative;
 
+        .post {
+            background-color: $body-bg;
+            padding: 10px;
+            border-bottom: 0.25px dotted $lightgray;
+            .post-misc-info {
+                color: $darkergray;
+            }
+            .post-title {
+                margin: 0;
+            }
+            .post-btn-group {
+                display: flex;
+                justify-content: flex-end;
+                span {
+                    margin: 0 0 0 5px;
+                    color: $white;
+                }
+                .badge-unread {
+                    background-color: $darkergray;
+                }
+                .badge-read {
+                    background-color: $middlegray;
+                }
+            }
+        }
     }
 }
 
 .app-post-display {
-    background-color: $cyan;
+    // background-color: $cyan;
+    padding: 30px;
+    .post-display-body {
+        border-radius: 6px;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        padding: 10px;
+        margin: 10px 0;
+        
+    }
+    .btn-groups {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        .btn {
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        }
+    }
+    .btn-blue {
+        background-color: $blue;
+        color: $white;
+        margin: 0 10px 0 0;
+    }
+    .btn-orange {
+        background-color: $orange;
+        color: $white;
+    }
+    .comments {
+        margin: 20px 0;
+        .comment-body {
+            background-color: $commentgray;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+    }
+    
 }

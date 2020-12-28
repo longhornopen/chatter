@@ -44,7 +44,7 @@ export default {
                 class="settings-control"
                 @click="open_settings()"
             >
-                <font-awesome-icon icon="cog"/>
+                <font-awesome-icon color="white" icon="cog"/>
             </div>
         </div>
     </div>

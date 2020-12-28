@@ -37,6 +37,16 @@ store.state.course_summary = {
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":17,
             "num_unread_comments":2
+        },
+        {
+            "id":2,
+            "creator_user_name":"Tammy Teacher",
+            "title":"post #2",
+            "body":"test body",
+            "pinned":false,
+            "created_at":"2020-12-21T09:17:11.000000Z",
+            "num_comments":18,
+            "num_unread_comments":2
         }
     ]
 };
@@ -48,6 +58,7 @@ store.state.currently_viewed_post =
         'title':'post #1',
         'body':'test body',
         'pinned':false,
+        'locked':false,
         'created_at':"2020-12-21T09:17:11.000000Z",
         comments: [
             {
