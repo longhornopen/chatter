@@ -100,7 +100,8 @@ store.state.currently_viewed_post =
 };
 
 store.actions = {
-
+    // will actually have save comment function later
+    // for now it can just pop up alert or print out "saved"
 }
 
 new Vue({
