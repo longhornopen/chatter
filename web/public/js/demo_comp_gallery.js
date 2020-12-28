@@ -12,18 +12,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue_
 
 /***/ }),
 
-/***/ "./resources/js/store.js":
-/*!*******************************!*\
-  !*** ./resources/js/store.js ***!
-  \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.common.js\");\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ \"./node_modules/vuex/dist/vuex.esm.js\");\n\n\nvue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\nvar state = {\n  course_summary: {},\n  currently_viewed_post: {},\n  user: {}\n};\nvar getters = {\n  course_summary: function course_summary(state) {\n    return state.course_summary;\n  },\n  currently_viewed_post: function currently_viewed_post(state) {\n    return state.currently_viewed_post;\n  },\n  user: function user(state) {\n    return state.user;\n  }\n};\nvar mutations = {};\nvar actions = {};\n/* harmony default export */ __webpack_exports__[\"default\"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__[\"default\"].Store({\n  state: state,\n  getters: getters,\n  actions: actions,\n  mutations: mutations\n}));//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvc3RvcmUuanM/MjVjZSJdLCJuYW1lcyI6WyJWdWUiLCJ1c2UiLCJWdWV4Iiwic3RhdGUiLCJjb3Vyc2Vfc3VtbWFyeSIsImN1cnJlbnRseV92aWV3ZWRfcG9zdCIsInVzZXIiLCJnZXR0ZXJzIiwibXV0YXRpb25zIiwiYWN0aW9ucyIsIlN0b3JlIl0sIm1hcHBpbmdzIjoiQUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQ0E7QUFFQUEsMENBQUcsQ0FBQ0MsR0FBSixDQUFRQyw0Q0FBUjtBQUVBLElBQU1DLEtBQUssR0FBRztBQUNWQyxnQkFBYyxFQUFFLEVBRE47QUFFVkMsdUJBQXFCLEVBQUUsRUFGYjtBQUdWQyxNQUFJLEVBQUU7QUFISSxDQUFkO0FBTUEsSUFBTUMsT0FBTyxHQUFHO0FBQ1pILGdCQUFjLEVBQUUsd0JBQUFELEtBQUssRUFBSTtBQUFFLFdBQU9BLEtBQUssQ0FBQ0MsY0FBYjtBQUE4QixHQUQ3QztBQUVaQyx1QkFBcUIsRUFBRSwrQkFBQUYsS0FBSyxFQUFJO0FBQUUsV0FBT0EsS0FBSyxDQUFDRSxxQkFBYjtBQUFxQyxHQUYzRDtBQUdaQyxNQUFJLEVBQUUsY0FBQUgsS0FBSyxFQUFJO0FBQUUsV0FBT0EsS0FBSyxDQUFDRyxJQUFiO0FBQW9CO0FBSHpCLENBQWhCO0FBTUEsSUFBTUUsU0FBUyxHQUFHLEVBQWxCO0FBSUEsSUFBTUMsT0FBTyxHQUFHLEVBQWhCO0FBSWUsbUVBQUlQLDRDQUFJLENBQUNRLEtBQVQsQ0FBZTtBQUMxQlAsT0FBSyxFQUFMQSxLQUQwQjtBQUUxQkksU0FBTyxFQUFQQSxPQUYwQjtBQUcxQkUsU0FBTyxFQUFQQSxPQUgwQjtBQUkxQkQsV0FBUyxFQUFUQTtBQUowQixDQUFmLENBQWYiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvc3RvcmUuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgVnVlIGZyb20gJ3Z1ZSdcbmltcG9ydCBWdWV4IGZyb20gJ3Z1ZXgnXG5cblZ1ZS51c2UoVnVleCk7XG5cbmNvbnN0IHN0YXRlID0ge1xuICAgIGNvdXJzZV9zdW1tYXJ5OiB7fSxcbiAgICBjdXJyZW50bHlfdmlld2VkX3Bvc3Q6IHt9LFxuICAgIHVzZXI6IHt9LFxufVxuXG5jb25zdCBnZXR0ZXJzID0ge1xuICAgIGNvdXJzZV9zdW1tYXJ5OiBzdGF0ZSA9PiB7IHJldHVybiBzdGF0ZS5jb3Vyc2Vfc3VtbWFyeTsgfSxcbiAgICBjdXJyZW50bHlfdmlld2VkX3Bvc3Q6IHN0YXRlID0+IHsgcmV0dXJuIHN0YXRlLmN1cnJlbnRseV92aWV3ZWRfcG9zdDsgfSxcbiAgICB1c2VyOiBzdGF0ZSA9PiB7IHJldHVybiBzdGF0ZS51c2VyOyB9LFxufVxuXG5jb25zdCBtdXRhdGlvbnMgPSB7XG5cbn1cblxuY29uc3QgYWN0aW9ucyA9IHtcblxufVxuXG5leHBvcnQgZGVmYXVsdCBuZXcgVnVleC5TdG9yZSh7XG4gICAgc3RhdGUsXG4gICAgZ2V0dGVycyxcbiAgICBhY3Rpb25zLFxuICAgIG11dGF0aW9uc1xufSk7XG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./resources/js/store.js\n");
-
-/***/ }),
-
 /***/ 1:
 /*!******************************************************!*\
   !*** multi ./resources/js/demo_component_gallery.js ***!

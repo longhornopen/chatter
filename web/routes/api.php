@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/course/{course_id}/summary', [ApiController::class, 'getCourseSummary']);
+Route::get('/course/{course_id}/user/self', [ApiController::class, 'getUserSelf']);
+Route::get('/course/{course_id}/post/{post_id}', [ApiController::class, 'getPost']);
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

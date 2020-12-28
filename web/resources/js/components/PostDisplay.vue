@@ -2,11 +2,14 @@
 export default {
     data() {
         return {
-            'post': this.$store.getters.currently_viewed_post,
+
         };
     },
     computed: {
-        user_is_teacher: function() {
+        post() {
+            return this.$store.getters.currently_viewed_post;
+        },
+        user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
         }
     },
