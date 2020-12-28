@@ -10903,3 +10903,107 @@ a.text-dark:focus {
   }
 }
 
+.app-title-bar .app-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.app-header-bar {
+  background-color: #f66d9b;
+}
+
+.app-header-bar .btn-search-submit {
+  color: #fff;
+  background-color: #38c172;
+  border-color: #3490dc;
+}
+
+.app-header-bar .btn-search-submit:hover {
+  color: #fff;
+  background-color: #e3342f;
+  border-color: #2176bd;
+}
+
+.app-header-bar .btn-search-submit:focus,
+.app-header-bar .btn-search-submit.focus {
+  color: #fff;
+  background-color: #e3342f;
+  border-color: #2176bd;
+  box-shadow: 0 0 0 0.2rem rgba(82, 161, 225, 0.5);
+}
+
+.app-header-bar .btn-search-submit.disabled,
+.app-header-bar .btn-search-submit:disabled {
+  color: #fff;
+  background-color: #38c172;
+  border-color: #3490dc;
+}
+
+.app-header-bar .btn-search-submit:not(:disabled):not(.disabled):active,
+.app-header-bar .btn-search-submit:not(:disabled):not(.disabled).active,
+.show > .app-header-bar .btn-search-submit.dropdown-toggle {
+  color: #fff;
+  background-color: #2d995b;
+  border-color: #1f6fb2;
+}
+
+.app-header-bar .btn-search-submit:not(:disabled):not(.disabled):active:focus,
+.app-header-bar .btn-search-submit:not(:disabled):not(.disabled).active:focus,
+.show > .app-header-bar .btn-search-submit.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(82, 161, 225, 0.5);
+}
+
+.app-header-bar .settings-control a:hover {
+  cursor: pointer;
+}
+
+.app-post-list {
+  background-color: #4dc0b5;
+}
+
+.app-post-list .btn-post-topic {
+  color: #fff;
+  background-color: #38c172;
+  border-color: #3490dc;
+  width: 100%;
+}
+
+.app-post-list .btn-post-topic:hover {
+  color: #fff;
+  background-color: #e3342f;
+  border-color: #2176bd;
+}
+
+.app-post-list .btn-post-topic:focus,
+.app-post-list .btn-post-topic.focus {
+  color: #fff;
+  background-color: #e3342f;
+  border-color: #2176bd;
+  box-shadow: 0 0 0 0.2rem rgba(82, 161, 225, 0.5);
+}
+
+.app-post-list .btn-post-topic.disabled,
+.app-post-list .btn-post-topic:disabled {
+  color: #fff;
+  background-color: #38c172;
+  border-color: #3490dc;
+}
+
+.app-post-list .btn-post-topic:not(:disabled):not(.disabled):active,
+.app-post-list .btn-post-topic:not(:disabled):not(.disabled).active,
+.show > .app-post-list .btn-post-topic.dropdown-toggle {
+  color: #fff;
+  background-color: #2d995b;
+  border-color: #1f6fb2;
+}
+
+.app-post-list .btn-post-topic:not(:disabled):not(.disabled):active:focus,
+.app-post-list .btn-post-topic:not(:disabled):not(.disabled).active:focus,
+.show > .app-post-list .btn-post-topic.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(82, 161, 225, 0.5);
+}
+
+.app-post-display {
+  background-color: #6cb2eb;
+}
+

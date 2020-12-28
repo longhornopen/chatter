@@ -17,7 +17,7 @@ Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
 
 //store.dispatch('init').then(() => {
-new Vue({
+const app = new Vue({
     el: '#app'
 })
 //});

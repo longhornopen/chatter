@@ -11,6 +11,12 @@ export default {
 <template>
     <div>
         <div class="row">
+            <div class="col-md-12 app-title-bar">
+                <img class="app-logo" src="/images/logo/logo.svg" alt="Chatter logo">
+                <span class="app-title">CHATTER</span>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12"><app-header></app-header></div>
         </div>
         <div class="row">

@@ -19,6 +19,11 @@ Vue.component('comment-display', CommentDisplay)
 import store from './store';
 
 // Fill in some dummy data, since we don't want you to have to have a database or the real API running
+store.state.user = {
+    "name": "Tammy Teacher",
+    "email": "teacher@example.com",
+    "role": "teacher", // 'teacher' or 'student'
+};
 store.state.course_summary = {
     "id":1,
     "name":"test course",
