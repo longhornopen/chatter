@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @method static Course findOrFail($id)
+ * @method static findOrFail(string $course_id)
+ * @method static where(string $string, $course_id)
  */
 class Course extends Model
 {

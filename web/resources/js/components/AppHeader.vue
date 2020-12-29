@@ -2,9 +2,13 @@
 export default {
     data() {
         return {
-            course_name: this.$store.getters.course_summary.name,
             search_term: '',
         };
+    },
+    computed: {
+        course_name() {
+            return this.$store.getters.course_summary.name;
+        }
     },
     methods: {
         search: function() {

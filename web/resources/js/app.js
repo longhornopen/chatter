@@ -16,8 +16,11 @@ Vue.component('post-display', PostDisplay);
 Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
 
-//store.dispatch('init').then(() => {
-const app = new Vue({
-    el: '#app'
-})
-//});
+import store from './store';
+
+store.dispatch('init').then(() => {
+  const app = new Vue({
+    el: '#app',
+    store: store,
+  })
+});

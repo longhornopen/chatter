@@ -2,29 +2,31 @@
 export default {
     data () {
         return {
-            'posts': this.$store.getters.course_summary.posts,
             'post_order': 'newest'
         }
     },
-    methods: {
-        ordered_posts: function () {
+    computed: {
+        posts() {
+            const posts = this.$store.getters.course_summary.posts
             if (this.post_order === 'newest') {
                 // FIXME sort by pinned, then newest
-                return this.posts
+                return posts
             }
             if (this.post_order === 'pinned') {
                 // FIXME sort by pinned, then newest
-                return this.posts
+                return posts
             }
             if (this.post_order === 'unread') {
                 // FIXME filter by pinned, then newest
-                return this.posts
+                return posts
             }
             if (this.post_order === 'my_posts') {
                 // FIXME filter by mine, then newest
-                return this.posts
+                return posts
             }
         },
+    },
+    methods: {
         set_post_sort_order: function (order) {
             this.post_order = order
         },
