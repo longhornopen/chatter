@@ -2,7 +2,7 @@
 export default {
     data() {
         return {
-
+            show_editor: false,
         };
     },
     computed: {
@@ -46,25 +46,33 @@ export default {
                     <div class="left">
                         <button
                             class="btn btn-blue"
-                            :class="user_is_teacher?'':'d-none'"
+                            :class="user_is_teacher && !show_editor?'':'d-none'"
                             @click="pin(!post.pinned)"
                         >{{post.pinned ? "Unpin" : "Pin"}}</button>
                         <button
                             class="btn btn-blue"
-                            :class="user_is_teacher?'':'d-none'"
+                            :class="user_is_teacher && !show_editor?'':'d-none'"
                             @click="remove()"
                         >Remove</button>
                         <button
                             class="btn btn-blue"
-                            :class="user_is_teacher?'':'d-none'"
+                            :class="user_is_teacher && !show_editor?'':'d-none'"
                             @click="lock(!post.locked)"
                         >{{post.locked ? "Unlock" : "Lock"}}</button>
                     </div>
                     
                     <div class="right">
-                        <button class="btn btn-orange">Comment</button>
+                        <button 
+                            class="btn btn-orange"
+                            :class="!show_editor?'':'d-none'"
+                            @click="show_editor=true">Comment</button>
                     </div>
                 </div>
+                <comment-create v-if="show_editor"></comment-create>
+                    <div v-show="show_editor" class="editor-btn-group">
+                        <button class="btn btn-gray" @click="show_editor=false">Cancel</button>
+                        <button class="btn btn-orange">Submit</button>
+                    </div>
                 <!-- <div>
                     <button class="btn btn-orange">Comment</button>
                 </div> -->
@@ -74,7 +82,8 @@ export default {
             <div v-for="comment in post.comments">
                 <comment-display :comment="comment"></comment-display>
             </div>
-            <comment-create></comment-create>
+            <!-- <comment-create></comment-create> -->
+            
         </div>
     </div>
 </template>

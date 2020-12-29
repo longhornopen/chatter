@@ -46,8 +46,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { faCog } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faReply } from '@fortawesome/free-solid-svg-icons'
+import { faAward } from '@fortawesome/free-solid-svg-icons'
 library.add(faCog);
 library.add(faPlus);
+library.add(faReply);
+library.add(faAward);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;

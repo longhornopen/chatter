@@ -69,6 +69,7 @@ store.state.currently_viewed_post =
                 'muted_by_user_id': null,
                 'body': "This is <b>Test Comment #1</b>",
                 "created_at": "2020-12-21T09:17:11.000000Z",
+                'endorsed': true,
                 'child_comments': [],
             },
             {
@@ -79,6 +80,7 @@ store.state.currently_viewed_post =
                 'muted_by_user_id': null,
                 'body': "This is <b>Test Comment #2</b>",
                 "created_at": "2020-12-21T09:17:11.000000Z",
+                'endorsed': false,
                 'child_comments': [
                     {
                         'id': 3,
@@ -88,6 +90,7 @@ store.state.currently_viewed_post =
                         'muted_by_user_id': null,
                         'body': "This is <b>Child Comment #3</b>",
                         "created_at": "2020-12-21T09:18:11.000000Z",
+                        'endorsed': false,
                         "child_comments": [
                             {
                                 'id': 5,
@@ -97,6 +100,7 @@ store.state.currently_viewed_post =
                                 'muted_by_user_id': null,
                                 'body': "This is <b>Grandchild Comment #5</b>",
                                 "created_at": "2020-12-21T09:18:11.000000Z",
+                                'endorsed': false,
                                 "child_comments": [],
                             }
                         ],
@@ -108,6 +112,7 @@ store.state.currently_viewed_post =
                         'muted_by_user_id': null,
                         'body': "This is <b>Child Comment #4</b>",
                         "created_at": "2020-12-21T09:19:11.000000Z",
+                        'endorsed': false,
                         "child_comments": [],
                     }
                 ],

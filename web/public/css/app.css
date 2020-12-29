@@ -11096,35 +11096,90 @@ a.text-dark:focus {
   margin: 10px 0;
 }
 
-.app-post-display .btn-groups {
+.app-post-display .comments {
+  margin: 20px 0;
+}
+
+.btn {
+  transition: 0.3s;
+}
+
+.btn-groups {
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
 }
 
-.app-post-display .btn-groups .btn {
+.btn-groups .btn {
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
-.app-post-display .btn-blue {
+.btn-groups .btn:hover {
+  color: #ffffff;
+}
+
+.btn-blue {
   background-color: #245E83;
   color: #ffffff;
   margin: 0 10px 0 0;
 }
 
-.app-post-display .btn-orange {
+.btn-orange {
   background-color: #B35C22;
   color: #ffffff;
 }
 
-.app-post-display .comments {
-  margin: 20px 0;
+.btn-gray {
+  background-color: #4E4E4E;
+  color: #ffffff;
 }
 
-.app-post-display .comments .comment-body {
+.comment-body {
   background-color: #e0e0e0;
   border-radius: 6px;
   padding: 10px;
   margin: 10px 0;
+  position: relative;
+}
+
+.reply-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.single-comment .row .col-1 {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+}
+
+.single-comment .row .col-1 .endorsed {
+  color: #245E83;
+  transition: 0.3s;
+}
+
+.single-comment .row .col-1 .can-endorse {
+  color: #e0e0e0;
+  transition: 0.3s;
+}
+
+.single-comment .row .col-11 {
+  padding-left: 0px;
+}
+
+.editor-btn-group {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 10px 0;
+}
+
+.editor-btn-group .btn {
+  margin: 0 0 0 10px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.editor-btn-group .btn:hover {
+  color: #ffffff;
 }
 

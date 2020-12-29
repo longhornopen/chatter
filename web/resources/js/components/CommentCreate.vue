@@ -10,6 +10,12 @@ export default {
 
 <template>
     <div>
-        Form to create a post - text with wysisyg editor, plus 'post anonymously' toggle
+        <!-- placeholder for wysiwyg editor -->
+        <textarea style="width:100%"></textarea>
+        <!-- <div class="editor-btn-group>">
+            <button class="btn">Cancel</button>
+            <button class="btn">Submit</button>
+        </div> -->
     </div>
+    
 </template>
