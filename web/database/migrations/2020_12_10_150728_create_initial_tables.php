@@ -104,7 +104,7 @@ class CreateInitialTables extends Migration
     public function down()
     {
         Schema::dropIfExists('comment_endorsed_users');
-        Schema::dropIfExists('comment_read_users');
+        Schema::dropIfExists('course_user_post_last_read_flags');
         Schema::dropIfExists('comments');
         Schema::dropIfExists('posts');
         Schema::dropIfExists('course_users');
