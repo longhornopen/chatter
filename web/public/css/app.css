@@ -11002,6 +11002,21 @@ a.text-dark:focus {
   font-size: 1.5rem;
 }
 
+.app-header-bar .clear-search-icon {
+  display: flex;
+  align-items: center;
+  margin-left: -50px;
+  z-index: 100;
+}
+
+.app-header-bar .clear-search-icon .times-icon {
+  color: #47535E;
+}
+
+.app-header-bar .clear-search-icon:focus {
+  box-shadow: none;
+}
+
 .app-post-list {
   background-color: #d1d1d1;
   padding: 10px;
@@ -11083,6 +11098,13 @@ a.text-dark:focus {
 
 .app-post-list .app-post-list-body .post .post-btn-group .badge-read {
   background-color: #aeabab;
+}
+
+.app-post-list .app-post-list-body .no-search-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .app-post-display {

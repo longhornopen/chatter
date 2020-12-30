@@ -30,7 +30,7 @@ store.state.course_summary = {
     "posts":[
         {
             "id":1,
-            "creator_user_name":"Tammy Teacher",
+            "creator_user_name":"Theodore Teacher",
             "title":"post #1",
             "body":"test body",
             "pinned":false,
@@ -43,12 +43,24 @@ store.state.course_summary = {
             "creator_user_name":"Tammy Teacher",
             "title":"post #2",
             "body":"test body",
-            "pinned":false,
+            "pinned":true,
+            "created_at":"2020-12-21T09:17:11.000000Z",
+            "num_comments":18,
+            "num_unread_comments":2
+        },
+        {
+            "id":3,
+            "creator_user_name":"Tammy Teacher",
+            "title":"post #3",
+            "body":"test body",
+            "pinned":true,
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":18,
             "num_unread_comments":2
         }
-    ]
+    ], 
+    'filtered_posts': [],
+    'search_results_available': false,
 };
 store.state.currently_viewed_post =
     {

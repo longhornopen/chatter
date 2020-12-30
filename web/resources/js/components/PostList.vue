@@ -2,27 +2,55 @@
 export default {
     data () {
         return {
-            'post_order': 'newest'
+            'post_order': 'newest',
+            'search_results_empty': false,
         }
     },
     computed: {
         posts() {
-            const posts = this.$store.getters.course_summary.posts
+            var posts = null
+
+            if (this.$store.getters.course_summary.search_results_available) {
+                // has searched
+                if (this.$store.getters.course_summary.filtered_posts.length === 0) {
+                    this.search_results_empty = true
+                }
+                posts = this.$store.getters.course_summary.filtered_posts
+            } else {
+                // hasn't searched
+                posts = this.$store.getters.course_summary.posts
+                this.search_results_empty = false
+            }
+
+            // filtering by tabs
             if (this.post_order === 'newest') {
-                // FIXME sort by pinned, then newest
-                return posts
+                var posts_copy = [...posts]
+                posts_copy.sort((a, b) => (
+                    a.created_at === b.created_at ? 0 : 
+                    (a.created_at < b.created_at ? -1 : 1)))
+                return posts_copy
             }
             if (this.post_order === 'pinned') {
-                // FIXME sort by pinned, then newest
-                return posts
+                var posts_copy = [...posts]
+                posts_copy.sort((a, b) => (
+                    (a.pinned && b.pinned) || (!a.pinned && !b.pinned) ? 0 : 
+                    (a.pinned ? -1 : 1)))
+                return posts_copy
             }
             if (this.post_order === 'unread') {
-                // FIXME filter by pinned, then newest
+                // FIXME filter by unread, then newest
                 return posts
             }
             if (this.post_order === 'my_posts') {
-                // FIXME filter by mine, then newest
-                return posts
+                const user_name = this.$store.getters.user.name
+                var posts_copy = [...posts]
+
+                posts_copy.sort((a, b) => (
+                    (a.creator_user_name === b.creator_user_name) ? 0 : (
+                        (a.creator_user_name === user_name ? -1 : 1)
+                    )
+                ))
+                return posts_copy
             }
         },
     },
@@ -110,6 +138,7 @@ export default {
                 </div>
                 
             </div>
+            <div v-if="search_results_empty" class="no-search-results">No Search Results</div>
             <div>
                 <button
                     class="btn btn-post-topic"
