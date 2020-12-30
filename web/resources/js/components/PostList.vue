@@ -42,7 +42,7 @@ export default {
         <div class="app-post-list-body">
             <div>
                 <ul class="nav nav-tabs">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link"
                            :class="post_order==='newest'?'active':''"
                            href="#"
@@ -81,36 +81,46 @@ export default {
                 </ul>
             </div>
 
-            <div v-for="post in posts">
-                <div style="margin-bottom:10px;">
-                    <div style="font-size:80%;">
+            <div class="post" v-for="post in posts">
+                <div>
+                    <div class="post-misc-info">
                         <span>{{ post.creator_user_name }}</span>
                         <i>{{ post.created_at }}</i>
-                        <span class="badge badge-danger"
+                        <!-- <span class="badge badge-danger"
                               :title="post.num_unread_comments + ' unread comments'"
                         >{{ post.num_unread_comments }}</span>
                         <span class="badge badge-secondary"
                               :title="post.num_comments + ' total comments'"
-                        >{{ post.num_comments }}</span>
+                        >{{ post.num_comments }}</span> -->
                     </div>
-                    <div>
+                    <h5 class="post-title">
                         {{ post.title }}
-                    </div>
+                    </h5>
                     <div>
                         {{ post.body }}
                     </div>
                 </div>
+                <div class="post-btn-group">
+                    <span class="badge badge-unread"
+                        :title="post.num_unread_comments + ' unread comments'"
+                    >{{ post.num_unread_comments }}</span>
+                    <span class="badge badge-read"
+                            :title="post.num_comments + ' total comments'"
+                    >{{ post.num_comments }}</span>
+                </div>
+                
+            </div>
+            <div>
+                <button
+                    class="btn btn-post-topic"
+                    @click="open_post_editor()"
+                >
+                    <font-awesome-icon icon="plus"/>
+                    Post a Topic
+                </button>
             </div>
         </div>
 
-        <div>
-            <button
-                class="btn btn-post-topic"
-                @click="open_post_editor()"
-            >
-                <font-awesome-icon icon="plus"/>
-                Post a Topic
-            </button>
-        </div>
+        
     </div>
 </template>
