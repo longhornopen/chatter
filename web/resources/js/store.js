@@ -29,8 +29,8 @@ const mutations = {
 const actions = {
   init ({ commit }) {
     axios.all([
-      axios.get('/api/course/1/user/self'),
-      axios.get('/api/course/1/summary'),
+      axios.get('/api/user/self'),
+      axios.get('/api/course/current/summary'),
     ])
       .then(axios.spread((user, courseSummary) => {
         commit('setUser', user.data);

@@ -15,20 +15,24 @@ class CreateInitialTables extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->unsignedBigInteger('lti_context_pk')->nullable();
             $table->timestamps();
+
+            $table->index(['lti_context_pk']);
         });
 
         Schema::create('course_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('course_id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('role');
+            $table->string('lti_user_id')->nullable();
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses');
-            $table->index('course_id');
+            $table->index(['course_id', 'lti_user_id']);
         });
 
         Schema::create('posts', function (Blueprint $table) {
