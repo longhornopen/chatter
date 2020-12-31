@@ -15,15 +15,21 @@ export default {
     },
     methods: {
         pin(pinned) {
-            console.log('set pinned for this post to '+pinned);
-            this.$store.getters.currently_viewed_post.pinned = pinned;
+            // console.log('set pinned for this post to '+pinned);
+            this.$store.dispatch('pinPost', {
+                post_id: this.$store.getters.currently_viewed_post.id,
+                pinned: pinned
+            });
         },
         remove() {
             console.log('remove this post');
         },
         lock(locked) {
-            console.log('set locked for this post to '+locked);
-            this.$store.getters.currently_viewed_post.locked = locked;
+            // console.log('set locked for this post to '+locked);
+            this.$store.dispatch('lockPost', {
+                post_id: this.$store.getters.currently_viewed_post.id,
+                locked: locked
+            });
         },
     },
 }

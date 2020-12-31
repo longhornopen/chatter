@@ -20,8 +20,15 @@ export default {
     },
     methods: {
         endorse(endorse_action) {
-            this.comment.endorsed = endorse_action;
+            // this.comment.endorsed = endorse_action;
+            this.$store.dispatch('endorseComment', {
+                comment_id: this.comment.id,
+                endorsed: endorse_action
+            })
         },
+        toggle_comment_editor: function(action) {
+            this.show_editor = action
+        }
     }
 }
 </script>
@@ -50,15 +57,11 @@ export default {
                         {{ this_comment.body }}
                         <div 
                             class="reply-icon"
-                            @click="show_editor=!show_editor">
+                            @click="toggle_comment_editor(!show_editor)">
                             <font-awesome-icon icon="reply" size="lg" color="#7d7d7d"/>
                         </div>
                     </div>
-                    <comment-create v-if="show_editor"></comment-create>
-                    <div v-show="show_editor" class="editor-btn-group">
-                            <button class="btn btn-gray" @click="show_editor=false">Cancel</button>
-                            <button class="btn btn-orange">Submit</button>
-                        </div>
+                    <comment-create v-if="show_editor" @close_comment_editor="  toggle_comment_editor(false)"></comment-create>
                     <div style="padding-left:20px;">
                         <div v-for="child_comment in this_comment.child_comments">
                             <comment-display :comment="child_comment"></comment-display>
