@@ -11,30 +11,39 @@ export default {
         }
     },
     methods: {
+        clear_search: function() {
+            // reset search term
+            this.search_term = '';
+            this.$store.commit('setFilteredPosts', {
+                filtered_posts: [],
+                search_results_available: false,
+            })
+
+        },
         search: function() {
             // console.log("You searched for \'"+this.search_term+"\'. What should happen visually when we search?")
             this.search_term = this.search_term.toLowerCase();
 
             const posts = this.$store.getters.course_summary.posts
-            var filtered_posts = []
+            var filtered_posts_res = []
 
             // loop through all posts and only display the ones searched
             posts.forEach(post => {
                 if ((post.title.indexOf(this.search_term) > -1) 
                     || post.body.indexOf(this.search_term) > -1) {
-                    filtered_posts.push(post)
+                    filtered_posts_res.push(post)
                 }
             })
             // console.log(filtered_posts)
-            this.$store.getters.course_summary.filtered_posts = filtered_posts
-            this.$store.getters.course_summary.search_results_available = true
-        },
-        clear_search: function() {
-            // reset search term
-            this.search_term = '';
-            this.$store.getters.course_summary.search_results_available = false
+            // this.$store.getters.course_summary.filtered_posts = filtered_posts
+            // this.$store.getters.course_summary.search_results_available = true
 
+            this.$store.dispatch('setFilteredPosts', {
+                filtered_posts: filtered_posts_res,
+                search_results_available: true,
+            })
         },
+        
         open_settings: function() {
             console.log("You opened settings.")
         }

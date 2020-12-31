@@ -34,6 +34,7 @@ store.state.course_summary = {
             "title":"post #1",
             "body":"test body",
             "pinned":false,
+            "locked":false,
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":17,
             "num_unread_comments":2
@@ -44,6 +45,7 @@ store.state.course_summary = {
             "title":"post #2",
             "body":"test body",
             "pinned":true,
+            "locked":false,
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":18,
             "num_unread_comments":2
@@ -54,6 +56,7 @@ store.state.course_summary = {
             "title":"post #3",
             "body":"test body",
             "pinned":true,
+            "locked":false,
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":18,
             "num_unread_comments":2

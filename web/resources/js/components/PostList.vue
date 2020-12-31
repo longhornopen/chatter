@@ -9,11 +9,14 @@ export default {
     computed: {
         posts() {
             var posts = null
-
+            // console.log(this.$store.getters.course_summary.search_results_available)
+            // console.log(this.$store.getters.course_summary.filtered_posts)
             if (this.$store.getters.course_summary.search_results_available) {
                 // has searched
                 if (this.$store.getters.course_summary.filtered_posts.length === 0) {
                     this.search_results_empty = true
+                } else {
+                    this.search_results_empty = false
                 }
                 posts = this.$store.getters.course_summary.filtered_posts
             } else {
