@@ -11,33 +11,28 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    public function getUserSelf(Request $request, $course_id) {
-        $course_user_id = $request->attributes->get('course_user_id');
-        $course_user = CourseUser::find($course_user_id);
-        if ($course_user === null) {
-            return response('Login expired.',401);
-        }
-        if ((string)$course_user->course_id !== $course_id) {
-            return response('You are not authorized to access this resource.', 403);
-        }
-
-        return CourseUser::where('id',$course_user_id)
-            ->select(['id','name','email','role'])
-            ->first();
-    }
-
-    public function getCourseSummary(Request $request, $course_id)
+    public function getUserSelf(Request $request)
     {
         $course_user_id = $request->attributes->get('course_user_id');
         $course_user = CourseUser::find($course_user_id);
         if ($course_user === null) {
             return response('Login expired.',401);
         }
-        if ($course_user->course_id !== (int)$course_id) {
-            return response('You are not authorized to access this resource.', 403);
+
+        return CourseUser::where('id',$course_user_id)
+            ->select(['id','course_id','name','email','role'])
+            ->first();
+    }
+
+    public function getCourseSummary(Request $request)
+    {
+        $course_user_id = $request->attributes->get('course_user_id');
+        $course_user = CourseUser::find($course_user_id);
+        if ($course_user === null) {
+            return response('Login expired.',401);
         }
 
-        $course = Course::where('id',$course_id)
+        $course = Course::where('id',$course_user->course_id)
             ->select('id','name')
             ->with('posts')
             ->first();
@@ -56,14 +51,12 @@ class ApiController extends Controller
         return $course;
     }
 
-    public function getPost(Request $request, $course_id, $post_id) {
+    public function getPost(Request $request, $post_id)
+    {
         $course_user_id = $request->attributes->get('course_user_id');
         $course_user = CourseUser::find($course_user_id);
         if ($course_user === null) {
             return response('Login expired.',401);
-        }
-        if ((string)$course_user->course_id !== $course_id) {
-            return response('You are not authorized to access this resource.', 403);
         }
 
         $post = Post::where('id',$post_id)
@@ -72,7 +65,7 @@ class ApiController extends Controller
         if ($post === null) {
             return response('Post not found.', 404);
         }
-        if ($post->course_id !== (int)$course_id) {
+        if ($post->course_id !== (int)$course_user->course_id) {
             return response('You are not authorized to access this resource.', 403);
         }
 

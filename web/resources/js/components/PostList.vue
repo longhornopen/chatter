@@ -145,7 +145,7 @@ export default {
                     @click="open_post_editor()"
                 >
                     <font-awesome-icon icon="plus"/>
-                    Post a Topic
+                    Write a Post
                 </button>
             </div>
         </div>

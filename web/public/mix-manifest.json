@@ -1,7 +1,12 @@
 {
-    "/js/app.js": "/js/app.js?id=aaa0867c94f4537dfb32",
-    "/css/app.css": "/css/app.css?id=ec7a8c44bbf6ae12867c",
-    "/js/demo_comp_gallery.js": "/js/demo_comp_gallery.js?id=da473158c11872d3e24f",
-    "/js/manifest.js": "/js/manifest.js?id=41f053ba9a94d81b39f8",
-    "/js/vendor.js": "/js/vendor.js?id=d1a6f00b13e94c973613"
+    "/js/manifest.js": "/js/manifest.js?id=d91051ea7d0c9bd1981e",
+    "/js/manifest.js.map": "/js/manifest.js.map?id=a07956f82042cc418451",
+    "/js/vendor.js": "/js/vendor.js?id=f59d2ae27fae8399728f",
+    "/js/vendor.js.map": "/js/vendor.js.map?id=e6db8b09588e66d63b64",
+    "/js/app.js": "/js/app.js?id=f7190cc118bf67b87b02",
+    "/css/app.css": "/css/app.css?id=6ec69c095a94cd07cb7b",
+    "/js/app.js.map": "/js/app.js.map?id=ddbe5fbc2922f0ec6a7e",
+    "/css/app.css.map": "/css/app.css.map?id=1add21d5f3db9da0f786",
+    "/js/demo_comp_gallery.js": "/js/demo_comp_gallery.js?id=d55d32081284b3f74179",
+    "/js/demo_comp_gallery.js.map": "/js/demo_comp_gallery.js.map?id=d675fe1c57f55570ee68"
 }

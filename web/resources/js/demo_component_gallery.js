@@ -133,8 +133,30 @@ store.state.currently_viewed_post =
 };
 
 store.actions = {
-    // will actually have save comment function later
-    // for now it can just pop up alert or print out "saved"
+  createPost({commit}, post) {
+    commit('createPost', post);
+  },
+  editPost({commit}, post_id, body) {
+    commit('editPost', post_id, body);
+  },
+  pinPost({commit}, post_id, pinned) {
+    commit('pinPost', post_id, pinned);
+  },
+  lockPost({commit}, post_id, locked) {
+    commit('lockPost', post_id, locked);
+  },
+  deletePost({commit}, post_id) {
+    commit('deletePost', post_id);
+  },
+  endorseComment({commit}, comment_id) {
+    commit('endorseComment', comment_id);
+  },
+  muteComment({commit}, comment_id) {
+    commit('muteComment', comment_id);
+  },
+  addComment({commit}, post_id, comment) {
+    commit('addComment', post_id, comment);
+  },
 }
 
 new Vue({
