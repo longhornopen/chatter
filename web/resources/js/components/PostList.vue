@@ -63,6 +63,7 @@ export default {
         },
         open_post_editor: function() {
             console.log("Now I should open a new-post editor.")
+            this.$emit('open_post_editor')
         }
     }
 }

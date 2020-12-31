@@ -105,8 +105,32 @@ const mutations = {
     // FIXME remove the post to course_summary
     // FIXME set currently_viewed_post=null
   },
-  endorseComment(state, comment_id, endorsed) {
-    // FIXME endorse/unendorse the comment in currently_viewed_post
+  endorseComment(state, payload) {
+    // endorse/unendorse the comment in currently_viewed_post and each comment's child comment
+    var comment_to_endorse = null
+
+    const comments = state.currently_viewed_post.comments
+    var found = false
+    for (var i = 0; i < comments.length && !found; i++) {
+      found = comments[i].id === payload.comment_id
+      comment_to_endorse = found ? comments[i] : null
+      
+      // search through its child comments
+      for (var j = 0; j < comments[i].child_comments.length && !found; j++) {
+        found = comments[i].child_comments[j].id === payload.comment_id
+        comment_to_endorse = found ? comments[i].child_comments[j] : null
+
+        // grandchildren comments
+        for (var k = 0; k < comments[i].child_comments[j].child_comments.length && !found; k++) {
+          found = comments[i].child_comments[j].child_comments[k].id === payload.comment_id
+        comment_to_endorse = found ? comments[i].child_comments[j].child_comments[k] : null
+        }
+      }
+    }
+
+    if (comment_to_endorse !== null) {
+      comment_to_endorse.endorsed = payload.endorsed
+    }
   },
   muteComment(state, comment_id) {
     // FIXME mute/unmute the comment in currently_viewed_post
@@ -148,8 +172,8 @@ const actions = {
     commit('deletePost', post_id);
     // FIXME do an API call here and commit the mutation
   },
-  endorseComment({commit}, comment_id) {
-    commit('endorseComment', comment_id);
+  endorseComment({commit}, payload) {
+    commit('endorseComment', payload);
     // FIXME do an API call here and commit the mutation
   },
   muteComment({commit}, comment_id) {

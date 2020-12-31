@@ -11124,6 +11124,11 @@ a.text-dark:focus {
 
 .btn {
   transition: 0.3s;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover {
+  color: #ffffff;
 }
 
 .btn-groups {
@@ -11132,18 +11137,14 @@ a.text-dark:focus {
   margin: 20px 0;
 }
 
-.btn-groups .btn {
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-}
-
-.btn-groups .btn:hover {
-  color: #ffffff;
-}
-
 .btn-blue {
   background-color: #245E83;
   color: #ffffff;
   margin: 0 10px 0 0;
+}
+
+.btn-blue:hover {
+  background-color: #19415b;
 }
 
 .btn-orange {
@@ -11151,9 +11152,17 @@ a.text-dark:focus {
   color: #ffffff;
 }
 
+.btn-orange:hover {
+  background-color: #88461a;
+}
+
 .btn-gray {
   background-color: #4E4E4E;
   color: #ffffff;
+}
+
+.btn-gray:hover {
+  background-color: #353535;
 }
 
 .comment-body {
@@ -11203,5 +11212,9 @@ a.text-dark:focus {
 
 .editor-btn-group .btn:hover {
   color: #ffffff;
+}
+
+.new-post {
+  padding: 30px;
 }
 
