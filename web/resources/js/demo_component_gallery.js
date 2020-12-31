@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 require('./bootstrap');
 
 import Vue from 'vue';
@@ -136,28 +138,40 @@ store.state.currently_viewed_post =
 };
 
 store.actions = {
-  createPost({commit}, post) {
+  createPost({commit}, payload) {
+    let post = payload.post;
     commit('createPost', post);
   },
-  editPost({commit}, post_id, body) {
+  editPost({commit}, payload) {
+    let post_id = payload.post_id;
+    let body = payload.body;
     commit('editPost', post_id, body);
   },
-  pinPost({commit}, post_id, pinned) {
+  pinPost({commit}, payload) {
+    let post_id = payload.post_id;
+    let pinned = payload.pinned;
     commit('pinPost', post_id, pinned);
   },
-  lockPost({commit}, post_id, locked) {
+  lockPost({commit}, payload) {
+    let post_id = payload.post_id;
+    let locked = payload.locked;
     commit('lockPost', post_id, locked);
   },
-  deletePost({commit}, post_id) {
+  deletePost({commit}, payload) {
+    let post_id = payload.post_id;
     commit('deletePost', post_id);
   },
-  endorseComment({commit}, comment_id) {
+  endorseComment({commit}, payload) {
+    let post_id = payload.post_id;
     commit('endorseComment', comment_id);
   },
-  muteComment({commit}, comment_id) {
+  muteComment({commit}, payload) {
+    let comment_id = payload.comment_id;
     commit('muteComment', comment_id);
   },
-  addComment({commit}, post_id, comment) {
+  addComment({commit}, payload) {
+    let post_id = payload.post_id;
+    let comment = payload.comment;
     commit('addComment', post_id, comment);
   },
 }
