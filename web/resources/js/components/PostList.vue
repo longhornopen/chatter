@@ -108,7 +108,7 @@ export default {
                             :title="post.num_comments + ' total comments'"
                     >{{ post.num_comments }}</span>
                 </div>
-                
+
             </div>
             <div>
                 <button
@@ -116,11 +116,11 @@ export default {
                     @click="open_post_editor()"
                 >
                     <font-awesome-icon icon="plus"/>
-                    Post a Topic
+                    Write a Post
                 </button>
             </div>
         </div>
 
-        
+
     </div>
 </template>
