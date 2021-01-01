@@ -45,6 +45,7 @@ class CreateInitialTables extends Migration
             $table->string('body');
             $table->boolean('pinned')->default(false);
             $table->boolean('locked')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses');

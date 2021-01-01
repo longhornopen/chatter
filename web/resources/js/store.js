@@ -94,35 +94,49 @@ const actions = {
         commit('setCourseSummary', courseSummary.data);
       }))
   },
-  createPost({commit}, post) {
+  createPost({commit}, payload) {
+    let post = payload.post;
     commit('createPost', post);
     // FIXME do an API call here and commit the mutation
   },
-  editPost({commit}, post_id, body) {
+  editPost({commit}, payload) {
+    let post_id = payload.post_id;
+    let body = payload.body;
     commit('editPost', post_id, body);
     // FIXME do an API call here and commit the mutation
   },
-  pinPost({commit}, post_id, pinned) {
-    commit('pinPost', post_id, pinned);
-    // FIXME do an API call here and commit the mutation
+  pinPost({commit}, payload) {
+    let post_id = payload.post_id;
+    let pinned = payload.pinned;
+    axios.post('/api/course/current/post/'+post_id+'/pin/'+pinned).then(function(response) {
+      commit('pinPost', post_id, pinned);
+    });
   },
-  lockPost({commit}, post_id, locked) {
-    commit('lockPost', post_id, locked);
-    // FIXME do an API call here and commit the mutation
+  lockPost({commit}, payload) {
+    let post_id = payload.post_id;
+    let locked = payload.locked;
+    axios.post('/api/course/current/post/'+post_id+'/lock/'+locked).then(function(response) {
+      commit('lockPost', post_id, locked);
+    });
   },
-  deletePost({commit}, post_id) {
+  deletePost({commit}, payload) {
+    let post_id = payload.post_id;
     commit('deletePost', post_id);
     // FIXME do an API call here and commit the mutation
   },
-  endorseComment({commit}, comment_id) {
+  endorseComment({commit}, payload) {
+    let post_id = payload.post_id;
     commit('endorseComment', comment_id);
     // FIXME do an API call here and commit the mutation
   },
-  muteComment({commit}, comment_id) {
+  muteComment({commit}, payload) {
+    let comment_id = payload.comment_id;
     commit('muteComment', comment_id);
     // FIXME do an API call here and commit the mutation
   },
-  addComment({commit}, post_id, comment) {
+  addComment({commit}, payload) {
+    let post_id = payload.post_id;
+    let comment = payload.comment;
     commit('addComment', post_id, comment);
     // FIXME do an API call here and commit the mutation
   },
