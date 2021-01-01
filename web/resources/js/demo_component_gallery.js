@@ -8,6 +8,7 @@ import AppFramework from './components/AppFramework.vue';
 import AppHeader from './components/AppHeader.vue';
 import PostList from './components/PostList.vue';
 import PostDisplay from './components/PostDisplay.vue';
+import PostCreate from './components/PostCreate.vue';
 import CommentCreate from './components/CommentCreate.vue';
 import CommentDisplay from './components/CommentDisplay.vue'
 
@@ -15,6 +16,7 @@ Vue.component('app-framework', AppFramework);
 Vue.component('app-header', AppHeader);
 Vue.component('post-list', PostList);
 Vue.component('post-display', PostDisplay);
+Vue.component('post-create', PostCreate);
 Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
 
@@ -32,10 +34,11 @@ store.state.course_summary = {
     "posts":[
         {
             "id":1,
-            "creator_user_name":"Tammy Teacher",
+            "creator_user_name":"Theodore Teacher",
             "title":"post #1",
             "body":"test body",
             "pinned":false,
+            "locked":false,
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":17,
             "num_unread_comments":2
@@ -45,12 +48,26 @@ store.state.course_summary = {
             "creator_user_name":"Tammy Teacher",
             "title":"post #2",
             "body":"test body",
-            "pinned":false,
+            "pinned":true,
+            "locked":false,
+            "created_at":"2020-12-21T09:17:11.000000Z",
+            "num_comments":18,
+            "num_unread_comments":2
+        },
+        {
+            "id":3,
+            "creator_user_name":"Tammy Teacher",
+            "title":"post #3",
+            "body":"test body",
+            "pinned":true,
+            "locked":false,
             "created_at":"2020-12-21T09:17:11.000000Z",
             "num_comments":18,
             "num_unread_comments":2
         }
-    ]
+    ], 
+    'filtered_posts': [],
+    'search_results_available': false,
 };
 store.state.currently_viewed_post =
     {

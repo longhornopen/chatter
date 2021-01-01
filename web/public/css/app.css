@@ -11002,6 +11002,21 @@ a.text-dark:focus {
   font-size: 1.5rem;
 }
 
+.app-header-bar .clear-search-icon {
+  display: flex;
+  align-items: center;
+  margin-left: -50px;
+  z-index: 100;
+}
+
+.app-header-bar .clear-search-icon .times-icon {
+  color: #47535E;
+}
+
+.app-header-bar .clear-search-icon:focus {
+  box-shadow: none;
+}
+
 .app-post-list {
   background-color: #d1d1d1;
   padding: 10px;
@@ -11085,6 +11100,13 @@ a.text-dark:focus {
   background-color: #aeabab;
 }
 
+.app-post-list .app-post-list-body .no-search-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .app-post-display {
   padding: 30px;
 }
@@ -11102,6 +11124,11 @@ a.text-dark:focus {
 
 .btn {
   transition: 0.3s;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover {
+  color: #ffffff;
 }
 
 .btn-groups {
@@ -11110,18 +11137,14 @@ a.text-dark:focus {
   margin: 20px 0;
 }
 
-.btn-groups .btn {
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-}
-
-.btn-groups .btn:hover {
-  color: #ffffff;
-}
-
 .btn-blue {
   background-color: #245E83;
   color: #ffffff;
   margin: 0 10px 0 0;
+}
+
+.btn-blue:hover {
+  background-color: #19415b;
 }
 
 .btn-orange {
@@ -11129,9 +11152,17 @@ a.text-dark:focus {
   color: #ffffff;
 }
 
+.btn-orange:hover {
+  background-color: #88461a;
+}
+
 .btn-gray {
   background-color: #4E4E4E;
   color: #ffffff;
+}
+
+.btn-gray:hover {
+  background-color: #353535;
 }
 
 .comment-body {
@@ -11181,5 +11212,9 @@ a.text-dark:focus {
 
 .editor-btn-group .btn:hover {
   color: #ffffff;
+}
+
+.new-post {
+  padding: 30px;
 }
 

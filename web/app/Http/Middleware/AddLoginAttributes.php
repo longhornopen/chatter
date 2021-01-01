@@ -16,7 +16,9 @@ class AddLoginAttributes
      */
     public function handle(Request $request, Closure $next)
     {
-        $request->attributes->set('course_user_id', $request->session()->get('course_user_id'));
+        // FIXME do not commit
+        $request->attributes->set('course_user_id', 1);
+        //$request->attributes->set('course_user_id', $request->session()->get('course_user_id'));
 
         return $next($request);
     }
