@@ -34,110 +34,113 @@ Vue.use(Vuex);
 
 const state = {
     course_summary: {},
+    posts: [],
     currently_viewed_post: {},
     user: {},
+
+    filter_order: 'newest',
+    search_string: '',
+    filtered_posts: [],
+    search_results_available: false,
+
+    app_main_panel_mode: 'welcome',
 }
 
 const getters = {
     course_summary: state => { return state.course_summary; },
+    posts: state => { return state.posts; },
     currently_viewed_post: state => { return state.currently_viewed_post; },
     user: state => { return state.user; },
+
+    filter_order: state => { return state.filter_order; },
+    search_string: state => { return state.search_string; },
+    filtered_posts: state => { return state.filtered_posts; },
+    search_results_available: state => { return state.search_results_available; },
+
+    app_main_panel_mode: state => {return state.app_main_panel_mode; },
 }
 
 const mutations = {
-  setUser(state, user) {
-    state.user = user;
+  setUser(state, payload) {
+    state.user = payload.user;
   },
-  setCourseSummary(state, course_summary) {
-    state.course_summary = course_summary;
+  setCourseSummary(state, payload) {
+    state.course_summary = payload.course;
+  },
+  setPosts(state, payload) {
+    state.posts = payload.posts;
+  },
+
+  setAppMainPanelMode(state, payload) {
+    state.app_main_panel_mode = payload.mode;
+  },
+  setCurrentlyViewedPost(state, payload) {
+    state.currently_viewed_post = payload.post;
+  },
+
+  setSearchString(state, payload) {
+    state.search_string = payload.search_string;
+  },
+  setFilterOrder(state, payload) {
+    state.filter_order = payload.filter_order;
   },
   setFilteredPosts(state, payload) {
-    // console.log(state.course_summary.filtered_posts)
-    state.course_summary.filtered_posts = payload.filtered_posts
-    state.course_summary.search_results_available = payload.search_results_available
+    state.filtered_posts = payload.posts;
+    state.search_results_available = true;
   },
-  createPost(state, /* Post */ post) {
-    // FIXME add the post to course_summary
-    // FIXME set currently_viewed_post=post
+
+  addPost(state, payload) {
+    state.posts.unshift(payload);
+    state.currently_viewed_post = payload;
+    state.app_main_panel_mode = 'show_post';
   },
-  editPost(state, post_id, body) {
+  editPost(state, payload) {
+    let post_id = payload.post_id;
+    let body = payload.body;
     // FIXME update currently_viewed_post if it's the same post_id
     // FIXME update course_summary
   },
   pinPost(state, payload) {
-    // FIXME pin/unpin post in course_summary
-    // find the course with this id in course_summary
-    var post_to_pin = null
-    state.course_summary.posts.forEach(post => {
-      if (post.id === payload.post_id) {
-        post_to_pin = post
-      }
-    })
+    let post_id = payload.post_id;
+    let pinned = payload.pinned;
 
-    // only pin if this post exists
-    if (post_to_pin !== null) {
-      post_to_pin.pinned = payload.pinned
-    }
-    // pin/unpin post in currently_viewed_post if it's the same post id
-    if (state.currently_viewed_post.id === payload.post_id) {
-      state.currently_viewed_post.pinned = payload.pinned
+    state.posts.find(p => p.id===post_id).pinned = pinned;
+    if (state.currently_viewed_post.id === post_id) {
+      state.currently_viewed_post.pinned = pinned
     }
   },
   lockPost(state, payload) {
-    var post_to_lock = null
-    state.course_summary.posts.forEach(post => {
-      if (post.id === payload.post_id) {
-        post_to_lock = post
-      }
-    })
+    let post_id = payload.post_id;
+    let locked = payload.locked;
 
-    // only lock if this post exists
-    if (post_to_lock !== null) {
-      post_to_lock.locked = payload.locked
-    }
-
-    // lock / unlock post in currently_viewed_post if it's the same post id
-    if (state.currently_viewed_post.id === payload.post_id) {
-      state.currently_viewed_post.locked = payload.locked
+    state.posts.find(p => p.id===post_id).locked = locked;
+    if (state.currently_viewed_post.id === post_id) {
+      state.currently_viewed_post.locked = locked
     }
   },
-  deletePost(state, post_id) {
-    // FIXME remove the post to course_summary
-    // FIXME set currently_viewed_post=null
+  deletePost(state, payload) {
+    state.currently_viewed_post = {};
+    state.app_main_panel_mode = 'welcome';
+    state.posts = state.posts.filter(p => p.id !== payload.post_id);
   },
   endorseComment(state, payload) {
-    // endorse/unendorse the comment in currently_viewed_post and each comment's child comment
-    var comment_to_endorse = null
+    let comment_id = payload.comment_id;
+    let endorsed = payload.endorsed;
 
-    const comments = state.currently_viewed_post.comments
-    var found = false
-    for (var i = 0; i < comments.length && !found; i++) {
-      found = comments[i].id === payload.comment_id
-      comment_to_endorse = found ? comments[i] : null
-
-      // search through its child comments
-      for (var j = 0; j < comments[i].child_comments.length && !found; j++) {
-        found = comments[i].child_comments[j].id === payload.comment_id
-        comment_to_endorse = found ? comments[i].child_comments[j] : null
-
-        // grandchildren comments
-        for (var k = 0; k < comments[i].child_comments[j].child_comments.length && !found; k++) {
-          found = comments[i].child_comments[j].child_comments[k].id === payload.comment_id
-        comment_to_endorse = found ? comments[i].child_comments[j].child_comments[k] : null
-        }
-      }
-    }
-
-    if (comment_to_endorse !== null) {
-      comment_to_endorse.endorsed = payload.endorsed
-    }
+    let c = state.currently_viewed_post.comments.find(c => c.id===comment_id);
+    c.endorsed = endorsed;
   },
-  muteComment(state, comment_id) {
-    // FIXME mute/unmute the comment in currently_viewed_post
+  muteComment(state, payload) {
+    let comment_id = payload.comment_id;
+    let muted = payload.muted;
+    let c = state.currently_viewed_post.comments.find(c => c.id===comment_id);
+    c.muted = muted;
   },
-  addComment(state, post_id, /* Comment */ comment) {
-    // FIXME add the comment, updating currently_viewed_post
-    // FIXME update course_summary, incrementing num_comments
+  addComment(state, payload) {
+    if (state.currently_viewed_post.id === payload.post_id) {
+      state.currently_viewed_post.comments.push(payload);
+    }
+    state.posts.find(p => p.id === payload.post_id).num_comments += 1;
   },
 }
 
@@ -145,67 +148,93 @@ const actions = {
   init ({ commit }) {
     axios.all([
       axios.get('/api/user/self'),
-      axios.get('/api/course/current/summary'),
+      axios.get('/api/course/current'),
+      axios.get('/api/course/current/posts')
     ])
-      .then(axios.spread((user, courseSummary) => {
-        commit('setUser', user.data);
-        commit('setCourseSummary', courseSummary.data);
+      .then(axios.spread((user, course, posts) => {
+        commit('setUser', {user: user.data});
+        commit('setCourseSummary', {course: course.data});
+        commit('setPosts', {posts: posts.data});
       }))
   },
+
+  setSearchString({commit}, payload) {
+    commit('setSearchString', {search_string: payload.search_string});
+  },
+  setFilterOrder({commit}, payload) {
+    commit('setFilterOrder', {filter_order: payload.filter_order});
+  },
+  search({commit}) {
+    let params = {filter:this.state.filter_order, search:this.state.search_string};
+    axios.get('/api/course/current/posts', {params:params})
+      .then(function(response) {
+      commit('setFilteredPosts', {posts: response.data});
+    });
+  },
+  setAppMainPanelMode({commit}, payload) {
+    commit('setAppMainPanelMode', {mode: payload.mode});
+    if (payload.mode === 'show_post') {
+      axios.get('/api/course/current/post/'+payload.post_id)
+        .then(function(response) {
+        commit('setCurrentlyViewedPost', {post: response.data});
+      });
+    }
+  },
+
   createPost({commit}, payload) {
-    let post = payload.post;
-    commit('createPost', post);
-    // FIXME do an API call here and commit the mutation
+    axios.post('/api/course/current/post/new', payload)
+      .then(function(response) {
+        commit('addPost', response.data);
+      });
   },
   editPost({commit}, payload) {
-    let post_id = payload.post_id;
-    let body = payload.body;
-    commit('editPost', post_id, body);
+    commit('editPost', {post_id: payload.post_id, body: payload.body});
     // FIXME do an API call here and commit the mutation
   },
   pinPost({commit}, payload) {
-    let post_id = payload.post_id;
-    let pinned = payload.pinned;
-    axios.post('/api/course/current/post/'+post_id+'/pin/'+pinned).then(function(response) {
-      commit('pinPost', post_id, pinned);
+    axios.post('/api/course/current/post/'+payload.post_id+'/pin/'+payload.pinned)
+      .then(function(response) {
+      commit('pinPost', {post_id:payload.post_id, pinned:payload.pinned});
     });
   },
   lockPost({commit}, payload) {
-    let post_id = payload.post_id;
-    let locked = payload.locked;
-    axios.post('/api/course/current/post/'+post_id+'/lock/'+locked).then(function(response) {
-      commit('lockPost', post_id, locked);
+    axios.post('/api/course/current/post/'+payload.post_id+'/lock/'+payload.locked)
+      .then(function(response) {
+      commit('lockPost', {post_id: payload.post_id, locked: payload.locked});
     });
   },
   deletePost({commit}, payload) {
-    let post_id = payload.post_id;
-    commit('deletePost', post_id);
-    // FIXME do an API call here and commit the mutation
+    axios.delete('/api/course/current/post/'+payload.post_id).then(function() {
+      commit('deletePost', { post_id: payload.post_id });
+    });
   },
   endorseComment({commit}, payload) {
-    let post_id = payload.post_id;
-    commit('endorseComment', comment_id);
-    // FIXME do an API call here and commit the mutation
+    axios.post('/api/course/current/comment/'+payload.comment_id+'/endorse/'+payload.endorsed)
+      .then(function(response) {
+      commit('endorseComment', { comment_id: payload.comment_id, endorsed: payload.endorsed });
+    });
   },
   muteComment({commit}, payload) {
-    let comment_id = payload.comment_id;
-    commit('muteComment', comment_id);
-    // FIXME do an API call here and commit the mutation
+    axios.post('/api/course/current/comment/'+payload.comment_id+'/mute/'+payload.muted)
+      .then(function(response) {
+      commit('muteComment', {comment_id: payload.comment_id, muted: payload.muted});
+    });
   },
   addComment({commit}, payload) {
-    let post_id = payload.post_id;
-    let comment = payload.comment;
-    commit('addComment', post_id, comment);
-    // FIXME do an API call here and commit the mutation
+    axios.post('/api/course/current/comment/new', payload)
+      .then(function(response) {
+        commit('addComment', response.data);
+      });
   },
-  setFilteredPosts({ commit }, payload) {
-    commit('setFilteredPosts', payload)
-  }
 }
 
+// TEMP
+export default {state:state, getters:getters, actions:actions, mutations:mutations};
+/**
 export default new Vuex.Store({
     state,
     getters,
     actions,
     mutations
 });
+*/

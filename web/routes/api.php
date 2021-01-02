@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/user/self', [ApiController::class, 'getUserSelf']);
-Route::get('/course/current/summary', [ApiController::class, 'getCourseSummary']);
+Route::get('/course/current', [ApiController::class, 'getCourse']);
+Route::get('/course/current/posts', [ApiController::class, 'getCoursePosts']);
 Route::get('/course/current/post/{post_id}', [ApiController::class, 'getPost']);
 Route::post('/course/current/post/new', [ApiController::class, 'createPost']);
 Route::post('/course/current/post/{post_id}', [ApiController::class, 'editPost']);

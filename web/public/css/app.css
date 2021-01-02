@@ -10903,6 +10903,12 @@ a.text-dark:focus {
   }
 }
 
+#app {
+  height: 100vh;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .app-title-bar {
   margin: 10px 0;
   display: flex;
@@ -11105,6 +11111,10 @@ a.text-dark:focus {
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+
+.app-post-list .app-post-list-body .post-clickable-container {
+  cursor: pointer;
 }
 
 .app-post-display {

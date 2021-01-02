@@ -44,9 +44,9 @@ import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import { 
-    faCog, 
-    faTimes, 
+import {
+    faCog,
+    faTimes,
     faTimesCircle,
     faPlus,
     faReply,
@@ -59,3 +59,7 @@ library.add(faTimesCircle);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
+
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+Vue.use(VueSweetalert2);

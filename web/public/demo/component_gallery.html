@@ -8,45 +8,9 @@
 
     <script defer src="/js/demo_comp_gallery.js"></script>
 </head>
-<body style="padding:50px;">
-<div id="app">
-    <h1>Terminology</h1>
-    <ul>
-        <li>A <i>Course</i> is a container for several Topics.</li>
-        <li>A <i>Post</i> has a title, a discussion prompt or question, and zero or more Comments as replies.</li>
-        <li>A <i>Comment</i> is a reply to a Post.  It contains text.</li>
-    </ul>
-    <hr><br><br>
-    <h1>Component Gallery</h1>
-    <h2>App Framework</h2>
-    <div style="font-style:italic;">Container holding App Header along the top, Post List along the left side.  Center content area will be filled by a component, depending on what action the user is trying to perform.</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><app-framework></app-framework></div>
-    <hr>
-    <h2>App Header</h2>
-    <div style="font-style:italic;">Top-of-page header.  Contains controls related to the user or the course</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><app-header></app-header></div>
-    <hr>
-    <h2>Post List</h2>
-    <div style="font-style:italic;">Left sidebar.  Contains a sortable list of posts, and quick controls for viewing a post, or doing one-click toggle actions on a post.</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><post-list></post-list></div>
-    <hr>
-    <h2>Post Display</h2>
-    <div style="font-style:italic;">Center content if the user is reading a post.  Shows the post, its comments, and other controls related to this post or its comments.</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><post-display></post-display></div>
-    <hr>
-    <h2>Post Create</h2>
-    <div style="font-style:italic;">Editor for making a new post. This component is shown when
-    'Write a Post' is clicked.</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><post-create></post-create></div>
-    <hr>
-    <h2>Comment Create</h2>
-    <div style="font-style:italic;">Editor for creating a comment</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><comment-create></comment-create></div>
-    <hr>
-    <h2>Comment Display</h2>
-    <div style="font-style:italic;">Area for displaying a comment</div>
-    <div style="border:solid 1px gray;padding:10px;margin:10px;"><comment-display :comment="get_sample_comment()"></comment-display></div>
-    <hr>
-</div>
+<body>
+    <div id="app">
+        <app-framework></app-framework>
+    </div>
 </body>
 </html>

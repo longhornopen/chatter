@@ -41,6 +41,7 @@ class CreateInitialTables extends Migration
             $table->unsignedBigInteger('author_user_id');
             $table->string('author_user_name');
             $table->string('author_user_role');
+            $table->boolean('author_anonymous')->default(false);
             $table->string('title');
             $table->string('body');
             $table->boolean('pinned')->default(false);
@@ -70,8 +71,9 @@ class CreateInitialTables extends Migration
             $table->unsignedBigInteger('author_user_id');
             $table->string('author_user_name');
             $table->string('author_user_role');
+            $table->boolean('author_anonymous')->default(false);
             $table->unsignedBigInteger('parent_comment_id')->nullable();
-            $table->boolean('poster_anonymous')->default(false);
+            $table->boolean('endorsed')->default(false);
             $table->unsignedBigInteger('muted_by_user_id')->nullable();
             $table->text('body');
             $table->timestamps();
@@ -81,19 +83,6 @@ class CreateInitialTables extends Migration
             $table->foreign('muted_by_user_id')->references('id')->on('course_users');
             $table->foreign('parent_comment_id')->references('id')->on('comments');
             $table->index('post_id');
-        });
-
-        Schema::create('comment_endorsed_users', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('comment_id');
-            $table->unsignedBigInteger('course_user_id');
-            $table->timestamps();
-
-            $table->foreign('post_id')->references('id')->on('posts');
-            $table->foreign('comment_id')->references('id')->on('comments');
-            $table->foreign('course_user_id')->references('id')->on('course_users');
-            $table->index(['post_id','course_user_id']);
         });
     }
 

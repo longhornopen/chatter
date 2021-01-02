@@ -1,3 +1,5 @@
+import Vuex from 'vuex'
+
 require('./bootstrap');
 
 import Vue from 'vue';
@@ -20,7 +22,13 @@ Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
 
 
-import store from './store';
+//TEMP
+Vue.use(Vuex);
+import store_defaults from './store';
+const store = new Vuex.Store(
+  store_defaults
+)
+//import store from './store';
 
 store.dispatch('init').then(() => {
   const app = new Vue({
