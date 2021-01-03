@@ -53,7 +53,10 @@ export default {
                 </div>
                 <div class="col-11">
                     <div class="comment-body">
-                        {{ this_comment.body }}
+                        <div
+                            class="comment-body-text"
+                            v-html="this_comment.body"
+                        ></div>
                         <div
                             class="reply-icon"
                             @click="toggle_comment_editor(!show_editor)">

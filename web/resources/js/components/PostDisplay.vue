@@ -58,9 +58,7 @@ export default {
             <div>
                 {{ post.author_user_name }} {{ post.created_at }}
             </div>
-            <div class="post-display-body">
-                {{ post.body }}
-            </div>
+            <div class="post-display-body" v-html="post.body"></div>
                 <div class="btn-groups">
                     <div class="left">
                         <button

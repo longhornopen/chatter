@@ -17,7 +17,7 @@ class ApiController extends Controller
 {
     public function getUserSelf(Request $request)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, null);
         $course_user_id = $course_user->id;
 
         return CourseUser::where('id',$course_user_id)
@@ -25,9 +25,9 @@ class ApiController extends Controller
             ->first();
     }
 
-    public function getCourse(Request $request)
+    public function getCourse(Request $request, $course_id)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $course_user_id = $course_user->id;
 
         $course = Course::where('id',$course_user->course_id)
@@ -36,9 +36,9 @@ class ApiController extends Controller
         return $course;
     }
 
-    public function getCoursePosts(Request $request)
+    public function getCoursePosts(Request $request, $course_id)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $course_user_id = $course_user->id;
 
         $filter = $request->get('filter');
@@ -92,9 +92,9 @@ TAG
     }
 
 
-    public function getPost(Request $request, $post_id)
+    public function getPost(Request $request, $course_id, $post_id)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $course_user_id = $course_user->id;
 
         $post = Post::where('id',$post_id)
@@ -121,12 +121,12 @@ TAG
         return $post;
     }
 
-    public function createPost(Request $request)
+    public function createPost(Request $request, $course_id)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
 
-        // FIXME scrub out injection of e.g. <script> tags
         $body = $request->get('body');
+        $body = $this->stripTags($body);
 
         $post = new Post();
         $post->course_id = $course_user->course_id;
@@ -141,14 +141,14 @@ TAG
         return $post;
     }
 
-    public function editPost(Request $request, $post_id)
+    public function editPost(Request $request, $course_id, $post_id)
     {
 //TODO
     }
 
-    public function deletePost(Request $request, $post_id)
+    public function deletePost(Request $request, $course_id, $post_id)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $this->checkIsTeacher($course_user);
 
         $post = Post::findOrFail($post_id);
@@ -157,9 +157,9 @@ TAG
         return "ok";
     }
 
-    public function pinPost(Request $request, $post_id, $pinned)
+    public function pinPost(Request $request, $course_id, $post_id, $pinned)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $this->checkIsTeacher($course_user);
 
         $post = Post::findOrFail($post_id);
@@ -169,9 +169,9 @@ TAG
         return $post;
     }
 
-    public function lockPost(Request $request, $post_id, $locked)
+    public function lockPost(Request $request, $course_id, $post_id, $locked)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $this->checkIsTeacher($course_user);
 
         $post = Post::findOrFail($post_id);
@@ -181,14 +181,14 @@ TAG
         return $post;
     }
 
-    public function createComment(Request $request)
+    public function createComment(Request $request, $course_id)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $post = Post::findOrFail($request->get('post_id'));
         $this->checkPostAuths($post, $course_user);
 
         $body = $request->get('body');
-        // FIXME scrub out injection of e.g. <script> tags
+        $body = $this->stripTags($body);
 
         $comment = new Comment();
         $comment->post_id = $request->get('post_id');
@@ -203,14 +203,14 @@ TAG
         return $comment;
     }
 
-    public function editComment(Request $request, $comment_id)
+    public function editComment(Request $request, $course_id, $comment_id)
     {
 //TODO
     }
 
-    public function endorseComment(Request $request, $comment_id, $endorsed)
+    public function endorseComment(Request $request, $course_id, $comment_id, $endorsed)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $this->checkIsTeacher($course_user);
 
         $comment = Comment::findOrFail($comment_id);
@@ -221,9 +221,9 @@ TAG
         return $comment;
     }
 
-    public function muteComment(Request $request, $comment_id, $muted)
+    public function muteComment(Request $request, $course_id, $comment_id, $muted)
     {
-        $course_user = $this->getCourseUserFromSession($request);
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
         $this->checkIsTeacher($course_user);
 
         $comment = Comment::findOrFail($comment_id);
@@ -238,12 +238,15 @@ TAG
     // utility functions
     */
 
-    protected function getCourseUserFromSession(Request $request)
+    protected function getCourseUserFromSession(Request $request, $course_id)
     {
         $course_user_id = $request->attributes->get('course_user_id');
         $course_user = CourseUser::find($course_user_id);
         if ($course_user === null) {
             throw new LoginExpiredException("Login expired.");
+        }
+        if ($course_id!==null && $course_user->course_id != $course_id) {
+            throw new LoginExpiredException("Login mismatch.");
         }
         return $course_user;
     }
@@ -266,6 +269,11 @@ TAG
         if ($course_user->role !== 'teacher') {
             throw new UnauthorizedException("Unauthorized: Only teachers may perform this action.");
         }
+    }
+
+    protected function stripTags($html)
+    {
+        return preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
     }
 
 }

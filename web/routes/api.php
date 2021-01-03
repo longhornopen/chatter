@@ -15,15 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/user/self', [ApiController::class, 'getUserSelf']);
-Route::get('/course/current', [ApiController::class, 'getCourse']);
-Route::get('/course/current/posts', [ApiController::class, 'getCoursePosts']);
-Route::get('/course/current/post/{post_id}', [ApiController::class, 'getPost']);
-Route::post('/course/current/post/new', [ApiController::class, 'createPost']);
-Route::post('/course/current/post/{post_id}', [ApiController::class, 'editPost']);
-Route::delete('/course/current/post/{post_id}', [ApiController::class, 'deletePost']);
-Route::post('/course/current/post/{post_id}/pin/{pinned}', [ApiController::class, 'pinPost']);
-Route::post('/course/current/post/{post_id}/lock/{locked}', [ApiController::class, 'lockPost']);
-Route::post('/course/current/comment/new', [ApiController::class, 'createComment']);
-Route::post('/course/current/comment/{comment_id}', [ApiController::class, 'editComment']);
-Route::post('/course/current/comment/{comment_id}/endorse/{endorsed}', [ApiController::class, 'endorseComment']);
-Route::post('/course/current/comment/{comment_id}/mute/{muted}', [ApiController::class, 'muteComment']);
+Route::get('/course/{course_id}', [ApiController::class, 'getCourse']);
+Route::get('/course/{course_id}/posts', [ApiController::class, 'getCoursePosts']);
+Route::get('/course/{course_id}/post/{post_id}', [ApiController::class, 'getPost']);
+Route::post('/course/{course_id}/post/new', [ApiController::class, 'createPost']);
+Route::post('/course/{course_id}/post/{post_id}', [ApiController::class, 'editPost']);
+Route::delete('/course/{course_id}/post/{post_id}', [ApiController::class, 'deletePost']);
+Route::post('/course/{course_id}/post/{post_id}/pin/{pinned}', [ApiController::class, 'pinPost']);
+Route::post('/course/{course_id}/post/{post_id}/lock/{locked}', [ApiController::class, 'lockPost']);
+Route::post('/course/{course_id}/comment/new', [ApiController::class, 'createComment']);
+Route::post('/course/{course_id}/comment/{comment_id}', [ApiController::class, 'editComment']);
+Route::post('/course/{course_id}/comment/{comment_id}/endorse/{endorsed}', [ApiController::class, 'endorseComment']);
+Route::post('/course/{course_id}/comment/{comment_id}/mute/{muted}', [ApiController::class, 'muteComment']);

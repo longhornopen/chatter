@@ -145,17 +145,19 @@ const mutations = {
 }
 
 const actions = {
-  init ({ commit }) {
-    axios.all([
-      axios.get('/api/user/self'),
-      axios.get('/api/course/current'),
-      axios.get('/api/course/current/posts')
-    ])
-      .then(axios.spread((user, course, posts) => {
-        commit('setUser', {user: user.data});
-        commit('setCourseSummary', {course: course.data});
-        commit('setPosts', {posts: posts.data});
-      }))
+  init ({ commit }, user_id) {
+    axios.get('/api/user/self').then(function(user_response) {
+      commit('setUser', {user: user_response.data});
+      let course_id = user_response.data.course_id;
+      axios.all([
+        axios.get('/api/course/'+course_id),
+        axios.get('/api/course/'+course_id+'/posts')
+      ])
+        .then(axios.spread((course_response, posts_response) => {
+          commit('setCourseSummary', {course: course_response.data});
+          commit('setPosts', {posts: posts_response.data});
+        }))
+    })
   },
 
   setSearchString({commit}, payload) {
@@ -166,7 +168,7 @@ const actions = {
   },
   search({commit}) {
     let params = {filter:this.state.filter_order, search:this.state.search_string};
-    axios.get('/api/course/current/posts', {params:params})
+    axios.get('/api/course/'+this.state.user.course_id+'/posts', {params:params})
       .then(function(response) {
       commit('setFilteredPosts', {posts: response.data});
     });
@@ -174,7 +176,7 @@ const actions = {
   setAppMainPanelMode({commit}, payload) {
     commit('setAppMainPanelMode', {mode: payload.mode});
     if (payload.mode === 'show_post') {
-      axios.get('/api/course/current/post/'+payload.post_id)
+      axios.get('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id)
         .then(function(response) {
         commit('setCurrentlyViewedPost', {post: response.data});
       });
@@ -182,7 +184,7 @@ const actions = {
   },
 
   createPost({commit}, payload) {
-    axios.post('/api/course/current/post/new', payload)
+    axios.post('/api/course/'+this.state.user.course_id+'/post/new', payload)
       .then(function(response) {
         commit('addPost', response.data);
       });
@@ -192,36 +194,36 @@ const actions = {
     // FIXME do an API call here and commit the mutation
   },
   pinPost({commit}, payload) {
-    axios.post('/api/course/current/post/'+payload.post_id+'/pin/'+payload.pinned)
+    axios.post('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id+'/pin/'+payload.pinned)
       .then(function(response) {
       commit('pinPost', {post_id:payload.post_id, pinned:payload.pinned});
     });
   },
   lockPost({commit}, payload) {
-    axios.post('/api/course/current/post/'+payload.post_id+'/lock/'+payload.locked)
+    axios.post('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id+'/lock/'+payload.locked)
       .then(function(response) {
       commit('lockPost', {post_id: payload.post_id, locked: payload.locked});
     });
   },
   deletePost({commit}, payload) {
-    axios.delete('/api/course/current/post/'+payload.post_id).then(function() {
+    axios.delete('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id).then(function() {
       commit('deletePost', { post_id: payload.post_id });
     });
   },
   endorseComment({commit}, payload) {
-    axios.post('/api/course/current/comment/'+payload.comment_id+'/endorse/'+payload.endorsed)
+    axios.post('/api/course/'+this.state.user.course_id+'/comment/'+payload.comment_id+'/endorse/'+payload.endorsed)
       .then(function(response) {
       commit('endorseComment', { comment_id: payload.comment_id, endorsed: payload.endorsed });
     });
   },
   muteComment({commit}, payload) {
-    axios.post('/api/course/current/comment/'+payload.comment_id+'/mute/'+payload.muted)
+    axios.post('/api/course/'+this.state.user.course_id+'/comment/'+payload.comment_id+'/mute/'+payload.muted)
       .then(function(response) {
       commit('muteComment', {comment_id: payload.comment_id, muted: payload.muted});
     });
   },
   addComment({commit}, payload) {
-    axios.post('/api/course/current/comment/new', payload)
+    axios.post('/api/course/'+this.state.user.course_id+'/comment/new', payload)
       .then(function(response) {
         commit('addComment', response.data);
       });

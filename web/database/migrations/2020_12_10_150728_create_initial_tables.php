@@ -43,7 +43,7 @@ class CreateInitialTables extends Migration
             $table->string('author_user_role');
             $table->boolean('author_anonymous')->default(false);
             $table->string('title');
-            $table->string('body');
+            $table->mediumText('body');
             $table->boolean('pinned')->default(false);
             $table->boolean('locked')->default(false);
             $table->softDeletes();
@@ -75,7 +75,7 @@ class CreateInitialTables extends Migration
             $table->unsignedBigInteger('parent_comment_id')->nullable();
             $table->boolean('endorsed')->default(false);
             $table->unsignedBigInteger('muted_by_user_id')->nullable();
-            $table->text('body');
+            $table->mediumText('body');
             $table->timestamps();
 
             $table->foreign('post_id')->references('id')->on('posts');

@@ -1,5 +1,7 @@
 <script>
+import WysiwygEditor from './WysiwygEditor'
 export default {
+    components: { WysiwygEditor },
     data() {
         return {
             'title': '',
@@ -57,12 +59,7 @@ export default {
             </div>
             <div class="form-group">
                 <label for="post-body">Post Body</label>
-                <!-- placeholder for wysiwyg editor -->
-                <textarea
-                    class="form-control"
-                    style="width:100%"
-                    v-model="body"
-                    placeholder="This is a placeholder for WYSIWYG editor"></textarea>
+                <wysiwyg-editor v-model="body"></wysiwyg-editor>
             </div>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">

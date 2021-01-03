@@ -84,19 +84,18 @@ export default {
                         <div class="post-misc-info">
                             <span>{{ post.author_user_name }}</span>
                             <i>{{ post.created_at }}</i>
-                            <!-- <span class="badge badge-danger"
-                                  :title="post.num_unread_comments + ' unread comments'"
-                            >{{ post.num_unread_comments }}</span>
-                            <span class="badge badge-secondary"
-                                  :title="post.num_comments + ' total comments'"
-                            >{{ post.num_comments }}</span> -->
                         </div>
                         <h5 class="post-title">
                             {{ post.title }}
                         </h5>
+                        <!--
+                        // Removing this until we find a way of effectively producing a one-line summary of
+                        // a post body (which may contain images, formulas, links, etc.  So it's not as simple
+                        // as showing the first N characters of the post body.
                         <div>
                             {{ post.body }}
                         </div>
+                        -->
                     </div>
                     <div class="post-btn-group">
                         <span class="badge badge-unread"

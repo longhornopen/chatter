@@ -11183,6 +11183,14 @@ a.text-dark:focus {
   position: relative;
 }
 
+.comment-body-text {
+  margin-right: 10px;
+}
+
+.comment-body-text p:last-child {
+  margin-bottom: 0;
+}
+
 .reply-icon {
   position: absolute;
   top: 10px;

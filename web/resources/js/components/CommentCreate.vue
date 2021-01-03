@@ -1,5 +1,7 @@
 <script>
+import WysiwygEditor from './WysiwygEditor'
 export default {
+    components: { WysiwygEditor },
     props: ['parent_comment_id', 'post_id'],
     data() {
         return {
@@ -45,8 +47,7 @@ export default {
 
 <template>
     <div>
-        <!-- placeholder for wysiwyg editor -->
-        <textarea style="width:100%" v-model="comment_body"></textarea>
+        <wysiwyg-editor v-model="comment_body"></wysiwyg-editor>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
             <label class="form-check-label" for="postAnonymously">Post Anonymously</label>
