@@ -79,6 +79,12 @@ window.axios.interceptors.response.use(response => {
       text: 'Your login has expired.  Please relaunch Chatter from your course to continue.',
       icon: 'error',
     })
+  } else {
+    sweetalert2.fire({
+      title: 'Error',
+      text: 'Sorry, but an unexpected error happened.  Please try again.',
+      icon: 'error',
+    })
   }
   return error;
 });
