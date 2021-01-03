@@ -133,7 +133,7 @@ TAG
         $post->author_user_id = $course_user->id;
         $post->author_user_name = $course_user->name;
         $post->author_user_role = $course_user->role;
-        $post->author_anonymous = $request->get('anonymous');
+        $post->author_anonymous = $request->get('anonymous')==='true' ? 1 : 0;
         $post->title = $request->get('title');
         $post->body = $body;
         $post->save();
@@ -196,7 +196,7 @@ TAG
         $comment->author_user_name = $course_user->name;
         $comment->author_user_role = $course_user->role;
         $comment->parent_comment_id = $request->get('parent_comment_id');
-        $comment->author_anonymous = $request->get('author_anonymous');
+        $comment->author_anonymous = $request->get('author_anonymous')==='true' ? 1 : 0;
         $comment->body = $body;
         $comment->save();
 
