@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int post_id
+ * @property int author_user_id
+ * @property string author_user_name
+ * @property string author_user_role
+ * @property int parent_comment_id
+ * @property boolean author_anonymous
+ * @property string body
+ */
 class Comment extends Model
 {
     use HasFactory;
@@ -14,15 +23,5 @@ class Comment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function readers(): HasMany
-    {
-        return $this->hasMany(CommentReadUsers::class);
-    }
-
-    public function endorsers(): HasMany
-    {
-        return $this->hasMany(CommentEndorsedUsers::class);
     }
 }

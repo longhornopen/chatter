@@ -15,8 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/user/self', [ApiController::class, 'getUserSelf']);
-Route::get('/course/current/summary', [ApiController::class, 'getCourseSummary']);
-Route::get('/course/current/post/{post_id}', [ApiController::class, 'getPost']);
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::get('/course/{course_id}', [ApiController::class, 'getCourse']);
+Route::get('/course/{course_id}/posts', [ApiController::class, 'getCoursePosts']);
+Route::get('/course/{course_id}/post/{post_id}', [ApiController::class, 'getPost']);
+Route::post('/course/{course_id}/post/new', [ApiController::class, 'createPost']);
+Route::post('/course/{course_id}/post/{post_id}', [ApiController::class, 'editPost']);
+Route::delete('/course/{course_id}/post/{post_id}', [ApiController::class, 'deletePost']);
+Route::post('/course/{course_id}/post/{post_id}/pin/{pinned}', [ApiController::class, 'pinPost']);
+Route::post('/course/{course_id}/post/{post_id}/lock/{locked}', [ApiController::class, 'lockPost']);
+Route::post('/course/{course_id}/comment/new', [ApiController::class, 'createComment']);
+Route::post('/course/{course_id}/comment/{comment_id}', [ApiController::class, 'editComment']);
+Route::post('/course/{course_id}/comment/{comment_id}/endorse/{endorsed}', [ApiController::class, 'endorseComment']);
+Route::post('/course/{course_id}/comment/{comment_id}/mute/{muted}', [ApiController::class, 'muteComment']);

@@ -1455,12 +1455,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/longhornopen/laravel-celtic-lti.git",
-                "reference": "45bd3d75285a3195d8256116079a04fa913b368a"
+                "reference": "9c64651434b72f5d45eeb8d8891b2cda8ed5e510"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/longhornopen/laravel-celtic-lti/zipball/45bd3d75285a3195d8256116079a04fa913b368a",
-                "reference": "45bd3d75285a3195d8256116079a04fa913b368a",
+                "url": "https://api.github.com/repos/longhornopen/laravel-celtic-lti/zipball/9c64651434b72f5d45eeb8d8891b2cda8ed5e510",
+                "reference": "9c64651434b72f5d45eeb8d8891b2cda8ed5e510",
                 "shasum": ""
             },
             "require": {
@@ -1495,7 +1495,7 @@
                 "source": "https://github.com/longhornopen/laravel-celtic-lti/tree/main",
                 "issues": "https://github.com/longhornopen/laravel-celtic-lti/issues"
             },
-            "time": "2020-12-30T14:37:31+00:00"
+            "time": "2020-12-30T19:49:58+00:00"
         },
         {
             "name": "monolog/monolog",

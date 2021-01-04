@@ -23,6 +23,7 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -40,22 +41,55 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: true
 // });
 
+window.katex = require('katex')
+import 'katex/dist/katex.min.css';
+
+
 import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import { 
-    faCog, 
-    faTimes, 
+import {
+    faCog,
+    faTimes,
     faTimesCircle,
     faPlus,
     faReply,
-    faAward, } from '@fortawesome/free-solid-svg-icons'
+    faAward, 
+    faThumbtack,
+    faLock,
+  } from '@fortawesome/free-solid-svg-icons'
 library.add(faCog);
 library.add(faPlus);
 library.add(faReply);
 library.add(faAward);
 library.add(faTimesCircle);
+library.add(faThumbtack);
+library.add(faLock);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
+
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+Vue.use(VueSweetalert2);
+
+import sweetalert2 from 'sweetalert2';
+window.axios.interceptors.response.use(response => {
+  return response;
+}, error => {
+  if (error.response.status === 401) {
+    sweetalert2.fire({
+      title: 'Login Expired',
+      text: 'Your login has expired.  Please relaunch Chatter from your course to continue.',
+      icon: 'error',
+    })
+  } else {
+    sweetalert2.fire({
+      title: 'Error',
+      text: 'Sorry, but an unexpected error happened.  Please try again.',
+      icon: 'error',
+    })
+  }
+  return error;
+});

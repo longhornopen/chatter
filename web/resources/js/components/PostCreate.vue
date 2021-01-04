@@ -1,18 +1,50 @@
 <script>
+import WysiwygEditor from './WysiwygEditor'
 export default {
+    components: { WysiwygEditor },
     data() {
         return {
-            'post_title': '',
-            'post_body': '',
+            'title': '',
+            'body': '',
+            'anonymous': false,
         };
     },
     methods: {
         submit_new_post: function() {
-            console.log("new post submitted")
-            console.log("post title is " + this.post_title)
+            if (this.title.trim().length === 0) {
+                this.$swal.fire({
+                    title: "Looks like you forgot to write your post title.",
+                    icon: 'warning'
+                });
+                return;
+            }
+            if (this.body.trim().length === 0) {
+                this.$swal.fire({
+                    title: "Looks like you forgot to write your post body.",
+                    icon: 'warning'
+                });
+                return;
+            }
+            this.$store.dispatch('createPost', {
+                title: this.title,
+                body: this.body,
+                author_anonymous: this.anonymous,
+            });
         },
         close_post_editor: function() {
-            this.$emit('close_post_editor')
+            if (this.body.trim().length === 0) {
+                this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
+                return;
+            }
+            this.$swal.fire({
+                title: "Are you sure you want to abandon this post without saving it?",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
+                }
+            });
         }
     }
 }
@@ -23,31 +55,27 @@ export default {
         <!-- <form> -->
             <div class="form-group">
                 <label for="post-title">Post Title</label>
-                <input class="form-control" id="post-title" v-model="post_title">
+                <input class="form-control" id="post-title" v-model="title">
             </div>
             <div class="form-group">
                 <label for="post-body">Post Body</label>
-                <!-- placeholder for wysiwyg editor -->
-                <textarea 
-                    class="form-control" 
-                    style="width:100%"
-                    placeholder="This is a placeholder for WYSIWYG editor"></textarea>
+                <wysiwyg-editor v-model="body"></wysiwyg-editor>
             </div>
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="postAnonymously">
+                <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
                 <label class="form-check-label" for="postAnonymously">Post Anonymously</label>
             </div>
             <div class="editor-btn-group">
-                <button 
+                <button
                     class="btn btn-gray"
                     @click="close_post_editor()">Cancel</button>
-                <button 
+                <button
                     class="btn btn-blue"
                     @click="submit_new_post()">Post</button>
             </div>
-            
+
         <!-- </form> -->
-        
+
     </div>
-    
+
 </template>

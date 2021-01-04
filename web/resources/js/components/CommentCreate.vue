@@ -1,12 +1,44 @@
 <script>
+import WysiwygEditor from './WysiwygEditor'
 export default {
+    components: { WysiwygEditor },
+    props: ['parent_comment_id', 'post_id'],
     data() {
         return {
-            //
+            anonymous: false,
+            comment_body: '',
         };
     },
     methods: {
-        close_comment_editor: function() {
+        cancel: function() {
+            if (this.comment_body.trim().length === 0) {
+                this.$emit('close_comment_editor')
+                return;
+            }
+            this.$swal.fire({
+                title: "Are you sure you want to abandon this comment without saving it?",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.$emit('close_comment_editor')
+                }
+            });
+        },
+        submit: function() {
+            if (this.comment_body.trim().length === 0) {
+                this.$swal.fire({
+                    title: "Looks like you forgot to write your comment.",
+                    icon: 'warning'
+                });
+                return;
+            }
+            this.$store.dispatch('addComment', {
+                post_id: this.post_id,
+                parent_comment_id: this.parent_comment_id,
+                author_anonymous: this.anonymous,
+                body: this.comment_body,
+            });
             this.$emit('close_comment_editor')
         }
     }
@@ -15,12 +47,15 @@ export default {
 
 <template>
     <div>
-        <!-- placeholder for wysiwyg editor -->
-        <textarea style="width:100%"></textarea>
+        <wysiwyg-editor v-model="comment_body"></wysiwyg-editor>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
+            <label class="form-check-label" for="postAnonymously">Post Anonymously</label>
+        </div>
         <div class="editor-btn-group">
-            <button class="btn btn-gray" @click="close_comment_editor()">Cancel</button>
-            <button class="btn btn-orange">Submit</button>
+            <button class="btn btn-gray" @click="cancel()">Cancel</button>
+            <button class="btn btn-orange" @click="submit">Submit</button>
         </div>
     </div>
-    
+
 </template>

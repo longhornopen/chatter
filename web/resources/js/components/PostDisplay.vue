@@ -11,25 +11,42 @@ export default {
         },
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
-        }
+        },
+        add_comment_allowed() {
+            return !this.$store.state.currently_viewed_post.locked;
+        },
     },
     methods: {
         pin(pinned) {
-            // console.log('set pinned for this post to '+pinned);
             this.$store.dispatch('pinPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
                 pinned: pinned
             });
         },
         remove() {
-            console.log('remove this post');
+            this.$swal.fire({
+                title: "Are you sure you want to remove this post and all its comments?",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.$store.dispatch('deletePost', {
+                        post_id: this.$store.getters.currently_viewed_post.id,
+                    });
+                }
+            });
         },
         lock(locked) {
-            // console.log('set locked for this post to '+locked);
             this.$store.dispatch('lockPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
                 locked: locked
             });
+        },
+        post_comments_with_parent_comment_id(pcid) {
+            if (!this.$store.state.currently_viewed_post.comments) {
+                return [];
+            }
+            return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
     },
 }
@@ -44,10 +61,7 @@ export default {
             <div>
                 {{ post.author_user_name }} {{ post.created_at }}
             </div>
-            <div class="post-display-body">
-                {{ post.body }}
-            </div>
-            <!-- <div> -->
+            <div class="post-display-body" v-html="post.body"></div>
                 <div class="btn-groups">
                     <div class="left">
                         <button
@@ -66,30 +80,27 @@ export default {
                             @click="lock(!post.locked)"
                         >{{post.locked ? "Unlock" : "Lock"}}</button>
                     </div>
-                    
-                    <div class="right">
-                        <button 
+
+                    <div class="right" v-if="add_comment_allowed">
+                        <button
                             class="btn btn-orange"
                             :class="!show_editor?'':'d-none'"
                             @click="show_editor=true">Comment</button>
                     </div>
                 </div>
-                <comment-create v-if="show_editor"></comment-create>
-                    <div v-show="show_editor" class="editor-btn-group">
-                        <button class="btn btn-gray" @click="show_editor=false">Cancel</button>
-                        <button class="btn btn-orange">Submit</button>
-                    </div>
-                <!-- <div>
-                    <button class="btn btn-orange">Comment</button>
-                </div> -->
-            <!-- </div> -->
+                <comment-create
+                    v-if="show_editor"
+                    @close_comment_editor="show_editor = false"
+                    :parent_comment_id="null"
+                    :post_id="this.post.id"
+                ></comment-create>
         </div>
         <div class="comments">
-            <div v-for="comment in post.comments">
-                <comment-display :comment="comment"></comment-display>
+            <div v-for="comment in post_comments_with_parent_comment_id(null)">
+                <comment-display
+                    :comment="comment"
+                ></comment-display>
             </div>
-            <!-- <comment-create></comment-create> -->
-            
         </div>
     </div>
 </template>
