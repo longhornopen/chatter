@@ -29,6 +29,16 @@ class ApiController extends Controller
             ->first();
     }
 
+    public function getUser(Request $request, $course_id, $user_id)
+    {
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkIsTeacher($course_user);
+
+        return CourseUser::where('course_id', $course_id)
+            ->where('id', $user_id)
+            ->firstOrFail();
+    }
+
     public function getCourse(Request $request, $course_id)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
@@ -89,7 +99,7 @@ TAG
                 }
                 $post->num_unread_comments = $unread_comments->count();
                 if ($post->author_anonymous) {
-                    $post->makeHidden(['author_user_id', 'author_user_name']);
+                    $post->makeHidden(['author_user_name']);
                 }
                 return $post;
               });
@@ -119,7 +129,7 @@ TAG
                        || $comment->updated_at > $post_last_read->updated_at;
             $comment->is_unread = $is_unread;
             if ($comment->author_anonymous) {
-                $comment->makeHidden(['author_user_id', 'author_user_name']);
+                $comment->makeHidden(['author_user_name']);
             }
             return $comment;
         });

@@ -29,7 +29,10 @@ export default {
         },
         open_new_post_editor: function() {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'new_post'});
-        }
+        },
+        poster_name(post) {
+            return post.author_anonymous ? '(anonymous)' : post.author_user_name;
+        },
     }
 }
 </script>
@@ -82,7 +85,7 @@ export default {
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
-                            <span>{{ post.author_user_name }}</span>
+                            <span>{{ poster_name(post) }}</span>
                             <i>{{ post.created_at }}</i>
                         </div>
                         <h5 class="post-title">

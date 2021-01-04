@@ -1,5 +1,8 @@
 <script>
+import UserName from './UserName';
+import FormattedDate from './FormattedDate';
 export default {
+    components: { UserName, FormattedDate },
     data() {
         return {
             show_editor: false,
@@ -59,7 +62,14 @@ export default {
                 {{ post.title }}
             </h2>
             <div>
-                {{ post.author_user_name }} {{ post.created_at }}
+                <user-name
+                    :name="post.author_user_name"
+                    :anonymous="post.author_anonymous"
+                    :user-id="post.author_user_id"
+                ></user-name>
+                <formatted-date
+                    :date-iso="post.created_at"
+                ></formatted-date>
             </div>
             <div class="post-display-body" v-html="post.body"></div>
                 <div class="btn-groups">

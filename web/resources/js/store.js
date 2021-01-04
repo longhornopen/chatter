@@ -234,6 +234,10 @@ const actions = {
         commit('addComment', response.data);
       });
   },
+  async deanonUserId({commit}, payload) {
+    let response = await axios.get('/api/course/' + this.state.user.course_id + '/user/' + payload.user_id)
+    return response.data;
+  }
 }
 
 // TEMP
