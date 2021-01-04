@@ -172,12 +172,11 @@ const actions = {
   setFilterOrder({commit}, payload) {
     commit('setFilterOrder', {filter_order: payload.filter_order});
   },
-  search({commit}) {
+  async search({commit}) {
     let params = {filter:this.state.filter_order, search:this.state.search_string};
-    axios.get('/api/course/'+this.state.user.course_id+'/posts', {params:params})
-      .then(function(response) {
-      commit('setFilteredPosts', {posts: response.data});
-    });
+    let response = axios.get('/api/course/'+this.state.user.course_id+'/posts', {params:params});
+    commit('setFilteredPosts', {posts: response.data});
+    return response;
   },
   setAppMainPanelMode({commit}, payload) {
     commit('setAppMainPanelMode', {mode: payload.mode});

@@ -19,8 +19,9 @@ export default {
     },
     methods: {
         clear_search: function() {
-            this.search_term = '';
-            this.search();
+            this.search().then(() => {
+                this.search_term = '';
+            })
         },
         search: function() {
             this.$store.dispatch('search');
@@ -34,6 +35,7 @@ export default {
 
 <template>
     <div class="app-header-bar">
+        {{search_term}}
         <div class="d-flex justify-content-between">
             <div>
                 <form
