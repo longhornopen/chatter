@@ -16,6 +16,9 @@ export default {
         comment_is_endorsed() {
             return this.comment.endorsed;
         },
+        add_comment_allowed() {
+            return !this.$store.state.currently_viewed_post.locked;
+        },
     },
     methods: {
         endorse(endorse_action) {
@@ -59,12 +62,14 @@ export default {
                         ></div>
                         <div
                             class="reply-icon"
-                            @click="toggle_comment_editor(!show_editor)">
+                            @click="toggle_comment_editor(!show_editor)"
+                            v-if="add_comment_allowed"
+                        >
                             <font-awesome-icon icon="reply" size="lg" color="#7d7d7d"/>
                         </div>
                     </div>
                     <comment-create
-                        v-if="show_editor"
+                        v-if="add_comment_allowed && show_editor"
                         @close_comment_editor="toggle_comment_editor(false)"
                         :parent_comment_id="this_comment.id"
                         :post_id="this_comment.post_id"

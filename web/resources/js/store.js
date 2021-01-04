@@ -90,6 +90,12 @@ const mutations = {
   },
 
   addPost(state, payload) {
+    if (!payload.num_comments) {
+      payload.num_comments = 0;
+    }
+    if (!payload.num_unread_comments) {
+      payload.num_unread_comments = 0;
+    }
     state.posts.unshift(payload);
     state.currently_viewed_post = payload;
     state.app_main_panel_mode = 'show_post';

@@ -12,6 +12,9 @@ export default {
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
         },
+        add_comment_allowed() {
+            return !this.$store.state.currently_viewed_post.locked;
+        },
     },
     methods: {
         pin(pinned) {
@@ -78,7 +81,7 @@ export default {
                         >{{post.locked ? "Unlock" : "Lock"}}</button>
                     </div>
 
-                    <div class="right">
+                    <div class="right" v-if="add_comment_allowed">
                         <button
                             class="btn btn-orange"
                             :class="!show_editor?'':'d-none'"

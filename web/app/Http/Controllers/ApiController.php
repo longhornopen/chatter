@@ -187,6 +187,10 @@ TAG
         $post = Post::findOrFail($request->get('post_id'));
         $this->checkPostAuths($post, $course_user);
 
+        if ($post->locked) {
+            throw new UnauthorizedException("You can't create a comment because that post has been locked.");
+        }
+
         $body = $request->get('body');
         $body = $this->stripTags($body);
 
