@@ -146,6 +146,11 @@ TAG
         $post->body = $body;
         $post->save();
 
+        $flag = new CourseUserPostLastReadFlag();
+        $flag->post_id = $post->id;
+        $flag->course_user_id = $course_user->id;
+        $flag->save();
+
         return $post;
     }
 
