@@ -25,3 +25,8 @@ Route::get('/app', function() {
 Route::post('/lti', [App\Http\Controllers\LtiController::class, 'ltiMessage']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/demo/temp_impersonate', function() {
+    session(['course_user_id'=>1]);
+    return 'FIXME remove this';
+});
