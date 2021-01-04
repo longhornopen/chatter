@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int parent_comment_id
  * @property boolean author_anonymous
  * @property string body
+ * @method static findOrFail($comment_id)
  */
 class Comment extends Model
 {
