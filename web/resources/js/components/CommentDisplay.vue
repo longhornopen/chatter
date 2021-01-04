@@ -55,6 +55,10 @@ export default {
                 <formatted-date
                     :date-iso="this_comment.created_at"
                 ></formatted-date>
+                <span
+                    v-if="this_comment.is_unread"
+                >NEW
+                </span>
             </div>
             <div class="row">
                 <div
