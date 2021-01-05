@@ -1,6 +1,7 @@
 <script>
 import UserName from './UserName';
 import FormattedDate from './FormattedDate';
+import _ from 'lodash';
 export default {
     components: { UserName, FormattedDate },
     data() {
@@ -11,6 +12,9 @@ export default {
     computed: {
         post() {
             return this.$store.getters.currently_viewed_post;
+        },
+        post_loaded() {
+            return !_.isEmpty(this.$store.getters.currently_viewed_post);
         },
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
@@ -56,60 +60,67 @@ export default {
 </script>
 
 <template>
-    <div class="app-post-display">
-        <div>
-            <h2>
-                {{ post.title }}
-            </h2>
-            <div>
-                <user-name
-                    :name="post.author_user_name"
-                    :anonymous="post.author_anonymous"
-                    :user-id="post.author_user_id"
-                ></user-name>
-                <formatted-date
-                    :date-iso="post.created_at"
-                ></formatted-date>
+    <div>
+        <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
             </div>
-            <div class="post-display-body" v-html="post.body"></div>
-                <div class="btn-groups">
-                    <div class="left">
-                        <button
-                            class="btn btn-blue"
-                            :class="user_is_teacher && !show_editor?'':'d-none'"
-                            @click="pin(!post.pinned)"
-                        >{{post.pinned ? "Unpin" : "Pin"}}</button>
-                        <button
-                            class="btn btn-blue"
-                            :class="user_is_teacher && !show_editor?'':'d-none'"
-                            @click="remove()"
-                        >Remove</button>
-                        <button
-                            class="btn btn-blue"
-                            :class="user_is_teacher && !show_editor?'':'d-none'"
-                            @click="lock(!post.locked)"
-                        >{{post.locked ? "Unlock" : "Lock"}}</button>
-                    </div>
-
-                    <div class="right" v-if="add_comment_allowed">
-                        <button
-                            class="btn btn-orange"
-                            :class="!show_editor?'':'d-none'"
-                            @click="show_editor=true">Comment</button>
-                    </div>
-                </div>
-                <comment-create
-                    v-if="show_editor"
-                    @close_comment_editor="show_editor = false"
-                    :parent_comment_id="null"
-                    :post_id="this.post.id"
-                ></comment-create>
         </div>
-        <div class="comments">
-            <div v-for="comment in post_comments_with_parent_comment_id(null)">
-                <comment-display
-                    :comment="comment"
-                ></comment-display>
+        <div v-if="post_loaded" class="app-post-display">
+            <div>
+                <h2>
+                    {{ post.title }}
+                </h2>
+                <div>
+                    <user-name
+                        :name="post.author_user_name"
+                        :anonymous="post.author_anonymous"
+                        :user-id="post.author_user_id"
+                    ></user-name>
+                    <formatted-date
+                        :date-iso="post.created_at"
+                    ></formatted-date>
+                </div>
+                <div class="post-display-body" v-html="post.body"></div>
+                    <div class="btn-groups">
+                        <div class="left">
+                            <button
+                                class="btn btn-blue"
+                                :class="user_is_teacher && !show_editor?'':'d-none'"
+                                @click="pin(!post.pinned)"
+                            >{{post.pinned ? "Unpin" : "Pin"}}</button>
+                            <button
+                                class="btn btn-blue"
+                                :class="user_is_teacher && !show_editor?'':'d-none'"
+                                @click="remove()"
+                            >Remove</button>
+                            <button
+                                class="btn btn-blue"
+                                :class="user_is_teacher && !show_editor?'':'d-none'"
+                                @click="lock(!post.locked)"
+                            >{{post.locked ? "Unlock" : "Lock"}}</button>
+                        </div>
+
+                        <div class="right" v-if="add_comment_allowed">
+                            <button
+                                class="btn btn-orange"
+                                :class="!show_editor?'':'d-none'"
+                                @click="show_editor=true">Comment</button>
+                        </div>
+                    </div>
+                    <comment-create
+                        v-if="show_editor"
+                        @close_comment_editor="show_editor = false"
+                        :parent_comment_id="null"
+                        :post_id="this.post.id"
+                    ></comment-create>
+            </div>
+            <div class="comments">
+                <div v-for="comment in post_comments_with_parent_comment_id(null)">
+                    <comment-display
+                        :comment="comment"
+                    ></comment-display>
+                </div>
             </div>
         </div>
     </div>

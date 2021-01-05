@@ -19,11 +19,17 @@ export default {
                 ? this.$store.getters.filtered_posts
                 : this.$store.getters.posts;
         },
+<<<<<<< HEAD
         // get_height_for_posts() {
         //     console.log(this.$ref)
         //     var height_string = 'calc(100vh - 60px - 58px - 10px) - ' + this.$ref.posts_tabs.clientHeight + 'px'
         //     Vue.set(this.posts_styles, 'height', height_string)
         // }
+=======
+        posts_loaded() {
+            return !this.$store.getters.posts_loading;
+        }
+>>>>>>> upstream/main
     },
     methods: {
         set_post_sort_order: function (order) {
@@ -140,7 +146,16 @@ export default {
                 </ul>
             </div> -->
 
+<<<<<<< HEAD
             <div class="post" v-for="post in posts" :style="posts_styles">
+=======
+            <div v-if="!posts_loaded" class="d-flex justify-content-center mt-5">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div class="post" v-if="posts_loaded" v-for="post in posts">
+>>>>>>> upstream/main
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">

@@ -36,7 +36,6 @@ export default {
 
 <template>
     <div class="app-header-bar">
-        {{search_term}}
         <div class="d-flex justify-content-between">
             <div>
                 <form
