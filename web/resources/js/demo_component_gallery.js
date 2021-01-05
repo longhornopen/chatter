@@ -323,7 +323,8 @@ store_defaults.actions.endorseComment = function({commit}, payload) {
     commit('endorseComment', {comment_id:payload.comment_id, endorsed: payload.endorsed});
   };
 store_defaults.actions.muteComment = function({commit}, payload) {
-    commit('muteComment', {comment_id: payload.comment_id, muted: payload.muted});
+    let muid = payload.muted ? 999 : null;
+    commit('muteComment', {comment_id: payload.comment_id, muted_by_user_id: muid});
   };
 store_defaults.actions.addComment = function({commit}, payload) {
     // these are filled in from the API in the real app, so fake it here

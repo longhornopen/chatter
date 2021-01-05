@@ -18,16 +18,15 @@ export default {
         }
     },
     methods: {
-        clear_search: function() {
+        clear_search() {
             this.search().then(() => {
                 this.search_term = '';
             })
         },
-        search: function() {
+        search() {
             this.$store.dispatch('search');
         },
-        
-        open_settings: function() {
+        open_settings() {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'show_settings'});
         }
     }
@@ -50,16 +49,16 @@ export default {
                             autocomplete="off"
                             v-model="search_term"
                         >
-                        <button 
+                        <button
                             class="btn bg-transparent clear-search-icon"
                             @click="clear_search()">
-                            <font-awesome-icon 
-                                class="times-icon" 
-                                icon="times-circle" 
+                            <font-awesome-icon
+                                class="times-icon"
+                                icon="times-circle"
                                 size="lg"/>
                         </button>
                     </div>
-                    
+
                     <!-- <button
                         class="btn bg-transparent clear-search-icon"
                         @click.prevent="clear_search()">
@@ -68,7 +67,7 @@ export default {
                             icon="times-circle"
                             size="lg"/>
                     </button> -->
-                
+
 
                     <button
                         type="submit"

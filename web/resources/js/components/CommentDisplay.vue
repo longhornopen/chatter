@@ -23,7 +23,6 @@ export default {
         },
         user_is_teacher() {
             return this.$store.state.user.role == 'teacher'
-            // return false;
         },
         comment_is_muted() {
             return !(this.comment.muted_by_user_id === null)
@@ -45,11 +44,7 @@ export default {
             }
             return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
-        toggle_comment_editor: function(action) {
-            this.show_editor = action
-        },
         mute_comment: function(action) {
-            console.log(action)
             this.$store.dispatch('muteComment', {
                 comment_id: this.comment.id,
                 muted: action,
@@ -88,10 +83,17 @@ export default {
                 <div class="comment-container">
                     <div class="comment-body-group">
                         <div class="comment-body">
-                            <div
-                                class="comment-body-text"
-                                v-html="this_comment.body"
-                            ></div>
+                            <div v-if="comment_is_muted">
+                                <div class="comment-body-text comment-body-text-muted">
+                                    (This comment is hidden.)
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div
+                                    class="comment-body-text"
+                                    v-html="comment.body"
+                                ></div>
+                            </div>
                             <div
                                 class="reply-icon"
                                 @click="toggle_comment_editor(!show_editor)"
@@ -111,11 +113,11 @@ export default {
                     <comment-create
                         v-if="add_comment_allowed && show_editor"
                         @close_comment_editor="toggle_comment_editor(false)"
-                        :parent_comment_id="this_comment.id"
-                        :post_id="this_comment.post_id"
+                        :parent_comment_id="comment.id"
+                        :post_id="comment.post_id"
                     ></comment-create>
                     <div style="padding-left:20px;">
-                        <div v-for="child_comment in post_comments_with_parent_comment_id(this_comment.id)">
+                        <div v-for="child_comment in post_comments_with_parent_comment_id(comment.id)">
                             <comment-display :comment="child_comment"></comment-display>
                         </div>
                     </div>

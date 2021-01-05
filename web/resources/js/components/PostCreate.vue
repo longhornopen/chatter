@@ -10,7 +10,7 @@ export default {
         };
     },
     methods: {
-        submit_new_post: function() {
+        submit_new_post() {
             if (this.title.trim().length === 0) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your post title.",
@@ -31,7 +31,7 @@ export default {
                 author_anonymous: this.anonymous,
             });
         },
-        close_post_editor: function() {
+        close_post_editor() {
             if (this.body.trim().length === 0) {
                 this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
                 return;

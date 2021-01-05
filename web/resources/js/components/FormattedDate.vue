@@ -11,7 +11,6 @@ export default {
             return this.dateIso + "**";
         },
         convert_date() {
-            // return moment(this.dateIso).format('YYYY-MM-DD hh:mm A')
             let date = new Date(this.dateIso).toLocaleDateString()
             let time = new Date(this.dateIso).toLocaleTimeString([], {
                 timeStyle: 'short'
@@ -25,6 +24,6 @@ export default {
 
 <template>
         <span>
-            {{ convert_date }}  
+            {{ convert_date }}
         </span>
 </template>

@@ -23,7 +23,7 @@
     }
     .col-md-8 {
         padding-left: 0;
-        
+
     }
 }
 
@@ -227,6 +227,9 @@
         padding: 10px;
         margin: 10px 0;
 
+    }
+    .post-display-body p:last-child {
+        margin-bottom: 0;
     }
     .comments {
         margin: 20px 0;
