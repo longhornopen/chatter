@@ -1,5 +1,4 @@
 <script>
-import moment from 'moment'
 export default {
     props: ['dateIso'],
     data() {
@@ -7,9 +6,6 @@ export default {
         };
     },
     computed: {
-        formatted_date() {
-            return this.dateIso + "**";
-        },
         convert_date() {
             let date = new Date(this.dateIso).toLocaleDateString()
             let time = new Date(this.dateIso).toLocaleTimeString([], {
