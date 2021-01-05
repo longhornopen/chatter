@@ -11,7 +11,6 @@ export default {
     },
     data() {
         return {
-            this_comment: this.comment,
             show_editor: false,
         };
     },
@@ -53,10 +52,10 @@ export default {
                     :user-id="comment.author_user_id"
                 ></user-name>
                 <formatted-date
-                    :date-iso="this_comment.created_at"
+                    :date-iso="comment.created_at"
                 ></formatted-date>
                 <span
-                    v-if="this_comment.is_unread"
+                    v-if="comment.is_unread"
                 >NEW
                 </span>
             </div>
@@ -71,7 +70,7 @@ export default {
                     <div class="comment-body">
                         <div
                             class="comment-body-text"
-                            v-html="this_comment.body"
+                            v-html="comment.body"
                         ></div>
                         <div
                             class="reply-icon"
@@ -84,11 +83,11 @@ export default {
                     <comment-create
                         v-if="add_comment_allowed && show_editor"
                         @close_comment_editor="toggle_comment_editor(false)"
-                        :parent_comment_id="this_comment.id"
-                        :post_id="this_comment.post_id"
+                        :parent_comment_id="comment.id"
+                        :post_id="comment.post_id"
                     ></comment-create>
                     <div style="padding-left:20px;">
-                        <div v-for="child_comment in post_comments_with_parent_comment_id(this_comment.id)">
+                        <div v-for="child_comment in post_comments_with_parent_comment_id(comment.id)">
                             <comment-display :comment="child_comment"></comment-display>
                         </div>
                     </div>

@@ -57,7 +57,7 @@ class ApiController extends Controller
         $search = $request->get('search');
 
         $posts = Post::where('course_id', $course_user->course_id)
-            ->orderBy('created_at');
+            ->orderBy('created_at', 'desc');
         if ($filter==='pinned') {
             $posts = $posts->where('pinned', true);
         } elseif ($filter==='unread') {
