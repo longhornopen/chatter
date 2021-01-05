@@ -55,12 +55,17 @@ import {
     faTimesCircle,
     faPlus,
     faReply,
-    faAward, } from '@fortawesome/free-solid-svg-icons'
+    faAward, 
+    faThumbtack,
+    faLock,
+  } from '@fortawesome/free-solid-svg-icons'
 library.add(faCog);
 library.add(faPlus);
 library.add(faReply);
 library.add(faAward);
 library.add(faTimesCircle);
+library.add(faThumbtack);
+library.add(faLock);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;

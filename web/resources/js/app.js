@@ -11,6 +11,7 @@ import PostDisplay from './components/PostDisplay.vue';
 import PostCreate from './components/PostCreate.vue';
 import CommentCreate from './components/CommentCreate.vue';
 import CommentDisplay from './components/CommentDisplay.vue';
+import FormattedDate from './components/FormattedDate.vue';
 
 
 Vue.component('app-framework', AppFramework);
@@ -20,6 +21,7 @@ Vue.component('post-display', PostDisplay);
 Vue.component('post-create', PostCreate);
 Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
+Vue.component('formatted-date', FormattedDate);
 
 
 //TEMP

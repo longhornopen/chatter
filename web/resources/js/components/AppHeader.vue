@@ -26,6 +26,7 @@ export default {
         search: function() {
             this.$store.dispatch('search');
         },
+        
         open_settings: function() {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'show_settings'});
         }
@@ -41,31 +42,41 @@ export default {
                     class="form-inline"
                     @submit.prevent="search()"
                 >
-                <div class="input-group">
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Search..."
-                        autocomplete="off"
-                        v-model="search_term"
-                    >
-                    <button
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Search..."
+                            autocomplete="off"
+                            v-model="search_term"
+                        >
+                        <button 
+                            class="btn bg-transparent clear-search-icon"
+                            @click="clear_search()">
+                            <font-awesome-icon 
+                                class="times-icon" 
+                                icon="times-circle" 
+                                size="lg"/>
+                        </button>
+                    </div>
+                    
+                    <!-- <button
                         class="btn bg-transparent clear-search-icon"
                         @click.prevent="clear_search()">
                         <font-awesome-icon
                             class="times-icon"
                             icon="times-circle"
                             size="lg"/>
-                    </button>
-                </div>
+                    </button> -->
+                
 
                     <button
                         type="submit"
                         class="btn btn-search-submit"
                     >Search</button>
                 </form>
-            </div>
-            <div class="course_name">{{ course_name }}</div>
+                </div>
+            <!-- <div class="course_name">{{ course_name }}</div> -->
             <div
                 class="settings-control"
                 @click="open_settings()"
@@ -73,5 +84,6 @@ export default {
                 <font-awesome-icon color="white" icon="cog"/>
             </div>
         </div>
+        <div class="course_name">{{ course_name }}</div>
     </div>
 </template>
