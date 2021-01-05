@@ -11,6 +11,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @method static findOrFail($post_id)
  * @method static where(string $string, $post_id)
+ * @property int course_id
+ * @property int author_user_id
+ * @property string author_user_name
+ * @property string author_user_role
+ * @property int author_anonymous
+ * @property string title
+ * @property string body
+ * @property int id
  */
 class Post extends Model
 {

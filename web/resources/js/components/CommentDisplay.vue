@@ -1,5 +1,8 @@
 <script>
+import UserName from './UserName';
+import FormattedDate from './FormattedDate';
 export default {
+    components: { UserName, FormattedDate },
     props: {
         comment: {
             type: Object,
@@ -51,8 +54,18 @@ export default {
     <div class="single-comment">
         <div>
             <div style="font-style:italic;font-size:80%;">
-                {{ this_comment.author_user_name }}
-                {{ this_comment.created_at }}
+                <user-name
+                    :name="comment.author_user_name"
+                    :anonymous="comment.author_anonymous"
+                    :user-id="comment.author_user_id"
+                ></user-name>
+                <formatted-date
+                    :date-iso="this_comment.created_at"
+                ></formatted-date>
+                <span
+                    v-if="this_comment.is_unread"
+                >NEW
+                </span>
             </div>
             <div class="row comment-row">
                 <div

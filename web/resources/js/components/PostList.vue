@@ -34,7 +34,10 @@ export default {
             // console.log(date.getDate())
             // console.log(date.getMonth())
             // console.log(date.getFullYear())
-        }
+        },
+        poster_name(post) {
+            return post.author_anonymous ? '(anonymous)' : post.author_user_name;
+        },
     }
 }
 </script>
@@ -90,6 +93,8 @@ export default {
                             <span>{{ post.author_user_name }}</span>
                             <i @click="convert_date(post.created_at)">{{ post.created_at }}</i>
                             <!-- <i>{{ convert_date(post.created_at) }}</i> -->
+                            <span>{{ poster_name(post) }}</span>
+                            <i>{{ post.created_at }}</i>
                         </div>
                         <h5 class="post-title">
                             {{ post.title }}

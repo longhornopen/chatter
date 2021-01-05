@@ -221,6 +221,9 @@ store_defaults.actions.addComment = function({commit}, payload) {
     payload.created_at = '2020-12-21T09:17:11.000000Z';
     commit('addComment', payload);
 };
+store_defaults.actions.deanonUserId = function({commit}, payload) {
+  return {name:"Real User Name"};
+};
 
 let store = new Vuex.Store(store_defaults);
 
