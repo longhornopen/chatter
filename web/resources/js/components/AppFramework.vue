@@ -18,7 +18,7 @@ export default {
 <template>
     <div style="height: 100%;">
         <div class="row">
-            <div class="col-md-12 app-title-bar">
+            <div class="app-title-bar">
                 <img class="app-logo" src="/images/logo/logo.svg" alt="Chatter logo">
                 <span class="app-title">CHATTER</span>
             </div>
@@ -26,7 +26,7 @@ export default {
         <div class="row">
             <div class="col-md-12"><app-header></app-header></div>
         </div>
-        <div class="row">
+        <div class="row main-app-area">
             <div class="col-md-4"><post-list></post-list></div>
             <div class="col-md-8">
                 <div v-if="app_main_panel_mode==='welcome'">

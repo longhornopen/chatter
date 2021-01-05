@@ -9,8 +9,22 @@
 
 #app {
     height: 100vh;
-    margin-left: 10px;
-    margin-right: 10px;
+    // margin-left: 10px;
+    // margin-right: 10px;
+}
+// .col-md-12 {
+//     padding: 0;
+// }
+
+.main-app-area {
+    height: calc(100vh - 60px - 58px);
+    .col-md-4 {
+        padding-right: 0;
+    }
+    .col-md-8 {
+        padding-left: 0;
+        
+    }
 }
 
 .app-title-bar {
@@ -24,15 +38,16 @@
         font-size: x-large;
         font-weight: 900;
     }
-    margin: 10px 0;
+    margin: 10px 0 10px 20px;
     display: flex;
     align-items: center;
+    width: 80vh
 }
 
 .app-header-bar {
     background-color: $gray;
     padding: 10px;
-
+    position: relative;
     .justify-content-between {
         align-items: center;
     }
@@ -49,6 +64,14 @@
     .course_name {
         color: $white;
         font-size: large;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .form-inline {
         .form-control, .form-control:focus {
@@ -79,6 +102,7 @@
         align-items: center;
         margin-left: -50px;
         z-index: 100;
+        box-shadow: none;
         .times-icon {
             color: $gray;
         }
@@ -86,13 +110,13 @@
     .clear-search-icon:focus {
         box-shadow: none;
     }
-
 }
 
 .app-post-list {
     background-color: $lightgray;
     padding: 10px;
     height: 100%;
+    position: relative;
     .nav-tabs {
         display: flex;
         .nav-item {
@@ -117,7 +141,7 @@
     }
     .btn-post-topic {
         // @include button-variant($green, $blue, $red);
-        width: 100%;
+        width: calc(100% - 20px);
         background-color: $orange;
         color: $white;
         border-radius: 0;
@@ -129,9 +153,10 @@
 
     .app-post-list-body {
         background-color: $body-bg;
-        height: 100%;
-        position: relative;
-
+        height: calc(100vh - 60px - 58px - 49px - 37px);
+        // height: 100%;
+        // position: relative;
+        overflow-y: auto;
         .post {
             background-color: $body-bg;
             padding: 10px;
@@ -144,10 +169,22 @@
             }
             .post-btn-group {
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
+                align-items: center;
+                margin: 5px 0 0 0;
+                .pin-icon, .lock-icon {
+                    color: $darkergray;
+                    margin: 0 5px 0 0;
+                }
                 span {
                     margin: 0 0 0 5px;
                     color: $white;
+                }
+                .btn {
+                    color: $white;
+                    box-shadow: none;
+                    padding: 0.05rem 0.25rem;
+                    font-size: small;
                 }
                 .badge-unread {
                     background-color: $darkergray;
@@ -167,11 +204,23 @@
             cursor: pointer;
         }
     }
+    @media screen and (max-width: 1167px) {
+        .app-post-list-body {
+            height: calc(100vh - 60px - 58px - 72px - 37px);
+        }
+    }
+    @media screen and (max-width: 899px) {
+        .app-post-list-body {
+            height: calc(100vh - 60px - 58px - (39px * 2) - 10px - 37px);
+        }
+    }
 }
 
 .app-post-display {
     // background-color: $cyan;
-    padding: 30px;
+    height: calc(100vh - 60px - 58px);
+    padding: 40px 80px;
+    overflow-y: auto;
     .post-display-body {
         border-radius: 6px;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -223,7 +272,22 @@
     background-color: darken($darkergray, $darken-amount);
 }
 
+.comment-container{
+    width: calc(100% - 34.39px);
+}
+
+.comment-body-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .hide-btn {
+        color: $blue;
+        cursor: pointer;
+    }
+}
+
 .comment-body {
+    width: calc(100% - 55px);
     background-color: $commentgray;
     border-radius: 6px;
     padding: 10px;
@@ -231,8 +295,12 @@
     position: relative;
     // display: flex;
 }
+// .comment-body.can-unhide {
+//     width: calc(100% - 55px);
+// }
+
 .comment-body-text {
-    margin-right: 10px;
+    padding-right: 30px;
 }
 .comment-body-text p:last-child {
     margin-bottom: 0;
@@ -241,6 +309,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    cursor: pointer;
 }
 .single-comment {
     // display: flex;
@@ -257,9 +326,28 @@
                 color: $commentgray;
                 transition: 0.3s;
             }
+            .invisible {
+                color: $white;
+            }
         }
         .col-11 {
             padding-left: 0px;
+        }
+    }
+    .comment-row {
+        display: flex;
+        margin: 0px;
+        .endorse-icon {
+            padding-top: 22px;
+            margin: 0 10px;
+            .endorsed {
+                color: $blue;
+                transition: 0.3s;
+            }
+            .can-endorse {
+                color: $commentgray;
+                transition: 0.3s;
+            }
         }
     }
 }
