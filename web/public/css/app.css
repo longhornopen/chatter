@@ -11048,6 +11048,7 @@ a.text-dark:focus {
   background-color: #d1d1d1;
   padding: 10px;
   height: 100%;
+  position: relative;
 }
 
 .app-post-list .nav-tabs {
@@ -11079,7 +11080,7 @@ a.text-dark:focus {
 }
 
 .app-post-list .btn-post-topic {
-  width: 100%;
+  width: calc(100% - 20px);
   background-color: #B35C22;
   color: #ffffff;
   border-radius: 0;
@@ -11091,8 +11092,8 @@ a.text-dark:focus {
 
 .app-post-list .app-post-list-body {
   background-color: #f8fafc;
-  height: 100%;
-  position: relative;
+  height: calc(100vh - 60px - 58px - 49px - 37px);
+  overflow-y: auto;
 }
 
 .app-post-list .app-post-list-body .post {
@@ -11153,8 +11154,22 @@ a.text-dark:focus {
   cursor: pointer;
 }
 
+@media screen and (max-width: 1167px) {
+  .app-post-list .app-post-list-body {
+    height: calc(100vh - 60px - 58px - 72px - 37px);
+  }
+}
+
+@media screen and (max-width: 899px) {
+  .app-post-list .app-post-list-body {
+    height: calc(100vh - 60px - 58px - (39px * 2) - 10px - 37px);
+  }
+}
+
 .app-post-display {
+  height: calc(100vh - 60px - 58px);
   padding: 40px 80px;
+  overflow-y: auto;
 }
 
 .app-post-display .post-display-body {
@@ -11215,17 +11230,28 @@ a.text-dark:focus {
   width: calc(100% - 34.39px);
 }
 
+.comment-body-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-body-group .hide-btn {
+  color: #245E83;
+  cursor: pointer;
+}
+
 .comment-body {
+  width: calc(100% - 55px);
   background-color: #e0e0e0;
   border-radius: 6px;
   padding: 10px;
   margin: 10px 0;
   position: relative;
-  display: flex;
 }
 
 .comment-body-text {
-  margin-right: 10px;
+  padding-right: 30px;
 }
 
 .comment-body-text p:last-child {

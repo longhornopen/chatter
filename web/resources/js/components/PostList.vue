@@ -1,7 +1,9 @@
 <script>
+import FormattedDate from './FormattedDate.vue';
 export default {
     data () {
         return {
+            posts_styles: {}
         }
     },
     computed: {
@@ -17,6 +19,11 @@ export default {
                 ? this.$store.getters.filtered_posts
                 : this.$store.getters.posts;
         },
+        // get_height_for_posts() {
+        //     console.log(this.$ref)
+        //     var height_string = 'calc(100vh - 60px - 58px - 10px) - ' + this.$ref.posts_tabs.clientHeight + 'px'
+        //     Vue.set(this.posts_styles, 'height', height_string)
+        // }
     },
     methods: {
         set_post_sort_order: function (order) {
@@ -38,14 +45,19 @@ export default {
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
         },
-    }
+        get_height_for_posts() {
+            console.log(this.$ref)
+            // var height_string = 'calc(100vh - 60px - 58px - 10px) - ' + this.$ref.posts_tabs.clientHeight + 'px'
+            // Vue.set(this.posts_styles, 'height', height_string)
+        }
+        
+    },
 }
 </script>
 
 <template>
     <div class="app-post-list">
-        <div class="app-post-list-body">
-            <div>
+        <div>
                 <ul class="nav nav-tabs">
                     <li class="nav-item active">
                         <a class="nav-link"
@@ -85,16 +97,58 @@ export default {
                     </li>
                 </ul>
             </div>
+        <div class="app-post-list-body">
+            <!-- <div @click="get_height_for_posts()">Hi</div> -->
+            <!-- <div>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item active">
+                        <a class="nav-link"
+                           :class="post_order==='newest'?'active':''"
+                           href="#"
+                           @click.prevent="set_post_sort_order('newest')"
+                        >
+                            All
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           :class="post_order==='pinned'?'active':''"
+                           href="#"
+                           @click.prevent="set_post_sort_order('pinned')"
+                        >
+                            Pinned
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           :class="post_order==='unread'?'active':''"
+                           href="#"
+                           @click.prevent="set_post_sort_order('unread')"
+                        >
+                            Unread
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           :class="post_order==='my_posts'?'active':''"
+                           href="#"
+                           @click.prevent="set_post_sort_order('my_posts')"
+                        >
+                            My Posts
+                        </a>
+                    </li>
+                </ul>
+            </div> -->
 
-            <div class="post" v-for="post in posts">
+            <div class="post" v-for="post in posts" :style="posts_styles">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
-                            <span>{{ post.author_user_name }}</span>
-                            <i @click="convert_date(post.created_at)">{{ post.created_at }}</i>
-                            <!-- <i>{{ convert_date(post.created_at) }}</i> -->
+                            <!-- <span>{{ post.author_user_name }}</span> -->
+                            <!-- <i @click="convert_date(post.created_at)">{{ post.created_at }}</i>
+                            -->
                             <span>{{ poster_name(post) }}</span>
-                            <i>{{ post.created_at }}</i>
+                            <formatted-date :dateIso="post.created_at" italicized="true"></formatted-date>
                         </div>
                         <h5 class="post-title">
                             {{ post.title }}
@@ -137,7 +191,7 @@ export default {
                 </div>
             </div>
             <div v-if="search_returned_zero_posts" class="no-search-results">No Search Results</div>
-            <div>
+            <!-- <div>
                 <button
                     class="btn btn-post-topic"
                     @click="open_new_post_editor()"
@@ -145,9 +199,17 @@ export default {
                     <font-awesome-icon icon="plus"/>
                     Write a Post
                 </button>
-            </div>
+            </div> -->
         </div>
-
+        <div>
+            <button
+                class="btn btn-post-topic"
+                @click="open_new_post_editor()"
+            >
+                <font-awesome-icon icon="plus"/>
+                Write a Post
+            </button>
+        </div>
         
     </div>
 </template>

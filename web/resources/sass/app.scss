@@ -23,6 +23,7 @@
     }
     .col-md-8 {
         padding-left: 0;
+        
     }
 }
 
@@ -115,6 +116,7 @@
     background-color: $lightgray;
     padding: 10px;
     height: 100%;
+    position: relative;
     .nav-tabs {
         display: flex;
         .nav-item {
@@ -139,7 +141,7 @@
     }
     .btn-post-topic {
         // @include button-variant($green, $blue, $red);
-        width: 100%;
+        width: calc(100% - 20px);
         background-color: $orange;
         color: $white;
         border-radius: 0;
@@ -151,9 +153,10 @@
 
     .app-post-list-body {
         background-color: $body-bg;
-        height: 100%;
-        position: relative;
-
+        height: calc(100vh - 60px - 58px - 49px - 37px);
+        // height: 100%;
+        // position: relative;
+        overflow-y: auto;
         .post {
             background-color: $body-bg;
             padding: 10px;
@@ -201,11 +204,23 @@
             cursor: pointer;
         }
     }
+    @media screen and (max-width: 1167px) {
+        .app-post-list-body {
+            height: calc(100vh - 60px - 58px - 72px - 37px);
+        }
+    }
+    @media screen and (max-width: 899px) {
+        .app-post-list-body {
+            height: calc(100vh - 60px - 58px - (39px * 2) - 10px - 37px);
+        }
+    }
 }
 
 .app-post-display {
     // background-color: $cyan;
+    height: calc(100vh - 60px - 58px);
     padding: 40px 80px;
+    overflow-y: auto;
     .post-display-body {
         border-radius: 6px;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -257,20 +272,35 @@
     background-color: darken($darkergray, $darken-amount);
 }
 
-.comment-container {
+.comment-container{
     width: calc(100% - 34.39px);
 }
 
+.comment-body-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .hide-btn {
+        color: $blue;
+        cursor: pointer;
+    }
+}
+
 .comment-body {
+    width: calc(100% - 55px);
     background-color: $commentgray;
     border-radius: 6px;
     padding: 10px;
     margin: 10px 0;
     position: relative;
-    display: flex;
+    // display: flex;
 }
+// .comment-body.can-unhide {
+//     width: calc(100% - 55px);
+// }
+
 .comment-body-text {
-    margin-right: 10px;
+    padding-right: 30px;
 }
 .comment-body-text p:last-child {
     margin-bottom: 0;

@@ -25,6 +25,9 @@ export default {
         user_is_teacher() {
             return this.$store.state.user.role == 'teacher'
             // return false;
+        },
+        comment_is_muted() {
+            return !(this.comment.muted_by_user_id === null)
         }
     },
     methods: {
@@ -45,6 +48,13 @@ export default {
         },
         toggle_comment_editor: function(action) {
             this.show_editor = action
+        },
+        mute_comment: function(action) {
+            console.log(action)
+            this.$store.dispatch('muteComment', {
+                comment_id: this.comment.id,
+                muted: action,
+            })
         }
     }
 }
@@ -77,22 +87,27 @@ export default {
                     icon="award" size="lg" />
                 </div>
                 <div class="comment-container">
-                    <div class="comment-body">
-                        <div
-                            class="comment-body-text"
-                            v-html="this_comment.body"
-                        ></div>
-                        <div
-                            class="reply-icon"
-                            @click="toggle_comment_editor(!show_editor)"
-                            v-if="add_comment_allowed"
-                            data-toggle="tooltip" 
-                            data-placement="top" 
-                            title="Click to Reply to this Comment"
-                            type="button"
-                        >
-                            <font-awesome-icon icon="reply" size="lg" color="#7d7d7d"/>
+                    <div class="comment-body-group">
+                        <div class="comment-body">
+                            <div
+                                class="comment-body-text"
+                                v-html="this_comment.body"
+                            ></div>
+                            <div
+                                class="reply-icon"
+                                @click="toggle_comment_editor(!show_editor)"
+                                v-if="add_comment_allowed"
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Click to Reply to this Comment"
+                                type="button"
+                            >
+                                <font-awesome-icon icon="reply" size="lg" color="#7d7d7d"/>
+                            </div>
                         </div>
+                        <div 
+                            class="hide-btn"
+                            @click="mute_comment(comment_is_muted ? false : true)"><u>{{comment_is_muted ? 'Unhide' : 'Hide'}}</u></div>
                     </div>
                     <comment-create
                         v-if="add_comment_allowed && show_editor"
@@ -105,8 +120,9 @@ export default {
                             <comment-display :comment="child_comment"></comment-display>
                         </div>
                     </div>
+                    
                 </div>
-
+                
             </div>
 
         </div>

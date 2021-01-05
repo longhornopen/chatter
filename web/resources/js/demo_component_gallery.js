@@ -11,6 +11,7 @@ import PostDisplay from './components/PostDisplay.vue';
 import PostCreate from './components/PostCreate.vue';
 import CommentCreate from './components/CommentCreate.vue';
 import CommentDisplay from './components/CommentDisplay.vue'
+import FormattedDate from './components/FormattedDate.vue';
 
 Vue.component('app-framework', AppFramework);
 Vue.component('app-header', AppHeader);
@@ -18,7 +19,8 @@ Vue.component('post-list', PostList);
 Vue.component('post-display', PostDisplay);
 Vue.component('post-create', PostCreate);
 Vue.component('comment-create', CommentCreate);
-Vue.component('comment-display', CommentDisplay)
+Vue.component('comment-display', CommentDisplay);
+Vue.component('formatted-date', FormattedDate);
 
 import Vuex from 'vuex'
 Vue.use(Vuex);
@@ -71,6 +73,114 @@ store_defaults.state.posts = [
     "created_at":"2020-12-21T09:17:11.000000Z",
     "num_comments":18,
     "num_unread_comments":2
+  },
+  {
+    "id":3,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #4, testing time",
+    "body":"test body",
+    "pinned":true,
+    "locked":false,
+    "created_at":"2021-01-05T16:08:02+0000",
+    "num_comments":18,
+    "num_unread_comments":2
+  },
+  {
+    "id":1,
+    "author_user_name":"Theodore Teacher",
+    "author_anonymous":false,
+    "title":"post #1",
+    "body":"test body",
+    "pinned":false,
+    "locked":true,
+    "created_at":"2020-12-21T09:17:11.000000Z",
+    "num_comments":17,
+    "num_unread_comments":2
+  },
+  {
+    "id":2,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #2",
+    "body":"test body",
+    "pinned":true,
+    "locked":true,
+    "created_at":"2020-12-21T09:17:11.000000Z",
+    "num_comments":18,
+    "num_unread_comments":2
+  },
+  {
+    "id":3,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #3",
+    "body":"test body",
+    "pinned":true,
+    "locked":false,
+    "created_at":"2020-12-21T09:17:11.000000Z",
+    "num_comments":18,
+    "num_unread_comments":2
+  },
+  {
+    "id":3,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #4, testing time",
+    "body":"test body",
+    "pinned":true,
+    "locked":false,
+    "created_at":"2021-01-05T16:08:02+0000",
+    "num_comments":18,
+    "num_unread_comments":2
+  },
+  {
+    "id":1,
+    "author_user_name":"Theodore Teacher",
+    "author_anonymous":false,
+    "title":"post #1",
+    "body":"test body",
+    "pinned":false,
+    "locked":true,
+    "created_at":"2020-12-21T09:17:11.000000Z",
+    "num_comments":17,
+    "num_unread_comments":2
+  },
+  {
+    "id":2,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #2",
+    "body":"test body",
+    "pinned":true,
+    "locked":true,
+    "created_at":"2020-12-21T09:17:11.000000Z",
+    "num_comments":18,
+    "num_unread_comments":2
+  },
+  {
+    "id":3,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #3",
+    "body":"test body",
+    "pinned":true,
+    "locked":false,
+    "created_at":"2020-12-21T09:17:11.000000Z",
+    "num_comments":18,
+    "num_unread_comments":2
+  },
+  {
+    "id":3,
+    "author_user_name":"Tammy Teacher",
+    "author_anonymous":false,
+    "title":"post #4, testing time",
+    "body":"test body",
+    "pinned":true,
+    "locked":false,
+    "created_at":"2021-01-05T16:08:02+0000",
+    "num_comments":18,
+    "num_unread_comments":2
   }
 ];
 
@@ -88,10 +198,10 @@ store_defaults.state.currently_viewed_post =
         comments: [
             {
                 'id': 1,
-              "author_user_name":"Tammy Teacher",
-              "author_anonymous":false,
+                "author_user_name":"Tammy Teacher",
+                "author_anonymous":false,
                 'author_user_role': 'teacher',
-                'muted_by_user_id': null,
+                'muted_by_user_id': 1,
                 'body': "This is <b>Test Comment #1</b>",
                 "created_at": "2020-12-21T09:17:11.000000Z",
                 'endorsed': true,
