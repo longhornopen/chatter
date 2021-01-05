@@ -44,6 +44,7 @@ const state = {
     search_results_available: false,
 
     app_main_panel_mode: 'welcome',
+    posts_loading: false,
 }
 
 const getters = {
@@ -57,7 +58,8 @@ const getters = {
     filtered_posts: state => { return state.filtered_posts; },
     search_results_available: state => { return state.search_results_available; },
 
-    app_main_panel_mode: state => {return state.app_main_panel_mode; },
+    app_main_panel_mode: state => { return state.app_main_panel_mode; },
+    posts_loading: state => { return state.posts_loading; },
 }
 
 const mutations = {
@@ -76,6 +78,9 @@ const mutations = {
   },
   setCurrentlyViewedPost(state, payload) {
     state.currently_viewed_post = payload.post;
+  },
+  setPostsLoading(state, payload) {
+    state.posts_loading = payload.loading;
   },
 
   setSearchString(state, payload) {
@@ -152,6 +157,7 @@ const mutations = {
 
 const actions = {
   init ({ commit }, user_id) {
+    commit('setPostsLoading', {loading:true});
     axios.get('/api/user/self').then(function(user_response) {
       commit('setUser', {user: user_response.data});
       let course_id = user_response.data.course_id;
@@ -162,6 +168,7 @@ const actions = {
         .then(axios.spread((course_response, posts_response) => {
           commit('setCourseSummary', {course: course_response.data});
           commit('setPosts', {posts: posts_response.data});
+          commit('setPostsLoading', {loading:false});
         }))
     })
   },
@@ -173,12 +180,15 @@ const actions = {
     commit('setFilterOrder', {filter_order: payload.filter_order});
   },
   async search({commit}) {
+    commit('setPostsLoading', {loading:true});
     let params = {filter:this.state.filter_order, search:this.state.search_string};
-    let response = axios.get('/api/course/'+this.state.user.course_id+'/posts', {params:params});
+    let response = await axios.get('/api/course/'+this.state.user.course_id+'/posts', {params:params});
     commit('setFilteredPosts', {posts: response.data});
+    commit('setPostsLoading', {loading:false});
     return response;
   },
   setAppMainPanelMode({commit}, payload) {
+    commit('setCurrentlyViewedPost', {post: {}});
     commit('setAppMainPanelMode', {mode: payload.mode});
     if (payload.mode === 'show_post') {
       axios.get('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id)

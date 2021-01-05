@@ -18,6 +18,9 @@ export default {
                 ? this.$store.getters.filtered_posts
                 : this.$store.getters.posts;
         },
+        posts_loaded() {
+            return !this.$store.getters.posts_loading;
+        }
     },
     methods: {
         set_post_sort_order: function (order) {
@@ -81,7 +84,12 @@ export default {
                 </ul>
             </div>
 
-            <div class="post" v-for="post in posts">
+            <div v-if="!posts_loaded" class="d-flex justify-content-center mt-5">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div class="post" v-if="posts_loaded" v-for="post in posts">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
