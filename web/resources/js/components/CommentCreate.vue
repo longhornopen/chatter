@@ -10,7 +10,7 @@ export default {
         };
     },
     methods: {
-        cancel: function() {
+        cancel() {
             if (this.comment_body.trim().length === 0) {
                 this.$emit('close_comment_editor')
                 return;
@@ -25,7 +25,7 @@ export default {
                 }
             });
         },
-        submit: function() {
+        submit() {
             if (this.comment_body.trim().length === 0) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your comment.",

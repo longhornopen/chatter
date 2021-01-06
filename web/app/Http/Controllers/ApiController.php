@@ -57,7 +57,7 @@ class ApiController extends Controller
         $search = $request->get('search');
 
         $posts = Post::where('course_id', $course_user->course_id)
-            ->orderBy('created_at');
+            ->orderBy('created_at', 'desc');
         if ($filter==='pinned') {
             $posts = $posts->where('pinned', true);
         } elseif ($filter==='unread') {
@@ -161,7 +161,9 @@ TAG
         $flag->course_user_id = $course_user->id;
         $flag->save();
 
-        return $post;
+        return Post::where('id',$post->id)
+            ->with(['comments'])
+            ->first();
     }
 
     public function editPost(Request $request, $course_id, $post_id)
@@ -227,7 +229,8 @@ TAG
         $comment->body = $body;
         $comment->save();
 
-        return $comment;
+        return Comment::where('id', $comment->id)
+            ->first();
     }
 
     public function editComment(Request $request, $course_id, $comment_id)
@@ -256,7 +259,7 @@ TAG
         $comment = Comment::findOrFail($comment_id);
         $this->checkCommentAuths($comment, $course_user);
 
-        $comment->muted_by_user_id = $muted ? $course_user->id : null;
+        $comment->muted_by_user_id = $muted==='true' ? $course_user->id : null;
         $comment->save();
         return $comment;
     }

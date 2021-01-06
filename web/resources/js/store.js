@@ -143,9 +143,9 @@ const mutations = {
   },
   muteComment(state, payload) {
     let comment_id = payload.comment_id;
-    let muted = payload.muted;
+    let muted_by_user_id = payload.muted_by_user_id;
     let c = state.currently_viewed_post.comments.find(c => c.id===comment_id);
-    c.muted = muted;
+    c.muted_by_user_id = muted_by_user_id;
   },
   addComment(state, payload) {
     if (state.currently_viewed_post.id === payload.post_id) {
@@ -234,7 +234,7 @@ const actions = {
   muteComment({commit}, payload) {
     axios.post('/api/course/'+this.state.user.course_id+'/comment/'+payload.comment_id+'/mute/'+payload.muted)
       .then(function(response) {
-      commit('muteComment', {comment_id: payload.comment_id, muted: payload.muted});
+      commit('muteComment', {comment_id: response.data.id, muted_by_user_id: response.data.muted_by_user_id});
     });
   },
   addComment({commit}, payload) {

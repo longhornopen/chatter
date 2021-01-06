@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * @property int id
  * @property int post_id
  * @property int author_user_id
  * @property string author_user_name
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property boolean author_anonymous
  * @property string body
  * @method static findOrFail($comment_id)
+ * @method static where(string $string, mixed $id)
  */
 class Comment extends Model
 {
