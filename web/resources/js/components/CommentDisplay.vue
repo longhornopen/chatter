@@ -57,7 +57,11 @@ export default {
 <template>
     <div class="single-comment">
         <div>
-            <div style="font-style:italic;font-size:80%;">
+            <div class="comment-metadata">
+                <span
+                    v-if="comment.is_unread"
+                ><div class="unread-dot"></div>
+                </span>
                 <user-name
                     :name="comment.author_user_name"
                     :anonymous="comment.author_anonymous"
@@ -66,10 +70,7 @@ export default {
                 <formatted-date
                     :date-iso="comment.created_at"
                 ></formatted-date>
-                <span
-                    v-if="comment.is_unread"
-                >NEW
-                </span>
+                
             </div>
             <div class="row comment-row">
                 <div
@@ -116,7 +117,7 @@ export default {
                         :parent_comment_id="comment.id"
                         :post_id="comment.post_id"
                     ></comment-create>
-                    <div style="padding-left:20px;">
+                    <div style="padding-left:10px;">
                         <div v-for="child_comment in post_comments_with_parent_comment_id(comment.id)">
                             <comment-display :comment="child_comment"></comment-display>
                         </div>

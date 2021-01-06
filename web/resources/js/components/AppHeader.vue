@@ -59,22 +59,12 @@ export default {
                         </button>
                     </div>
 
-                    <!-- <button
-                        class="btn bg-transparent clear-search-icon"
-                        @click.prevent="clear_search()">
-                        <font-awesome-icon
-                            class="times-icon"
-                            icon="times-circle"
-                            size="lg"/>
-                    </button> -->
-
                     <button
                         type="submit"
                         class="btn btn-search-submit"
                     >Search</button>
                 </form>
                 </div>
-            <!-- <div class="course_name">{{ course_name }}</div> -->
             <div
                 class="settings-control"
                 @click="open_settings()"

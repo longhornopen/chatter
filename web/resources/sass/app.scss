@@ -17,7 +17,7 @@
 // }
 
 .main-app-area {
-    height: calc(100vh - 60px - 58px);
+    height: calc(100vh - 60px - $app-header-height);
     .col-md-4 {
         padding-right: 0;
     }
@@ -40,7 +40,6 @@
     margin: 10px 0 10px 20px;
     display: flex;
     align-items: center;
-    width: 80vh
 }
 
 .app-header-bar {
@@ -68,9 +67,12 @@
         left: 0;
         width: 100%;
         height: 100%;
+        padding: 0 30% 0 30%;
         display: flex;
         justify-content: center;
         align-items: center;
+        text-align: center;
+        line-height: 1.2em;
     }
     .form-inline {
         .form-control, .form-control:focus {
@@ -80,9 +82,6 @@
             color: $white;
             margin: 0 10px 0 0;
         }
-        // .form-control:focus, .btn-search-submit:focus {
-        //     box-shadow: 0 0 0 0.2rem rgba(179, 92, 34, 0.25);
-        // }
 
         .btn-search-submit {
             background-color: $darkgray;
@@ -108,6 +107,25 @@
     }
     .clear-search-icon:focus {
         box-shadow: none;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .app-header-bar {
+        display: flex;
+        flex-direction: column-reverse;
+        .course_name {
+            position: relative;
+            padding: 10px 10px;
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .app-header-bar {
+        .input-group {
+            width: auto;
+        }
     }
 }
 
@@ -152,9 +170,7 @@
 
     .app-post-list-body {
         background-color: $body-bg;
-        height: calc(100vh - 60px - 58px - 49px - 37px);
-        // height: 100%;
-        // position: relative;
+        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1920)} - #{$post-list-padding} - #{$write-post-btn-height});
         overflow-y: auto;
         .post {
             background-color: $body-bg;
@@ -203,21 +219,21 @@
             cursor: pointer;
         }
     }
-    @media screen and (max-width: 1167px) {
+    @media screen and (max-width: 1152px){
         .app-post-list-body {
-            height: calc(100vh - 60px - 58px - 72px - 37px);
+            height: map-get($tabs-height, 1152);
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1152)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
-    @media screen and (max-width: 899px) {
+    @media screen and (max-width: 900) {
         .app-post-list-body {
-            height: calc(100vh - 60px - 58px - (39px * 2) - 10px - 37px);
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)} - #{map-get($tabs-height, 899)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
 }
 
 .app-post-display {
-    // background-color: $cyan;
-    height: calc(100vh - 60px - 58px);
+    height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)});
     padding: 40px 80px;
     overflow-y: auto;
     .post-display-body {
@@ -232,6 +248,13 @@
     }
     .comments {
         margin: 20px 0;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .app-post-display {
+        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)});
+        padding: 20px 30px;
     }
 }
 
@@ -276,6 +299,22 @@
 
 .comment-container{
     width: calc(100% - 34.39px);
+}
+
+.comment-metadata {
+    font-style: italic;
+    font-size: 80%;
+    display: flex;
+    align-items: center;
+}
+
+.unread-dot {
+    width: 7px;
+    height: 7px;
+    background-color: $orange;
+    opacity: 70%;
+    border-radius: 5px;
+    margin-right: 2px;
 }
 
 .comment-body-group {
