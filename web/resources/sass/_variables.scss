@@ -30,3 +30,27 @@ $darken-amount: 10%;
 
 // Navs
 $nav-tabs-border-width: 0;
+
+// Helper vars for calculating scrolling height
+$full-height: 100vh;
+$full-width: 100vw;
+$title-bar-height: 60px;
+$post-list-padding: 10px;
+$write-post-btn-height: 37px;
+$course-name-height: 70px;
+
+// map for tabs height 
+$tabs-height: (
+    1920: 39px,
+    1152: 62px,
+    899: 78px,
+    768: 39px,
+    384: 62px,
+);
+
+$app-header-height: (
+    1920: 58px,
+    900: 99px,
+    768: 128px,
+);
+

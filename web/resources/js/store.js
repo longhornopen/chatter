@@ -45,6 +45,11 @@ const state = {
 
     app_main_panel_mode: 'welcome',
     posts_loading: false,
+
+    // for mobile display
+    mobile: false,
+    view_post_list: true,
+    view_post_display: true,
 }
 
 const getters = {
@@ -60,6 +65,11 @@ const getters = {
 
     app_main_panel_mode: state => { return state.app_main_panel_mode; },
     posts_loading: state => { return state.posts_loading; },
+
+    // for mobile display
+    mobile: state => { return state.mobile },
+    show_post_list: state => { return state.view_post_list },
+    show_post_display: state => { return state.view_post_display }
 }
 
 const mutations = {
@@ -153,6 +163,13 @@ const mutations = {
     }
     state.posts.find(p => p.id === payload.post_id).num_comments += 1;
   },
+  switchScreen(state, payload) {
+    // only in mobile mode
+    if (state.mobile) {
+      state.view_post_list = payload.view_post_list;
+      state.view_post_display = payload.view_post_display;
+    }
+  }
 }
 
 const actions = {
@@ -246,6 +263,9 @@ const actions = {
   async deanonUserId({commit}, payload) {
     let response = await axios.get('/api/course/' + this.state.user.course_id + '/user/' + payload.user_id)
     return response.data;
+  },
+  switchScreen({commit}, payload) {
+    commit('switchScreen', payload);
   }
 }
 
