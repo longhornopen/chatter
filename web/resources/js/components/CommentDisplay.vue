@@ -26,7 +26,7 @@ export default {
         },
         comment_is_muted() {
             return !(this.comment.muted_by_user_id === null)
-        }
+        },
     },
     methods: {
         endorse(endorse_action) {
@@ -58,29 +58,32 @@ export default {
     <div class="single-comment">
         <div>
             <div class="comment-metadata">
-                <span
-                    v-if="comment.is_unread"
-                ><div class="unread-dot"></div>
-                </span>
-                <user-name
-                    :name="comment.author_user_name"
-                    :anonymous="comment.author_anonymous"
-                    :user-id="comment.author_user_id"
-                ></user-name>
-                <formatted-date
-                    :date-iso="comment.created_at"
-                ></formatted-date>
+                <div v-if="comment.is_unread" class="unread-dot">
+                </div>
+                <div>
+                    <user-name
+                        :name="comment.author_user_name"
+                        :anonymous="comment.author_anonymous"
+                        :user-id="comment.author_user_id"
+                    ></user-name>
+                    <formatted-date
+                        :date-iso="comment.created_at"
+                    ></formatted-date>
+                </div>
+                <div class="endorse-icon" v-if="comment_is_endorsed">
+                    <font-awesome-icon
+                    class="endorsed"
+                    icon="award" size="lg"/>
+                </div>
+                <!-- FIXME: only show if comment has upvotes. Also show number of upvotes here -->
+                <div class="upvote-icon">
+                    <font-awesome-icon
+                    class="upvotes"
+                    icon="arrow-circle-up" size="lg"/>
+                </div>
                 
             </div>
-            <div class="row comment-row">
-                <div
-                    class="endorse-icon"
-                    @click="user_is_teacher ? endorse(!comment_is_endorsed) : null">
-                    <font-awesome-icon
-                    :class="user_is_teacher ? (comment_is_endorsed ? 'endorsed' : 'can-endorse') :
-                    (comment_is_endorsed ? 'endorsed' : 'invisible')"
-                    icon="award" size="lg" />
-                </div>
+            <div>
                 <div class="comment-container">
                     <div class="comment-body-group">
                         <div class="comment-body">
@@ -95,21 +98,51 @@ export default {
                                     v-html="comment.body"
                                 ></div>
                             </div>
-                            <div
-                                class="reply-icon"
-                                @click="toggle_comment_editor(!show_editor)"
-                                v-if="add_comment_allowed"
-                                data-toggle="tooltip"
-                                data-placement="top"
-                                title="Click to Reply to this Comment"
-                                type="button"
-                            >
-                                <font-awesome-icon icon="reply" size="lg" color="#7d7d7d"/>
+                        </div>
+                        <div class="comment-actions">
+                            <div class="left-actions">
+                                <div 
+                                    class="endorse-action" v-if="user_is_teacher"
+                                    @click="user_is_teacher ? endorse(!comment_is_endorsed) : null"
+                                >
+                                    <font-awesome-icon 
+                                        icon="award" 
+                                        class="action-icon" 
+                                        :class="comment_is_endorsed ? 'action-icon-active-blue' : ''"/>
+                                    <div
+                                        :class="comment_is_endorsed ? 'action-active-blue' : ''">
+                                        {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
+                                    </div>
+                                </div>
+                                <div class="upvote-action">
+                                    <font-awesome-icon icon="arrow-circle-up" class="action-icon"/>
+                                    <div>Upvote</div>
+                                </div>
+                                <div 
+                                    class="hide-action"
+                                    v-if="user_is_teacher"
+                                >
+                                    <font-awesome-icon 
+                                        :icon="comment_is_muted ? 'eye-slash' : 'eye'" 
+                                        class="action-icon"
+                                        :class="comment_is_muted ? 'action-icon-active-gray' : ''"/>
+                                    <div
+                                        :class="comment_is_muted ? 'action-active-gray' : ''"
+                                        @click="mute_comment(comment_is_muted ? false : true)"
+                                    >
+                                        {{comment_is_muted ? 'Unhide' : 'Hide'}}</div>
+                                </div>
+                            </div>
+                            <div class="right-actions">
+                                <div 
+                                    class="reply-action"
+                                    @click="toggle_comment_editor(!show_editor)"
+                                    v-if="add_comment_allowed">
+                                    <font-awesome-icon icon="comment-alt" class="icon"/>
+                                    <div>Reply</div>
+                                </div>
                             </div>
                         </div>
-                        <div
-                            class="hide-btn"
-                            @click="mute_comment(comment_is_muted ? false : true)"><u>{{comment_is_muted ? 'Unhide' : 'Hide'}}</u></div>
                     </div>
                     <comment-create
                         v-if="add_comment_allowed && show_editor"
@@ -117,7 +150,7 @@ export default {
                         :parent_comment_id="comment.id"
                         :post_id="comment.post_id"
                     ></comment-create>
-                    <div style="padding-left:10px;">
+                    <div style="padding-left:20px;">
                         <div v-for="child_comment in post_comments_with_parent_comment_id(comment.id)">
                             <comment-display :comment="child_comment"></comment-display>
                         </div>

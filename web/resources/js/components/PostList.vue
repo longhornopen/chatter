@@ -44,6 +44,12 @@ export default {
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
         },
+        switch_screen() {
+            this.$store.dispatch('switchScreen', {
+                view_post_list: false,
+                view_post_display: true,
+            })
+        }
     },
 }
 </script>
@@ -96,7 +102,12 @@ export default {
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div class="post" v-if="posts_loaded" v-for="post in posts" :style="posts_styles">
+            <div 
+                class="post" 
+                v-if="posts_loaded" 
+                v-for="post in posts" 
+                :style="posts_styles"
+                @click="switch_screen()">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">

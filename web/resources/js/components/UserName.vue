@@ -13,12 +13,12 @@ export default {
         },
         display_user_name() {
             if (this.anonymous) {
-                return "(anonymous)";
+                return "Anonymous";
             }
             return this.name;
         },
         deanon_label() {
-            return this.temp_shown ? this.deanon_user_name : "?";
+            return this.temp_shown ? this.deanon_user_name : "";
         }
     },
     methods: {
@@ -30,6 +30,7 @@ export default {
                 this.temp_shown = true
                 window.setTimeout(() => {
                     this.temp_shown = false;
+                    this.deanon_user_name = ""
                 }, 3000);
             });
         }
@@ -40,11 +41,16 @@ export default {
 <template>
     <span>
         {{display_user_name}}
-        <button
-            class="btn btn-sm btn-secondary"
-            v-if="show_deanon_button"
-            @click.prevent="handle_deanon_click"
-            title="Click to show this person's name"
-        >{{ deanon_label }}</button>
+        <span class="anon" v-if="show_deanon_button">
+            <font-awesome-icon 
+                icon="caret-square-right" 
+                class="icon"
+                @click.prevent="handle_deanon_click"
+                size="lg"
+                title="Click to show this person's name"
+                v-if="this.temp_shown === false"/>
+            <span :class="this.deanon_user_name === '' ? 'd-none' : 'deanon-label'">{{ deanon_label }}</span>
+        </span>
+
     </span>
 </template>

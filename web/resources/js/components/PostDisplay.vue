@@ -22,6 +22,9 @@ export default {
         add_comment_allowed() {
             return !this.$store.state.currently_viewed_post.locked;
         },
+        in_mobile_mode() {
+            return this.$store.getters.mobile;
+        }
     },
     methods: {
         pin(pinned) {
@@ -55,12 +58,19 @@ export default {
             }
             return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
+        switch_screen() {
+            this.$store.dispatch('switchScreen', {
+                view_post_list: true,
+                view_post_display: false,
+            })
+        }
     },
 }
 </script>
 
 <template>
     <div>
+        <div v-if="in_mobile_mode" @click="switch_screen()">Back</div>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
