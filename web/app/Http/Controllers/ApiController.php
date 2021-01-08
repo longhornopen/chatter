@@ -6,6 +6,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentAdded;
+use App\Events\CommentEndorsedChanged;
+use App\Events\CommentMutedChanged;
+use App\Events\PostDeleted;
+use App\Events\PostLockedChanged;
+use App\Events\PostPinnedChanged;
 use App\Exceptions\LoginExpiredException;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Comment;
@@ -179,6 +185,12 @@ TAG
         $post = Post::findOrFail($post_id);
         $this->checkPostAuths($post, $course_user);
         $post->delete();
+
+        event(new PostDeleted(
+                  $course_user->course_id,
+                  $post->id,
+              ));
+
         return "ok";
     }
 
@@ -191,6 +203,13 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->pinned = $pinned === 'true';
         $post->save();
+
+        event(new PostPinnedChanged(
+                  $course_user->course_id,
+                  $post->id,
+                  $post->pinned ? true : false
+              ));
+
         return $post;
     }
 
@@ -203,6 +222,13 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->locked = $locked==='true' ? 1 : 0;
         $post->save();
+
+        event(new PostLockedChanged(
+            $course_user->course_id,
+            $post->id,
+            $post->locked ? true : false
+              ));
+
         return $post;
     }
 
@@ -229,6 +255,12 @@ TAG
         $comment->body = $body;
         $comment->save();
 
+        event(new CommentAdded(
+                  $course_user->course_id,
+                  $comment->post_id,
+                  $comment->id,
+              ));
+
         return Comment::where('id', $comment->id)
             ->first();
     }
@@ -248,7 +280,16 @@ TAG
 
         $comment->endorsed = $endorsed==='true' ? 1 : 0;
         $comment->save();
-        return $comment;
+
+        event(new CommentEndorsedChanged(
+                  $course_user->course_id,
+                  $comment->post_id,
+                  $comment->id,
+                  $comment->endorsed ? true : false,
+              ));
+
+        return Comment::where('id', $comment->id)
+            ->first();
     }
 
     public function muteComment(Request $request, $course_id, $comment_id, $muted)
@@ -261,7 +302,16 @@ TAG
 
         $comment->muted_by_user_id = $muted==='true' ? $course_user->id : null;
         $comment->save();
-        return $comment;
+
+        event(new CommentMutedChanged(
+                  $course_user->course_id,
+                  $comment->post_id,
+                  $comment->id,
+                  $comment->muted_by_user_id,
+              ));
+
+        return Comment::where('id', $comment->id)
+            ->first();
     }
 
     /*
