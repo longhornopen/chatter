@@ -1,0 +1,39 @@
+version: '3.3'
+
+networks:
+  frontend:
+  backend:
+
+services:
+  web:
+    build: .
+    networks:
+      - frontend
+    volumes:
+      - ./web:/var/www/html
+    environment:
+      VIRTUAL_HOST: chatter.docker
+    links:
+      - "database:database"
+      - "redis:redis"
+  broadcast:
+    build:
+      context: .
+      dockerfile: Dockerfile.broadcast
+    ports:
+      - "6001:6001"
+    networks:
+      - frontend
+    volumes:
+      - ./web:/var/www/html
+    environment:
+      VIRTUAL_HOST: chatter-ws.docker
+      VIRTUAL_PORT: 6001
+  database:
+    image: mysql:8
+    networks:
+      - backend
+  redis:
+    image: redis
+    networks:
+      - backend
