@@ -58,39 +58,60 @@ export default {
             }
             return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
+        edit_post() {
+            console.log("You clicked Edit for this post")
+        },
         switch_screen() {
-            this.$store.dispatch('switchScreen', {
-                view_post_list: true,
-                view_post_display: false,
-            })
-        }
+            if (this.$store.getters.mobile) {
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: true,
+                    view_post_display: false,
+                })
+            }
+            
+        },
     },
 }
 </script>
 
 <template>
     <div>
-        <div v-if="in_mobile_mode" @click="switch_screen()">Back</div>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
         <div v-if="post_loaded" class="app-post-display">
+            <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
+                <font-awesome-icon class="back-icon" icon="chevron-left" size="2x"/>
+                <h5>Back</h5>
+            </div>
             <div>
                 <h2>
                     {{ post.title }}
                 </h2>
-                <div>
-                    <user-name
-                        :name="post.author_user_name"
-                        :anonymous="post.author_anonymous"
-                        :user-id="post.author_user_id"
-                    ></user-name>
-                    <formatted-date
-                        :date-iso="post.created_at"
-                    ></formatted-date>
+                <div class="post-top-row">
+                    <div>
+                        <user-name
+                            :name="post.author_user_name"
+                            :anonymous="post.author_anonymous"
+                            :user-id="post.author_user_id"
+                        ></user-name>
+                        <formatted-date
+                            :date-iso="post.created_at"
+                        ></formatted-date>
+                    </div>
+                    <div>
+                        <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <font-awesome-icon icon="ellipsis-h" />
+                        </div>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button @click="edit_post()" class="dropdown-item" type="button">Edit</button>
+                            <button @click="remove()" class="dropdown-item" type="button">Delete</button>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="post-display-body" v-html="post.body"></div>
                     <div class="btn-groups">
                         <div class="left">
@@ -99,11 +120,11 @@ export default {
                                 :class="user_is_teacher && !show_editor?'':'d-none'"
                                 @click="pin(!post.pinned)"
                             >{{post.pinned ? "Unpin" : "Pin"}}</button>
-                            <button
+                            <!-- <button
                                 class="btn btn-blue"
                                 :class="user_is_teacher && !show_editor?'':'d-none'"
                                 @click="remove()"
-                            >Remove</button>
+                            >Remove</button> -->
                             <button
                                 class="btn btn-blue"
                                 :class="user_is_teacher && !show_editor?'':'d-none'"

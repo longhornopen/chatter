@@ -45,11 +45,13 @@ export default {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
         },
         switch_screen() {
-            this.$store.dispatch('switchScreen', {
-                view_post_list: false,
-                view_post_display: true,
-            })
-        }
+            if (this.$store.getters.mobile) {
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: false,
+                    view_post_display: true,
+                })
+            }
+        },
     },
 }
 </script>
