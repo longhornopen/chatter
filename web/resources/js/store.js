@@ -47,9 +47,9 @@ const state = {
     posts_loading: false,
 
     // for mobile display
-    mobile: false,
-    view_post_list: true,
-    view_post_display: true,
+    mobile: null,
+    view_post_list: null,
+    view_post_display: null,
 }
 
 const getters = {
@@ -164,11 +164,13 @@ const mutations = {
     state.posts.find(p => p.id === payload.post_id).num_comments += 1;
   },
   switchScreen(state, payload) {
-    // only in mobile mode
-    if (state.mobile) {
+    // if (state.mobile) {
       state.view_post_list = payload.view_post_list;
       state.view_post_display = payload.view_post_display;
-    }
+    // }
+  },
+  toggleMobile(state, payload) {
+    state.mobile = payload.mobile;
   }
 }
 
@@ -266,6 +268,11 @@ const actions = {
   },
   switchScreen({commit}, payload) {
     commit('switchScreen', payload);
+  },
+  toggleMobile({commit}, payload) {
+    console.log('switching mobile')
+    console.log(payload.mobile)
+    commit('toggleMobile', payload);
   }
 }
 
