@@ -35,7 +35,7 @@ store_defaults.state.user = {
 };
 store_defaults.state.course_summary = {
     "id":1,
-    "name":"test course",
+    "name":"Some course: A Very Very Very Very Very Very Long Course Title",
 };
 store_defaults.state.posts = [
   {

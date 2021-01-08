@@ -35,9 +35,21 @@ export default {
         open_new_post_editor() {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'new_post'});
         },
+        convert_date: function(date_string) {
+            const date = new Date(date_string)
+            // console.log(date.getDate())
+            // console.log(date.getMonth())
+            // console.log(date.getFullYear())
+        },
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
         },
+        switch_screen() {
+            this.$store.dispatch('switchScreen', {
+                view_post_list: false,
+                view_post_display: true,
+            })
+        }
     },
 }
 </script>
@@ -90,10 +102,18 @@ export default {
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div class="post" v-if="posts_loaded" v-for="post in posts" :style="posts_styles">
+            <div 
+                class="post" 
+                v-if="posts_loaded" 
+                v-for="post in posts" 
+                :style="posts_styles"
+                @click="switch_screen()">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
+                            <!-- <span>{{ post.author_user_name }}</span> -->
+                            <!-- <i @click="convert_date(post.created_at)">{{ post.created_at }}</i>
+                            -->
                             <span>{{ poster_name(post) }}</span>
                             <formatted-date :dateIso="post.created_at" italicized="true"></formatted-date>
                         </div>
@@ -126,7 +146,6 @@ export default {
                                 <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -141,6 +160,5 @@ export default {
                 Write a Post
             </button>
         </div>
-
     </div>
 </template>

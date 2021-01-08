@@ -61,6 +61,11 @@ import {
     faAward,
     faThumbtack,
     faLock,
+    faArrowCircleUp,
+    faCommentAlt,
+    faEye,
+    faEyeSlash,
+    faCaretSquareRight,
   } from '@fortawesome/free-solid-svg-icons'
 library.add(faCog);
 library.add(faPlus);
@@ -69,6 +74,11 @@ library.add(faAward);
 library.add(faTimesCircle);
 library.add(faThumbtack);
 library.add(faLock);
+library.add(faArrowCircleUp);
+library.add(faCommentAlt);
+library.add(faEye);
+library.add(faEyeSlash);
+library.add(faCaretSquareRight);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
