@@ -49,6 +49,14 @@ export default {
                 comment_id: this.comment.id,
                 muted: action,
             })
+        },
+        edit_comment: function() {
+            // FIXME: make API call
+            console.log("You edit comment with id " + this.comment.id)
+        },
+        delete_comment: function() {
+            // FIXME: make API call
+            console.log("You delete comment with id " + this.comment.id)
         }
     }
 }
@@ -57,32 +65,44 @@ export default {
 <template>
     <div class="single-comment">
         <div>
-            <div class="comment-metadata">
-                <div v-if="comment.is_unread" class="unread-dot">
+            <div class="comment-top-row">
+                <div class="comment-metadata">
+                    <div v-if="comment.is_unread" class="unread-dot">
+                    </div>
+                    <div>
+                        <user-name
+                            :name="comment.author_user_name"
+                            :anonymous="comment.author_anonymous"
+                            :user-id="comment.author_user_id"
+                        ></user-name>
+                        <formatted-date
+                            :date-iso="comment.created_at"
+                        ></formatted-date>
+                    </div>
+                    <div class="endorse-icon" v-if="comment_is_endorsed">
+                        <font-awesome-icon
+                        class="endorsed"
+                        icon="award" size="lg"/>
+                    </div>
+                    <!-- FIXME: only show if comment has upvotes. Also show number of upvotes here -->
+                    <div class="upvote-icon">
+                        <font-awesome-icon
+                        class="upvotes"
+                        icon="arrow-circle-up" size="lg"/>
+                    </div>
+                    
                 </div>
                 <div>
-                    <user-name
-                        :name="comment.author_user_name"
-                        :anonymous="comment.author_anonymous"
-                        :user-id="comment.author_user_id"
-                    ></user-name>
-                    <formatted-date
-                        :date-iso="comment.created_at"
-                    ></formatted-date>
+                    <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <font-awesome-icon icon="ellipsis-h" />
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button @click="edit_comment()" class="dropdown-item" type="button">Edit</button>
+                        <button @click="delete_comment()" class="dropdown-item" type="button">Delete</button>
+                    </div>
                 </div>
-                <div class="endorse-icon" v-if="comment_is_endorsed">
-                    <font-awesome-icon
-                    class="endorsed"
-                    icon="award" size="lg"/>
-                </div>
-                <!-- FIXME: only show if comment has upvotes. Also show number of upvotes here -->
-                <div class="upvote-icon">
-                    <font-awesome-icon
-                    class="upvotes"
-                    icon="arrow-circle-up" size="lg"/>
-                </div>
-                
             </div>
+            
             <div>
                 <div class="comment-container">
                     <div class="comment-body-group">

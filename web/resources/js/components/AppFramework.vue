@@ -17,6 +17,55 @@ export default {
         }
     },
     methods: {
+        onResize(event) {
+            const w = event.srcElement.innerWidth
+            // console.log("detecting resize")
+            if (w === 767) {
+                this.$store.dispatch('toggleMobile', {
+                    mobile: true,
+                })
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: true,
+                    view_post_display: false,
+                })
+            }
+            if (w === 768) {
+                this.$store.dispatch('toggleMobile', {
+                    mobile: false
+                })
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: true,
+                    view_post_display: true,
+                })
+            }
+        }
+    },
+    mounted() {
+        const w = window.innerWidth
+        if (w <= 767) {
+            this.$store.dispatch('toggleMobile', {
+                mobile: true,
+            })
+            this.$store.dispatch('switchScreen', {
+                view_post_list: true,
+                view_post_display: false,
+            })
+        } else {
+            this.$store.dispatch('toggleMobile', {
+                mobile: false,
+            })
+            this.$store.dispatch('switchScreen', {
+                view_post_list: true,
+                view_post_display: true,
+            })
+        }
+        // Register an event listener when the Vue component is ready
+        window.addEventListener('resize', this.onResize)
+    },
+
+    beforeDestroy() {
+        // Unregister the event listener before destroying this Vue instance
+        window.removeEventListener('resize', this.onResize)
     }
 }
 </script>

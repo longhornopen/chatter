@@ -74,7 +74,7 @@
         text-align: center;
         line-height: 1.2em;
     }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 767px) {
         .course_name {
             height: 70px;
         }
@@ -235,14 +235,14 @@
             height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)} - #{map-get($tabs-height, 899)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 767px) {
         .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 768)} - #{map-get($tabs-height, 768)} - #{$post-list-padding} - #{$write-post-btn-height});
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 767)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
     @media screen and (max-width: 384px) {
         .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 768)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
     
@@ -252,6 +252,24 @@
     height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)});
     padding: 5% 10%;
     overflow-y: auto;
+    .back-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        cursor: pointer;
+        h5 {
+            margin: 0;
+        }
+        .back-icon {
+            color: $darkergray;
+            margin: 0 5px 0 0;
+        }
+    }
+    .post-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
     .post-display-body {
         border-radius: 6px;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -271,6 +289,11 @@
     .app-post-display {
         height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)});
         padding: 3% 7%;
+    }
+}
+@media screen and (max-width: 767px) {
+    .app-post-display {
+        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)});
     }
 }
 
@@ -318,6 +341,16 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.comment-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .ellipsis {
+        display: flex;
+        align-items: baseline;
+    }
 }
 
 .comment-metadata {

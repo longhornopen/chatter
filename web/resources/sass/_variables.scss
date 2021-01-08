@@ -31,6 +31,9 @@ $darken-amount: 10%;
 // Navs
 $nav-tabs-border-width: 0;
 
+// Dropdown
+$dropdown-spacer: 0.7rem;
+
 // Helper vars for calculating scrolling height
 $full-height: 100vh;
 $full-width: 100vw;
@@ -44,13 +47,13 @@ $tabs-height: (
     1920: 39px,
     1152: 62px,
     899: 78px,
-    768: 39px,
+    767: 39px,
     384: 62px,
 );
 
 $app-header-height: (
     1920: 58px,
     900: 99px,
-    768: 128px,
+    767: 128px,
 );
 
