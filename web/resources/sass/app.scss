@@ -17,7 +17,7 @@
 // }
 
 .main-app-area {
-    height: calc(100vh - 60px - $app-header-height);
+    height: calc(100vh - 60px - map-get($app-header-height, 1920));
     .col-md-4 {
         padding-right: 0;
     }
