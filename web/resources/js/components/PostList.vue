@@ -31,6 +31,13 @@ export default {
         },
         open_post(post_id) {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'show_post', post_id: post_id});
+
+            if (this.$store.getters.mobile) {
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: false,
+                    view_post_display: true,
+                })
+            }
         },
         open_new_post_editor() {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'new_post'});
@@ -43,14 +50,6 @@ export default {
         },
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
-        },
-        switch_screen() {
-            if (this.$store.getters.mobile) {
-                this.$store.dispatch('switchScreen', {
-                    view_post_list: false,
-                    view_post_display: true,
-                })
-            }
         },
     },
 }
@@ -104,12 +103,11 @@ export default {
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div 
-                class="post" 
-                v-if="posts_loaded" 
-                v-for="post in posts" 
-                :style="posts_styles"
-                @click="switch_screen()">
+            <div
+                class="post"
+                v-if="posts_loaded"
+                v-for="post in posts"
+                :style="posts_styles">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">

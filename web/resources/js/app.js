@@ -32,9 +32,28 @@ const store = new Vuex.Store(
 )
 //import store from './store';
 
+let onResize = function() {
+  const w = window.innerWidth
+  let is_mobile = w < 768
+  store.dispatch('toggleMobile', {
+    mobile: is_mobile,
+  })
+  store.dispatch('switchScreen', {
+    view_post_list: true,
+    view_post_display: !is_mobile,
+  })
+}
+
 store.dispatch('init').then(() => {
   const app = new Vue({
     el: '#app',
     store: store,
+    mounted() {
+      onResize()
+      window.addEventListener('resize', onResize)
+    },
+    beforeDestroy() {
+      window.removeEventListener('resize', onResize)
+    }
   })
 });

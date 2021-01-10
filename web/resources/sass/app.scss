@@ -245,7 +245,7 @@
             height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
-    
+
 }
 
 .app-post-display {

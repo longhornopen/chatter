@@ -301,8 +301,6 @@ const actions = {
     commit('switchScreen', payload);
   },
   toggleMobile({commit}, payload) {
-    console.log('switching mobile')
-    console.log(payload.mobile)
     commit('toggleMobile', payload);
   }
 }
