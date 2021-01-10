@@ -53,7 +53,7 @@ class ApiController extends Controller
             ->select('id','name')
             ->first();
         if (env('APP_HELP_URL')) {
-            $course->help_url_text = env('APP_HELP_URL');
+            $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
             $course->help_url = env('APP_HELP_URL');
         }
         return $course;
