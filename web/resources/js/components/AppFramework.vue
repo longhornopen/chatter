@@ -1,7 +1,8 @@
 <script>
 import SplashPage from './SplashPage.vue';
+import SettingsEditor from './SettingsEditor.vue';
 export default {
-    components: { SplashPage },
+    components: { SplashPage, SettingsEditor },
     data() {
         return {
 
@@ -35,7 +36,6 @@ export default {
         <div class="row main-app-area no-gutters">
             <div v-if="show_post_list" class="col-md-4"><post-list></post-list></div>
             <div v-if="show_post_display" class="col-md-8">
-                {{app_main_panel_mode}}
                 <div v-if="app_main_panel_mode==='welcome'">
                     <splash-page></splash-page>
                 </div>
@@ -46,7 +46,7 @@ export default {
                     <post-create></post-create>
                 </div>
                 <div v-if="app_main_panel_mode==='show_settings'">
-                    FIXME settings controls here: change name/email, change email settings, get help (if help url set)
+                    <settings-editor></settings-editor>
                 </div>
             </div>
         </div>

@@ -54,10 +54,8 @@
         @include button-variant($green, $blue, $red);
     }
 
-    .settings-control {
-        a:hover {
-            cursor: pointer;
-        }
+    .settings-control:hover {
+        cursor: pointer;
     }
     .course_name {
         color: $white;
