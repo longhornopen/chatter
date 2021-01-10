@@ -49,9 +49,14 @@ class ApiController extends Controller
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
 
-        return Course::where('id',$course_user->course_id)
+        $course = Course::where('id',$course_user->course_id)
             ->select('id','name')
             ->first();
+        if (env('APP_HELP_URL')) {
+            $course->help_url_text = env('APP_HELP_URL');
+            $course->help_url = env('APP_HELP_URL');
+        }
+        return $course;
     }
 
     public function getCoursePosts(Request $request, $course_id)

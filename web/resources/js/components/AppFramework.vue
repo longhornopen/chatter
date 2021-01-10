@@ -1,5 +1,7 @@
 <script>
+import SplashPage from './SplashPage.vue';
 export default {
+    components: { SplashPage },
     data() {
         return {
 
@@ -85,7 +87,7 @@ export default {
             <div v-if="show_post_list" class="col-md-4"><post-list></post-list></div>
             <div v-if="show_post_display" class="col-md-8">
                 <div v-if="app_main_panel_mode==='welcome'">
-                    Welcome to chatter!  FIXME Add description of what Chatter is, that you should click a post to read it, etc....
+                    <splash-page></splash-page>
                 </div>
                 <div v-if="app_main_panel_mode==='show_post'">
                     <post-display></post-display>
