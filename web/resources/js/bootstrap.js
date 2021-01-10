@@ -32,16 +32,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import Echo from 'laravel-echo';
 
-window.Pusher = require('pusher-js');
+if (process.env.MIX_PUSHER_APP_KEY) {
+  window.Pusher = require('pusher-js');
 
-window.Echo = new Echo({
+  let echo_options = {
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
 //    wsHost: process.env.MIX_WS_HOST,
 //    wsPort: 6001,
     forceTLS: false,
     disableStats: true,
-});
+  }
+  window.Echo = new Echo(echo_options);
+}
 
 
 window.katex = require('katex')

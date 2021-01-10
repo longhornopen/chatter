@@ -131,7 +131,7 @@ export default {
                             <div class="left-actions">
                                 <div
                                     class="endorse-action" v-if="user_is_teacher"
-                                    @click="user_is_teacher ? endorse(!comment_is_endorsed) : null"
+                                    @click="endorse(!comment_is_endorsed)"
                                 >
                                     <font-awesome-icon
                                         icon="award"
