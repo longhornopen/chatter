@@ -22,7 +22,7 @@ export default {
             return !this.$store.state.currently_viewed_post.locked;
         },
         user_is_teacher() {
-            return this.$store.state.user.role == 'teacher'
+            return this.$store.state.user.role === 'teacher'
         },
         comment_is_muted() {
             return !(this.comment.muted_by_user_id === null)

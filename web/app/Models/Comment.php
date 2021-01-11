@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string author_user_name
  * @property string author_user_role
  * @property int parent_comment_id
- * @property boolean author_anonymous
+ * @property bool author_anonymous
  * @property string body
  * @method static findOrFail($comment_id)
  * @method static where(string $string, mixed $id)

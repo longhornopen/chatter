@@ -57,7 +57,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import {
     faCog,
-    faTimes,
     faTimesCircle,
     faPlus,
     faReply,

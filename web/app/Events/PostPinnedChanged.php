@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class PostPinnedChanged implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     private $course_id;
     public $post_id;

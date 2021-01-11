@@ -42,12 +42,6 @@ export default {
         open_new_post_editor() {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'new_post'});
         },
-        convert_date: function(date_string) {
-            const date = new Date(date_string)
-            // console.log(date.getDate())
-            // console.log(date.getMonth())
-            // console.log(date.getFullYear())
-        },
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
         },
@@ -111,9 +105,6 @@ export default {
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
-                            <!-- <span>{{ post.author_user_name }}</span> -->
-                            <!-- <i @click="convert_date(post.created_at)">{{ post.created_at }}</i>
-                            -->
                             <span>{{ poster_name(post) }}</span>
                             <formatted-date :dateIso="post.created_at" italicized="true"></formatted-date>
                         </div>
