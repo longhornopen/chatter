@@ -136,9 +136,9 @@ export default {
                                     <font-awesome-icon
                                         icon="award"
                                         class="action-icon"
-                                        :class="comment_is_endorsed ? 'action-icon-active-blue' : ''"/>
+                                        :class="comment_is_endorsed ? 'action-icon-active-secondary' : ''"/>
                                     <div
-                                        :class="comment_is_endorsed ? 'action-active-blue' : ''">
+                                        :class="comment_is_endorsed ? 'action-active-secondary' : ''">
                                         {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
                                     </div>
                                 </div>

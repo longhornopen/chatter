@@ -36,7 +36,7 @@ export default {
 <template>
     <div class="app-header-bar">
         <div class="d-flex justify-content-between">
-            <div>
+            <div class="header-col">
                 <form
                     class="form-inline"
                     @submit.prevent="search()"
@@ -64,16 +64,20 @@ export default {
                         class="btn btn-search-submit"
                     >Search</button>
                 </form>
+            </div>
+            <div class="header-col middle">
+                <div class="course-name">{{ course_name }}</div>
+            </div>
+            <div class="header-col right">
+                <div
+                    class="settings-control"
+                    @click="open_settings()"
+                >
+                    <font-awesome-icon color="white" icon="cog"/>
                 </div>
-            <div
-                class="settings-control"
-                @click="open_settings()"
-            >
-                <font-awesome-icon color="white" icon="cog"/>
             </div>
         </div>
-        <!--
-        <div class="course_name">{{ course_name }}</div>
-        -->
+        <div class="course-name mobile">{{ course_name }}</div>
+       
     </div>
 </template>

@@ -53,8 +53,8 @@ export default {
             <label class="form-check-label" for="postAnonymously">Post Anonymously</label>
         </div>
         <div class="editor-btn-group">
-            <button class="btn btn-gray" @click="cancel()">Cancel</button>
-            <button class="btn btn-orange" @click="submit">Submit</button>
+            <button class="btn btn-tertiary" @click="cancel()">Cancel</button>
+            <button class="btn btn-primary" @click="submit">Submit</button>
         </div>
     </div>
 
