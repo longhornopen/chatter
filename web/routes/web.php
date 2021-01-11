@@ -26,7 +26,12 @@ Route::post('/lti', [App\Http\Controllers\LtiController::class, 'ltiMessage']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/demo/temp_impersonate', function() {
-    session(['course_user_id'=>1]);
-    return 'FIXME remove this';
-});
+// For local development, it's useful to be able to run this without a full LMS.
+// Allow impersonating an existing user ID.
+if (env('APP_ENV') === 'local') {
+    Route::get('/demo/temp_impersonate', function() {
+        $dummy_user_id = 1;
+        session(['course_user_id'=>$dummy_user_id]);
+        return 'Impersonating user id #'.$dummy_user_id;
+    });
+}

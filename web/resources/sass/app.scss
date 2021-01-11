@@ -17,7 +17,7 @@
 // }
 
 .main-app-area {
-    height: calc(100vh - 60px - $app-header-height);
+    height: calc(100vh - 60px - map-get($app-header-height, 1920));
     .col-md-4 {
         padding-right: 0;
     }
@@ -54,10 +54,8 @@
         @include button-variant($green, $blue, $red);
     }
 
-    .settings-control {
-        a:hover {
-            cursor: pointer;
-        }
+    .settings-control:hover {
+        cursor: pointer;
     }
     .course_name {
         color: $white;
@@ -245,7 +243,7 @@
             height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
-    
+
 }
 
 .app-post-display {

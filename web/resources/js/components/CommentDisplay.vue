@@ -22,11 +22,14 @@ export default {
             return !this.$store.state.currently_viewed_post.locked;
         },
         user_is_teacher() {
-            return this.$store.state.user.role == 'teacher'
+            return this.$store.state.user.role === 'teacher'
         },
         comment_is_muted() {
             return !(this.comment.muted_by_user_id === null)
         },
+        num_upvotes() {
+            return 0; // FIXME
+        }
     },
     methods: {
         endorse(endorse_action) {
@@ -51,13 +54,11 @@ export default {
             })
         },
         edit_comment: function() {
-            // FIXME: make API call
-            console.log("You edit comment with id " + this.comment.id)
+            this.$swal.fire({
+                title: "Editing comments is not yet implemented. Coming soon!",
+                icon: 'warning',
+            })
         },
-        delete_comment: function() {
-            // FIXME: make API call
-            console.log("You delete comment with id " + this.comment.id)
-        }
     }
 }
 </script>
@@ -85,12 +86,14 @@ export default {
                         icon="award" size="lg"/>
                     </div>
                     <!-- FIXME: only show if comment has upvotes. Also show number of upvotes here -->
-                    <div class="upvote-icon">
+                    <div class="upvote-icon"
+                        v-if="num_upvotes > 0"
+                    >
                         <font-awesome-icon
                         class="upvotes"
-                        icon="arrow-circle-up" size="lg"/>
+                        icon="arrow-circle-up" size="lg"/> {{num_upvotes}}
                     </div>
-                    
+
                 </div>
                 <div>
                     <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -98,18 +101,23 @@ export default {
                     </div>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button @click="edit_comment()" class="dropdown-item" type="button">Edit</button>
-                        <button @click="delete_comment()" class="dropdown-item" type="button">Delete</button>
+                        <div v-if="user_is_teacher && !comment_is_muted">
+                            <button @click="mute_comment(true)" class="dropdown-item" type="button">Hide</button>
+                        </div>
+                        <div v-if="user_is_teacher && comment_is_muted">
+                            <button @click="mute_comment(false)" class="dropdown-item" type="button">Un-hide</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            
+
             <div>
                 <div class="comment-container">
                     <div class="comment-body-group">
                         <div class="comment-body">
                             <div v-if="comment_is_muted">
                                 <div class="comment-body-text comment-body-text-muted">
-                                    (This comment is hidden.)
+                                    (This comment has been hidden by an instructor.)
                                 </div>
                             </div>
                             <div v-else>
@@ -121,40 +129,28 @@ export default {
                         </div>
                         <div class="comment-actions">
                             <div class="left-actions">
-                                <div 
+                                <div
                                     class="endorse-action" v-if="user_is_teacher"
-                                    @click="user_is_teacher ? endorse(!comment_is_endorsed) : null"
+                                    @click="endorse(!comment_is_endorsed)"
                                 >
-                                    <font-awesome-icon 
-                                        icon="award" 
-                                        class="action-icon" 
+                                    <font-awesome-icon
+                                        icon="award"
+                                        class="action-icon"
                                         :class="comment_is_endorsed ? 'action-icon-active-blue' : ''"/>
                                     <div
                                         :class="comment_is_endorsed ? 'action-active-blue' : ''">
                                         {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
                                     </div>
                                 </div>
+                                <!--
                                 <div class="upvote-action">
                                     <font-awesome-icon icon="arrow-circle-up" class="action-icon"/>
                                     <div>Upvote</div>
                                 </div>
-                                <div 
-                                    class="hide-action"
-                                    v-if="user_is_teacher"
-                                >
-                                    <font-awesome-icon 
-                                        :icon="comment_is_muted ? 'eye-slash' : 'eye'" 
-                                        class="action-icon"
-                                        :class="comment_is_muted ? 'action-icon-active-gray' : ''"/>
-                                    <div
-                                        :class="comment_is_muted ? 'action-active-gray' : ''"
-                                        @click="mute_comment(comment_is_muted ? false : true)"
-                                    >
-                                        {{comment_is_muted ? 'Unhide' : 'Hide'}}</div>
-                                </div>
+                                -->
                             </div>
                             <div class="right-actions">
-                                <div 
+                                <div
                                     class="reply-action"
                                     @click="toggle_comment_editor(!show_editor)"
                                     v-if="add_comment_allowed">
@@ -176,7 +172,7 @@ export default {
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
         </div>

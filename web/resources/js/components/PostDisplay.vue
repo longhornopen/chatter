@@ -59,7 +59,10 @@ export default {
             return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
         edit_post() {
-            console.log("You clicked Edit for this post")
+            this.$swal.fire({
+                title: "Editing posts is not yet implemented. Coming soon!",
+                icon: 'warning',
+            })
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -68,7 +71,6 @@ export default {
                     view_post_display: false,
                 })
             }
-            
         },
     },
 }
@@ -111,7 +113,6 @@ export default {
                         </div>
                     </div>
                 </div>
-                
                 <div class="post-display-body" v-html="post.body"></div>
                     <div class="btn-groups">
                         <div class="left">
@@ -121,11 +122,6 @@ export default {
                                 @click="pin(!post.pinned)"
                             >{{post.pinned ? "Unpin" : "Pin"}}</button>
                             <!-- <button
-                                class="btn btn-blue"
-                                :class="user_is_teacher && !show_editor?'':'d-none'"
-                                @click="remove()"
-                            >Remove</button> -->
-                            <button
                                 class="btn btn-blue"
                                 :class="user_is_teacher && !show_editor?'':'d-none'"
                                 @click="lock(!post.locked)"

@@ -1,0 +1,12 @@
+FROM php:7.3-cli
+
+EXPOSE 6001
+RUN apt-get update && \
+    apt-get install -y libevent-dev libssl-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    docker-php-ext-install opcache sockets && \
+    pecl install event
+
+ADD web /var/www/html
+WORKDIR /var/www/html
+CMD ["/usr/local/bin/php","artisan","websockets:serve"]

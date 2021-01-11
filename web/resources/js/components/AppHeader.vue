@@ -72,6 +72,8 @@ export default {
                 <font-awesome-icon color="white" icon="cog"/>
             </div>
         </div>
+        <!--
         <div class="course_name">{{ course_name }}</div>
+        -->
     </div>
 </template>

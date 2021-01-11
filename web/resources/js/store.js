@@ -147,21 +147,38 @@ const mutations = {
   endorseComment(state, payload) {
     let comment_id = payload.comment_id;
     let endorsed = payload.endorsed;
-
-    let c = state.currently_viewed_post.comments.find(c => c.id===comment_id);
-    c.endorsed = endorsed;
+    if (state.currently_viewed_post.id !== payload.post_id) {
+      return;
+    }
+    let c = state.currently_viewed_post.comments.find(c => c.id === comment_id);
+    if (c) {
+      c.endorsed = endorsed;
+    }
   },
   muteComment(state, payload) {
     let comment_id = payload.comment_id;
     let muted_by_user_id = payload.muted_by_user_id;
-    let c = state.currently_viewed_post.comments.find(c => c.id===comment_id);
-    c.muted_by_user_id = muted_by_user_id;
+    if (state.currently_viewed_post.id !== payload.post_id) {
+      return;
+    }
+    let c = state.currently_viewed_post.comments.find(c => c.id === comment_id);
+    if (c) {
+      c.muted_by_user_id = muted_by_user_id || null;
+    }
   },
   addComment(state, payload) {
     if (state.currently_viewed_post.id === payload.post_id) {
       state.currently_viewed_post.comments.push(payload);
     }
-    state.posts.find(p => p.id === payload.post_id).num_comments += 1;
+  },
+  incrementUnreadCommentCount(state, payload) {
+    let p = state.posts.find(p => payload.post_id);
+    if (p) {
+      p.num_comments += 1;
+      if (p.id !== state.currently_viewed_post.id) {
+        p.num_unread_comments += 1;
+      }
+    }
   },
   switchScreen(state, payload) {
     // if (state.mobile) {
@@ -189,6 +206,20 @@ const actions = {
           commit('setPosts', {posts: posts_response.data});
           commit('setPostsLoading', {loading:false});
         }))
+      window.Echo.channel('course.'+course_id)
+        .listen('PostLockedChanged', (e) => {
+          commit('lockPost', { post_id: e.post_id, locked: e.locked });
+        }).listen('PostPinnedChanged', (e) => {
+          commit('pinPost', { post_id: e.post_id, pinned: e.pinned });
+        }).listen('PostDeleted', (e) => {
+          commit('deletePost', { post_id: e.post_id });
+        }).listen('CommentAdded', (e) => {
+          commit('incrementUnreadCommentCount', { post_id: e.post_id, comment_id: e.comment_id })
+        }).listen('CommentEndorsedChanged', (e) => {
+          commit('endorseComment', { comment_id: e.comment_id, post_id: e.post_id, endorsed: e.endorsed });
+        }).listen('CommentMutedChanged', (e) => {
+          commit('muteComment', {comment_id: e.comment_id, post_id: e.post_id, muted_by_user_id: e.muted_by_user_id});
+        });
     })
   },
 
@@ -247,13 +278,13 @@ const actions = {
   endorseComment({commit}, payload) {
     axios.post('/api/course/'+this.state.user.course_id+'/comment/'+payload.comment_id+'/endorse/'+payload.endorsed)
       .then(function(response) {
-      commit('endorseComment', { comment_id: payload.comment_id, endorsed: payload.endorsed });
+      commit('endorseComment', { comment_id: response.data.id, post_id: response.data.post_id, endorsed: response.data.endorsed });
     });
   },
   muteComment({commit}, payload) {
     axios.post('/api/course/'+this.state.user.course_id+'/comment/'+payload.comment_id+'/mute/'+payload.muted)
       .then(function(response) {
-      commit('muteComment', {comment_id: response.data.id, muted_by_user_id: response.data.muted_by_user_id});
+      commit('muteComment', {comment_id: response.data.id, post_id: response.data.post_id, muted_by_user_id: response.data.muted_by_user_id});
     });
   },
   addComment({commit}, payload) {
@@ -270,8 +301,6 @@ const actions = {
     commit('switchScreen', payload);
   },
   toggleMobile({commit}, payload) {
-    console.log('switching mobile')
-    console.log(payload.mobile)
     commit('toggleMobile', payload);
   }
 }

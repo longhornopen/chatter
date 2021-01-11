@@ -338,6 +338,18 @@ store_defaults.actions.deanonUserId = function({commit}, payload) {
 
 let store = new Vuex.Store(store_defaults);
 
+let onResize = function() {
+  const w = window.innerWidth
+  let is_mobile = w < 768
+  store.dispatch('toggleMobile', {
+    mobile: is_mobile,
+  })
+  store.dispatch('switchScreen', {
+    view_post_list: true,
+    view_post_display: !is_mobile,
+  })
+}
+
 new Vue({
     el: '#app',
     store: store,
@@ -345,5 +357,12 @@ new Vue({
         get_sample_comment: function() {
             return this.$store.getters.currently_viewed_post.comments[0];
         }
+    },
+    mounted() {
+      onResize()
+      window.addEventListener('resize', onResize)
+    },
+    beforeDestroy() {
+      window.removeEventListener('resize', onResize)
     }
 })

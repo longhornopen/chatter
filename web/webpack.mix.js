@@ -15,7 +15,10 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/demo_component_gallery.js', 'public/js/demo_comp_gallery.js')
     .sass('resources/sass/app.scss', 'public/css')
     .extract()
-    .version()
     .sourceMaps();
+
+if (mix.inProduction()) {
+  mix.version();
+}
 
 mix.disableNotifications();

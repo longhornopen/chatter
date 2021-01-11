@@ -6,6 +6,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentAdded;
+use App\Events\CommentEndorsedChanged;
+use App\Events\CommentMutedChanged;
+use App\Events\PostDeleted;
+use App\Events\PostLockedChanged;
+use App\Events\PostPinnedChanged;
 use App\Exceptions\LoginExpiredException;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Comment;
@@ -43,9 +49,14 @@ class ApiController extends Controller
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
 
-        return Course::where('id',$course_user->course_id)
+        $course = Course::where('id',$course_user->course_id)
             ->select('id','name')
             ->first();
+        if (env('APP_HELP_URL')) {
+            $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
+            $course->help_url = env('APP_HELP_URL');
+        }
+        return $course;
     }
 
     public function getCoursePosts(Request $request, $course_id)
@@ -151,7 +162,7 @@ TAG
         $post->author_user_id = $course_user->id;
         $post->author_user_name = $course_user->name;
         $post->author_user_role = $course_user->role;
-        $post->author_anonymous = $request->get('anonymous')==='true' ? 1 : 0;
+        $post->author_anonymous = $request->get('author_anonymous');
         $post->title = $request->get('title');
         $post->body = $body;
         $post->save();
@@ -179,6 +190,12 @@ TAG
         $post = Post::findOrFail($post_id);
         $this->checkPostAuths($post, $course_user);
         $post->delete();
+
+        event(new PostDeleted(
+                  $course_user->course_id,
+                  $post->id,
+              ));
+
         return "ok";
     }
 
@@ -191,6 +208,13 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->pinned = $pinned === 'true';
         $post->save();
+
+        event(new PostPinnedChanged(
+                  $course_user->course_id,
+                  $post->id,
+                  $post->pinned ? true : false
+              ));
+
         return $post;
     }
 
@@ -203,6 +227,13 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->locked = $locked==='true' ? 1 : 0;
         $post->save();
+
+        event(new PostLockedChanged(
+            $course_user->course_id,
+            $post->id,
+            $post->locked ? true : false
+              ));
+
         return $post;
     }
 
@@ -225,9 +256,15 @@ TAG
         $comment->author_user_name = $course_user->name;
         $comment->author_user_role = $course_user->role;
         $comment->parent_comment_id = $request->get('parent_comment_id');
-        $comment->author_anonymous = $request->get('author_anonymous')==='true' ? 1 : 0;
+        $comment->author_anonymous = $request->get('author_anonymous');
         $comment->body = $body;
         $comment->save();
+
+        event(new CommentAdded(
+                  $course_user->course_id,
+                  $comment->post_id,
+                  $comment->id,
+              ));
 
         return Comment::where('id', $comment->id)
             ->first();
@@ -248,7 +285,16 @@ TAG
 
         $comment->endorsed = $endorsed==='true' ? 1 : 0;
         $comment->save();
-        return $comment;
+
+        event(new CommentEndorsedChanged(
+                  $course_user->course_id,
+                  $comment->post_id,
+                  $comment->id,
+                  $comment->endorsed ? true : false,
+              ));
+
+        return Comment::where('id', $comment->id)
+            ->first();
     }
 
     public function muteComment(Request $request, $course_id, $comment_id, $muted)
@@ -261,7 +307,16 @@ TAG
 
         $comment->muted_by_user_id = $muted==='true' ? $course_user->id : null;
         $comment->save();
-        return $comment;
+
+        event(new CommentMutedChanged(
+                  $course_user->course_id,
+                  $comment->post_id,
+                  $comment->id,
+                  $comment->muted_by_user_id,
+              ));
+
+        return Comment::where('id', $comment->id)
+            ->first();
     }
 
     /*
