@@ -7,19 +7,11 @@ $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 // Colors
-$blue: #245E83;
+$primary: #B35C22;
+$secondary: #245E83;
 $white: #ffffff;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #B35C22;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
-$gray: #47535E;
-$darkergray: #4E4E4E;
+$bg-dark: #47535E;
+$tertiary: #4E4E4E;
 $darkgray: #0C0F11;
 $lightgray: #d1d1d1;
 $middlegray: #aeabab;
@@ -28,8 +20,11 @@ $commentgray: #e0e0e0;
 // darken color amount on button hover
 $darken-amount: 10%;
 
+// App Logo
+$app-logo-size: 40px;
+
 // Navs
-$nav-tabs-border-width: 0;
+$nav-tabs-border-width: 0; // gets rid of default bootstrap border
 
 // Dropdown
 $dropdown-spacer: 0.7rem;
@@ -40,20 +35,25 @@ $full-width: 100vw;
 $title-bar-height: 60px;
 $post-list-padding: 10px;
 $write-post-btn-height: 37px;
-$course-name-height: 70px;
+$course-name-height: 70px; // only starting max-width 1077px
 
 // map for tabs height 
 $tabs-height: (
     1920: 39px,
     1152: 62px,
-    899: 78px,
+    1077: 62px,
+    900: 62px,
+    884: 78px,
     767: 39px,
     384: 62px,
 );
 
 $app-header-height: (
     1920: 58px,
-    900: 99px,
+    1077: 128px,
+    900: 128px,
+    884: 128px,
     767: 128px,
+    384: 128px,
 );
 

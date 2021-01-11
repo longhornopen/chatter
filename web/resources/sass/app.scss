@@ -8,16 +8,12 @@
 @import '~bootstrap/scss/bootstrap';
 
 #app {
-    height: 100vh;
-    // margin-left: 10px;
-    // margin-right: 10px;
+    height: $full-height;
 }
-// .col-md-12 {
-//     padding: 0;
-// }
+
 
 .main-app-area {
-    height: calc(100vh - 60px - map-get($app-header-height, 1920));
+    height: calc($full-height - $title-bar-height - map-get($app-header-height, 1920));
     .col-md-4 {
         padding-right: 0;
     }
@@ -28,8 +24,8 @@
 
 .app-title-bar {
     .app-logo {
-        width: 40px;
-        height: 40px;
+        width: $app-logo-size;
+        height: $app-logo-size;
         margin: 0 10px 0 0;
     }
 
@@ -37,47 +33,55 @@
         font-size: x-large;
         font-weight: 900;
     }
-    margin: 10px 0 10px 20px;
+    margin: 10px 20px;
     display: flex;
     align-items: center;
 }
 
 .app-header-bar {
-    background-color: $gray;
+    background-color: $bg-dark;
     padding: 10px;
     position: relative;
     .justify-content-between {
         align-items: center;
+        .header-col {
+            flex: 1;
+        }
+        .header-col.middle {
+            flex: 2;
+        }
+        .header-col.right {
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 
     .btn-search-submit {
-        @include button-variant($green, $blue, $red);
+        @include button-variant($green, $secondary, $red);
     }
 
     .settings-control:hover {
         cursor: pointer;
     }
-    .course_name {
+    .course-name {
         color: $white;
         font-size: large;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0 30% 0 30%;
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
         line-height: 1.2em;
     }
-    @media screen and (max-width: 767px) {
-        .course_name {
+    .course-name.mobile {
+        display: none;
+    }
+    @media screen and (max-width: 1077px) {
+        .course-name {
             height: 70px;
         }
     }
     .form-inline {
+        flex-flow: nowrap;
         .form-control, .form-control:focus {
             background-color: $darkgray;
             border-radius: 6px;
@@ -92,7 +96,7 @@
             border-radius: 6px;
         }
         .btn-search-submit:hover {
-            background-color: $orange;
+            background-color: $primary;
         }
     }
     .settings-control {
@@ -105,7 +109,7 @@
         z-index: 100;
         box-shadow: none;
         .times-icon {
-            color: $gray;
+            color: $bg-dark;
         }
     }
     .clear-search-icon:focus {
@@ -113,13 +117,20 @@
     }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1077px) {
     .app-header-bar {
         display: flex;
         flex-direction: column-reverse;
-        .course_name {
+        .course-name.mobile {
+            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
             padding: 10px 10px;
+        }
+        .header-col.middle {
+            display: none;
         }
     }
 }
@@ -134,7 +145,7 @@
 
 .app-post-list {
     background-color: $lightgray;
-    padding: 10px;
+    padding: $post-list-padding;
     height: 100%;
     padding-bottom: $write-post-btn-height;
     position: relative;
@@ -144,7 +155,7 @@
             flex: 1;
             border-top-left-radius: 6px;
             border-top-right-radius: 6px;
-            background-color: $gray;
+            background-color: $bg-dark;
             box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
             a, a:hover, a:visited {
                 color: $white;
@@ -161,9 +172,8 @@
 
     }
     .btn-post-topic {
-        // @include button-variant($green, $blue, $red);
-        width: calc(100% - 20px);
-        background-color: $orange;
+        width: calc(100% - #{$post-list-padding * 2});
+        background-color: $primary;
         color: $white;
         border-radius: 0;
         border-top-left-radius: 6px;
@@ -181,7 +191,7 @@
             padding: 10px;
             border-bottom: 0.25px dotted $lightgray;
             .post-misc-info {
-                color: $darkergray;
+                color: $tertiary;
             }
             .post-title {
                 margin: 0;
@@ -192,7 +202,7 @@
                 align-items: center;
                 margin: 5px 0 0 0;
                 .pin-icon, .lock-icon {
-                    color: $darkergray;
+                    color: $tertiary;
                     margin: 0 5px 0 0;
                 }
                 span {
@@ -206,7 +216,7 @@
                     font-size: small;
                 }
                 .badge-unread {
-                    background-color: $darkergray;
+                    background-color: $tertiary;
                 }
                 .badge-read {
                     background-color: $middlegray;
@@ -228,9 +238,19 @@
             height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1152)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
+    @media screen and (max-width: 1077px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1077)} - #{map-get($tabs-height, 1077)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
     @media screen and (max-width: 900px) {
         .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)} - #{map-get($tabs-height, 899)} - #{$post-list-padding} - #{$write-post-btn-height});
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)} - #{map-get($tabs-height, 900)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+    @media screen and (max-width: 884px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 884)} - #{map-get($tabs-height, 884)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
     @media screen and (max-width: 767px) {
@@ -240,29 +260,30 @@
     }
     @media screen and (max-width: 384px) {
         .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 384)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
 
+}
+.back-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    h5 {
+        margin: 0;
+    }
+    .back-icon {
+        color: $tertiary;
+        margin: 0 5px 0 0;
+    }
 }
 
 .app-post-display {
     height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)});
     padding: 5% 10%;
     overflow-y: auto;
-    .back-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        cursor: pointer;
-        h5 {
-            margin: 0;
-        }
-        .back-icon {
-            color: $darkergray;
-            margin: 0 5px 0 0;
-        }
-    }
+    
     .post-top-row {
         display: flex;
         justify-content: space-between;
@@ -282,25 +303,19 @@
         margin: 20px 0;
     }
 }
+@media screen and (max-width: 1077px) {
+    .app-post-display, .new-post {
+        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1077)});
+    }
+}
 
-@media screen and (max-width: 900px) {
-    .app-post-display {
-        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)});
-        padding: 3% 7%;
-    }
-}
-@media screen and (max-width: 767px) {
-    .app-post-display {
-        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)});
-    }
-}
+
 
 .btn {
     transition: 0.3s;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 .btn:hover {
-    // transform: translateY(-0.1em);
     color: $white;
 }
 
@@ -311,27 +326,27 @@
     justify-content: space-between;
     margin: 20px 0;
 }
-.btn-blue {
-    background-color: $blue;
+.btn-secondary {
+    background-color: $secondary;
     color: $white;
     margin: 0 10px 0 0;
 }
-.btn-blue:hover {
-    background-color: darken($blue, $darken-amount);
+.btn-secondary:hover {
+    background-color: darken($secondary, $darken-amount);
 }
-.btn-orange {
-    background-color: $orange;
+.btn-primary {
+    background-color: $primary;
     color: $white;
 }
-.btn-orange:hover {
-    background-color: darken($orange, $darken-amount);
+.btn-primary:hover {
+    background-color: darken($primary, $darken-amount);
 }
-.btn-gray {
-    background-color: $darkergray;
+.btn-tertiary {
+    background-color: $tertiary;
     color: $white;
 }
-.btn-gray:hover {
-    background-color: darken($darkergray, $darken-amount);
+.btn-tertiary:hover {
+    background-color: darken($tertiary, $darken-amount);
 }
 
 .comment-container{
@@ -360,17 +375,17 @@
         margin: 0 7px 0 0;
     }
     .endorsed {
-        color: $blue;
+        color: $secondary;
     }
     .upvotes {
-        color: $darkergray;
+        color: $tertiary;
     }
 }
 
 .unread-dot {
     width: 7px;
     height: 7px;
-    background-color: $orange;
+    background-color: $primary;
     opacity: 70%;
     border-radius: 5px;
 }
@@ -402,16 +417,16 @@
             margin-right: 7px;
             color: $middlegray;
         }
-        .action-active-blue {
-            color: $blue;
+        .action-active-secondary {
+            color: $secondary;
         }
-        .action-active-gray {
-            color: $darkergray;
+        .action-active-tertiary {
+            color: $tertiary;
         }
     }
     .right-actions div{
         margin-right: 0;
-        color: $darkergray;
+        color: $tertiary;
     }
     .endorse-action, .upvote-action, .hide-action, .reply-action {
         display: flex;
@@ -423,11 +438,11 @@
         .action-icon {
             color: $middlegray;
         }
-        .action-icon-active-blue {
-            color: $blue;
+        .action-icon-active-secondary {
+            color: $secondary;
         }
-        .action-icon-active-gray {
-            color: $darkergray;
+        .action-icon-active-tertiary {
+            color: $tertiary;
         }
     }
 }
@@ -445,24 +460,7 @@
     cursor: pointer;
 }
 .single-comment {
-    // display: flex;
     .row {
-        // .col-1 {
-        //     display: flex;
-        //     justify-content: center;
-        //     padding-top: 16px;
-        //     .endorsed {
-        //         color: $blue;
-        //         transition: 0.3s;
-        //     }
-        //     .can-endorse {
-        //         color: $commentgray;
-        //         transition: 0.3s;
-        //     }
-        //     .invisible {
-        //         color: $white;
-        //     }
-        // }
         .col-11 {
             padding-left: 0px;
         }
@@ -470,18 +468,6 @@
     .comment-row {
         display: flex;
         margin: 0px;
-        // .endorse-icon {
-        //     padding-top: 22px;
-        //     margin: 0 10px;
-        //     .endorsed {
-        //         color: $blue;
-        //         transition: 0.3s;
-        //     }
-        //     .can-endorse {
-        //         color: $commentgray;
-        //         transition: 0.3s;
-        //     }
-        // }
     }
 }
 // for wysiwyg buttons
@@ -493,10 +479,6 @@
         margin: 0 0 0 10px;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     }
-    .btn:hover {
-        // transform: translateY(-0.1em);
-        color: $white;
-    }
 }
 
 // for new post
@@ -507,11 +489,11 @@
 .anon {
     .icon {
         margin: 0 2px;
-        color: $darkergray;
+        color: $tertiary;
         cursor: pointer;
     }
     .deanon-label {
-        background-color: $darkergray;
+        background-color: $tertiary;
         color: white;
         padding: 0 5px;
         border-radius: 2px;

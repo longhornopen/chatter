@@ -50,6 +50,7 @@ const state = {
     mobile: null,
     view_post_list: null,
     view_post_display: null,
+    view_post_create: false,
 }
 
 const getters = {
@@ -69,7 +70,8 @@ const getters = {
     // for mobile display
     mobile: state => { return state.mobile },
     show_post_list: state => { return state.view_post_list },
-    show_post_display: state => { return state.view_post_display }
+    show_post_display: state => { return state.view_post_display },
+    show_post_create: state => { return state.view_post_create }
 }
 
 const mutations = {
@@ -184,6 +186,7 @@ const mutations = {
     // if (state.mobile) {
       state.view_post_list = payload.view_post_list;
       state.view_post_display = payload.view_post_display;
+      state.view_post_create = payload.view_post_create;
     // }
   },
   toggleMobile(state, payload) {

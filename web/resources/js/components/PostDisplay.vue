@@ -69,6 +69,7 @@ export default {
                 this.$store.dispatch('switchScreen', {
                     view_post_list: true,
                     view_post_display: false,
+                    view_post_create: false,
                 })
             }
         },
@@ -113,16 +114,17 @@ export default {
                         </div>
                     </div>
                 </div>
+
                 <div class="post-display-body" v-html="post.body"></div>
                     <div class="btn-groups">
                         <div class="left">
                             <button
-                                class="btn btn-blue"
+                                class="btn btn-secondary"
                                 :class="user_is_teacher && !show_editor?'':'d-none'"
                                 @click="pin(!post.pinned)"
                             >{{post.pinned ? "Unpin" : "Pin"}}</button>
-                            <!-- <button
-                                class="btn btn-blue"
+                            <button
+                                class="btn btn-secondary"
                                 :class="user_is_teacher && !show_editor?'':'d-none'"
                                 @click="lock(!post.locked)"
                             >{{post.locked ? "Unlock" : "Lock"}}</button>
@@ -130,7 +132,7 @@ export default {
 
                         <div class="right" v-if="add_comment_allowed">
                             <button
-                                class="btn btn-orange"
+                                class="btn btn-primary"
                                 :class="!show_editor?'':'d-none'"
                                 @click="show_editor=true">Comment</button>
                         </div>

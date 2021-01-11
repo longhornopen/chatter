@@ -31,15 +31,22 @@ export default {
         },
         open_post(post_id) {
             this.$store.dispatch('setAppMainPanelMode', {mode: 'show_post', post_id: post_id});
-
             if (this.$store.getters.mobile) {
                 this.$store.dispatch('switchScreen', {
                     view_post_list: false,
                     view_post_display: true,
+                    view_post_create: false,
                 })
             }
         },
         open_new_post_editor() {
+            if (this.$store.getters.mobile) {
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: false,
+                    view_post_display: false,
+                    view_post_create: true,
+                })
+            }
             this.$store.dispatch('setAppMainPanelMode', {mode: 'new_post'});
         },
         poster_name(post) {

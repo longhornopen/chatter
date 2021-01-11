@@ -9,6 +9,11 @@ export default {
             'anonymous': false,
         };
     },
+    computed: {
+        in_mobile_mode() {
+            return this.$store.getters.mobile;
+        }
+    },
     methods: {
         submit_new_post() {
             if (this.title.trim().length === 0) {
@@ -33,7 +38,15 @@ export default {
         },
         close_post_editor() {
             if (this.body.trim().length === 0) {
-                this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
+                if (!this.in_mobile_mode) {
+                    this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
+                } else {
+                    this.$store.dispatch('switchScreen', {
+                        view_post_create: false,
+                        view_post_list: true,
+                        view_post_display: false,
+                    })
+                }
                 return;
             }
             this.$swal.fire({
@@ -42,10 +55,31 @@ export default {
                 showCancelButton: true,
             }).then(result => {
                 if (result.isConfirmed) {
-                    this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
+                    if (!this.in_mobile_mode) {
+                        this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
+                    } else {
+                        this.$store.dispatch('switchScreen', {
+                            view_post_create: false,
+                            view_post_list: true,
+                            view_post_display: false,
+                        })
+                    }
+                    
                 }
             });
-        }
+        },
+        switch_screen() {
+            if (this.$store.getters.mobile) {
+                this.$store.dispatch('switchScreen', {
+                    view_post_list: true,
+                    view_post_display: false,
+                    view_post_create: false,
+                })
+                this.$store.dispatch('setAppMainPanelMode', {
+                    mode: 'show_post',
+                })
+            }
+        },
     }
 }
 </script>
@@ -53,6 +87,10 @@ export default {
 <template>
     <div class="new-post">
         <!-- <form> -->
+            <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
+                <font-awesome-icon class="back-icon" icon="chevron-left" size="2x"/>
+                <h5>Back</h5>
+            </div>
             <div class="form-group">
                 <label for="post-title">Post Title</label>
                 <input class="form-control" id="post-title" v-model="title">
@@ -67,10 +105,10 @@ export default {
             </div>
             <div class="editor-btn-group">
                 <button
-                    class="btn btn-gray"
+                    class="btn btn-tertiary"
                     @click="close_post_editor()">Cancel</button>
                 <button
-                    class="btn btn-blue"
+                    class="btn btn-secondary"
                     @click="submit_new_post()">Post</button>
             </div>
 

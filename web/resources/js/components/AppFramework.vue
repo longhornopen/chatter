@@ -17,6 +17,9 @@ export default {
         },
         show_post_display() {
             return this.$store.getters.show_post_display
+        },
+        show_post_create() {
+            return this.$store.getters.show_post_create
         }
     },
 }
@@ -35,7 +38,7 @@ export default {
         </div>
         <div class="row main-app-area no-gutters">
             <div v-if="show_post_list" class="col-md-4"><post-list></post-list></div>
-            <div v-if="show_post_display" class="col-md-8">
+            <div v-if="show_post_display || show_post_create" class="col-md-8">
                 <div v-if="app_main_panel_mode==='welcome'">
                     <splash-page></splash-page>
                 </div>
