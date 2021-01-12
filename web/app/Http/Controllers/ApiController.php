@@ -91,8 +91,10 @@ TAG
             $posts = $posts->where('author_user_id', $course_user->id);
         }
         if ($search) {
-            $posts = $posts->where('title', 'like', '%'.$search.'%')
-                ->orWhere('body', 'like', '%'.$search.'%');
+            $posts = $posts->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('body', 'like', '%' . $search . '%');
+            });
         }
         $posts = $posts
             ->get()
