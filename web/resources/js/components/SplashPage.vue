@@ -26,9 +26,7 @@ export default {
             communicate outside the classroom.
         </p>
 
-        <p>
-        Students can:
-        </p>
+        <h4>Students can:</h4>
         <ul>
             <li>Produce free-form threaded discussions, moderated by course instructors</li>
             <li>Ask questions and crowdsource info by writing Posts</li>
@@ -36,9 +34,7 @@ export default {
             <li>Suggest answers by Commenting on Posts</li>
         </ul>
 
-        <p>
-        Instructors can:
-        </p>
+        <h4>Instructors can:</h4>
         <ul>
             <li>Post important announcements and class info</li>
             <li>Comment on student posts and answer questions</li>
@@ -54,9 +50,9 @@ export default {
             or write a new Post using the 'Write a Post' button at the bottom.
         </p>
 
-        <p v-if="help_url">
-            Have questions or need help?
+        <div v-if="help_url">
+            <h4>Have questions or need help?</h4>
             <a :href="help_url" target="_blank">{{help_url_display}}</a>.
-        </p>
+        </div>
     </div>
 </template>
