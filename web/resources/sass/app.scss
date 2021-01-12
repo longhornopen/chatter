@@ -28,14 +28,25 @@
         height: $app-logo-size;
         margin: 0 10px 0 0;
     }
+    .app-logo.large {
+        width: $app-logo-size-large;
+        height: $app-logo-size-large;
+        margin: 0 20px 0 0;
+    }
 
     .app-title {
         font-size: x-large;
         font-weight: 900;
     }
+    .app-title.large {
+        font-size: xxx-large;
+    }
     margin: 10px 20px;
     display: flex;
     align-items: center;
+}
+.app-title-bar.large {
+    margin: 10% 5% 30px 5%;
 }
 
 .app-header-bar {
@@ -157,6 +168,7 @@
             border-top-right-radius: 6px;
             background-color: $bg-dark;
             box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+            transition: 0.3s;
             a, a:hover, a:visited {
                 color: $white;
             }
@@ -169,6 +181,9 @@
                 border-top-right-radius: 6px;
             }
         }
+        .nav-item:hover {
+            background-color: darken($bg-dark, $darken-amount);
+        }
 
     }
     .btn-post-topic {
@@ -180,6 +195,9 @@
         border-top-right-radius: 6px;
         position: absolute;
         bottom: 0;
+    }
+    .btn-post-topic:hover {
+        background-color: darken($primary, $darken-amount);
     }
 
     .app-post-list-body {
@@ -315,6 +333,9 @@
     transition: 0.3s;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
+.btn.no-shadow {
+    box-shadow: none;
+}
 .btn:hover {
     color: $white;
 }
@@ -413,6 +434,7 @@
     margin: 0 0 10px 0;
     .left-actions, .right-actions {
         display: flex;
+        
         div {
             margin-right: 7px;
             color: $middlegray;
@@ -445,6 +467,10 @@
             color: $tertiary;
         }
     }
+    .endorse-action:hover, .upvote-action:hover, .hide-action:hover, .reply-action:hover {
+        transform: translateY(-1px);
+    }
+    
 }
 
 .comment-body-text {
@@ -500,5 +526,20 @@
     }
     .invisible {
         background-color: $white;
+    }
+}
+
+
+// Styles for static homepage
+.color-bar {
+    width: 100%;
+    height: 30px;
+    background-color: $bg-dark;
+}
+
+.home-content {
+    padding: 30px 20% 30px 5%;
+    p {
+        font-size: large;
     }
 }

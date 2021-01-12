@@ -130,7 +130,8 @@ export default {
                         <div class="comment-actions">
                             <div class="left-actions">
                                 <div
-                                    class="endorse-action" v-if="user_is_teacher"
+                                    class="endorse-action" 
+                                    v-if="user_is_teacher"
                                     @click="endorse(!comment_is_endorsed)"
                                 >
                                     <font-awesome-icon

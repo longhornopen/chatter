@@ -32,5 +32,8 @@
         "vue-sweetalert2": "^4.1.1",
         "vue-template-compiler": "^2.6.12",
         "vuex": "^3.6.0"
+    },
+    "dependencies": {
+        "php": "^1.0.1"
     }
 }
