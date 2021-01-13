@@ -13,7 +13,7 @@
 
 
 .main-app-area {
-    height: calc($full-height - $title-bar-height - map-get($app-header-height, 1920));
+    height: calc(#{$full-height} - #{$title-bar-height} - map-get($app-header-height, 1920));
     .col-md-4 {
         padding-right: 0;
     }
@@ -301,7 +301,7 @@
     height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)});
     padding: 5% 10%;
     overflow-y: auto;
-    
+
     .post-top-row {
         display: flex;
         justify-content: space-between;
@@ -434,7 +434,6 @@
     margin: 0 0 10px 0;
     .left-actions, .right-actions {
         display: flex;
-        
         div {
             margin-right: 7px;
             color: $middlegray;
@@ -470,7 +469,6 @@
     .endorse-action:hover, .upvote-action:hover, .hide-action:hover, .reply-action:hover {
         transform: translateY(-1px);
     }
-    
 }
 
 .comment-body-text {
