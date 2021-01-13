@@ -48,10 +48,12 @@ export default {
                             placeholder="Search..."
                             autocomplete="off"
                             v-model="search_term"
+                            aria-label="Search"
                         >
                         <button
                             class="btn bg-transparent clear-search-icon"
-                            @click="clear_search()">
+                            @click="clear_search()"
+                            aria-label="Clear">
                             <font-awesome-icon
                                 class="times-icon"
                                 icon="times-circle"

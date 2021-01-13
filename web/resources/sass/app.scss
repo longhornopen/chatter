@@ -234,10 +234,10 @@
                     font-size: small;
                 }
                 .badge-unread {
-                    background-color: $tertiary;
+                    background-color: $black;
                 }
                 .badge-read {
-                    background-color: $middlegray;
+                    background-color: $grayvariation;
                 }
             }
         }
@@ -306,6 +306,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .ellipsis {
+            border: none;
+        }
     }
     .post-display-body {
         border-radius: 6px;
@@ -371,7 +374,6 @@
 }
 
 .comment-container{
-    // width: calc(100% - 34.39px);
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -384,6 +386,7 @@
     .ellipsis {
         display: flex;
         align-items: baseline;
+        border: none;
     }
 }
 
@@ -434,7 +437,6 @@
     margin: 0 0 10px 0;
     .left-actions, .right-actions {
         display: flex;
-
         div {
             margin-right: 7px;
             color: $middlegray;
@@ -470,7 +472,6 @@
     .endorse-action:hover, .upvote-action:hover, .hide-action:hover, .reply-action:hover {
         transform: translateY(-1px);
     }
-
 }
 
 .comment-body-text {
