@@ -306,6 +306,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .ellipsis {
+            border: none;
+        }
     }
     .post-display-body {
         border-radius: 6px;
@@ -383,6 +386,7 @@
     .ellipsis {
         display: flex;
         align-items: baseline;
+        border: none;
     }
 }
 
