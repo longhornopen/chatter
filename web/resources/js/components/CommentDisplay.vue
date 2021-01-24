@@ -27,6 +27,15 @@ export default {
         comment_is_muted() {
             return !(this.comment.muted_by_user_id === null)
         },
+        can_edit() {
+            return this.comment.author_user_id === this.$store.getters.user.id;
+        },
+        can_hide_unhide() {
+            return this.user_is_teacher;
+        },
+        should_display_options_menu() {
+            return this.can_edit || this.can_hide_unhide;
+        },
         num_upvotes() {
             return 0; // FIXME
         }
@@ -95,17 +104,26 @@ export default {
                     </div>
 
                 </div>
-                <div>
+                <div
+                    v-show="should_display_options_menu"
+                >
                     <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <font-awesome-icon icon="ellipsis-h" />
                     </div>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button @click="edit_comment()" class="dropdown-item" type="button">Edit</button>
-                        <div v-if="user_is_teacher && !comment_is_muted">
-                            <button @click="mute_comment(true)" class="dropdown-item" type="button">Hide</button>
-                        </div>
-                        <div v-if="user_is_teacher && comment_is_muted">
-                            <button @click="mute_comment(false)" class="dropdown-item" type="button">Un-hide</button>
+                        <button
+                            @click="edit_comment()"
+                            class="dropdown-item"
+                            type="button"
+                            v-show="can_edit"
+                        >Edit</button>
+                        <div v-if="can_hide_unhide">
+                            <div v-if="!comment_is_muted">
+                                <button @click="mute_comment(true)" class="dropdown-item" type="button">Hide</button>
+                            </div>
+                            <div v-if="comment_is_muted">
+                                <button @click="mute_comment(false)" class="dropdown-item" type="button">Un-hide</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,7 +148,7 @@ export default {
                         <div class="comment-actions">
                             <div class="left-actions">
                                 <div
-                                    class="endorse-action" 
+                                    class="endorse-action"
                                     v-if="user_is_teacher"
                                     @click="endorse(!comment_is_endorsed)"
                                 >

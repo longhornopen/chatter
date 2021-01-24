@@ -19,6 +19,15 @@ export default {
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
         },
+        can_edit() {
+            return this.$store.getters.currently_viewed_post.author_user_id === this.$store.getters.user.id;
+        },
+        can_delete() {
+            return this.user_is_teacher;
+        },
+        should_display_options_menu() {
+            return this.can_edit || this.can_delete;
+        },
         add_comment_allowed() {
             return !this.$store.state.currently_viewed_post.locked;
         },
@@ -104,13 +113,25 @@ export default {
                             :date-iso="post.created_at"
                         ></formatted-date>
                     </div>
-                    <div>
+                    <div
+                        v-show="should_display_options_menu"
+                    >
                         <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <font-awesome-icon icon="ellipsis-h" />
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <button @click="edit_post()" class="dropdown-item" type="button">Edit</button>
-                            <button @click="remove()" class="dropdown-item" type="button">Delete</button>
+                            <button
+                                @click="edit_post()"
+                                class="dropdown-item"
+                                type="button"
+                                v-show="can_edit"
+                            >Edit</button>
+                            <button
+                                @click="remove()"
+                                class="dropdown-item"
+                                type="button"
+                                v-show="can_delete"
+                            >Delete</button>
                         </div>
                     </div>
                 </div>
