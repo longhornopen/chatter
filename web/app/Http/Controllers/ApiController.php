@@ -72,21 +72,21 @@ class ApiController extends Controller
         if ($filter==='pinned') {
             $posts = $posts->where('pinned', true);
         } elseif ($filter==='unread') {
-            $post_ids = DB::select(<<<'TAG'
-select distinct(posts.id) as id from posts
-left join comments on posts.id=comments.post_id
-left join course_user_post_last_read_flags on posts.id = course_user_post_last_read_flags.post_id
-where
-      posts.course_id = ?
-  and posts.deleted_at is null
-  and (course_user_post_last_read_flags.course_user_id = ?
-        or course_user_post_last_read_flags.course_user_id is null)
-  and (course_user_post_last_read_flags.updated_at is null
-        or comments.created_at > course_user_post_last_read_flags.updated_at)
+            $fully_read_posts = DB::select(<<<'TAG'
+SELECT posts.id as id, max(comments.created_at) as comment_date, max(flags.updated_at) as flag_date
+from comments,posts,course_user_post_last_read_flags as flags
+where comments.post_id = posts.id
+  and flags.post_id = posts.id
+  and posts.course_id = ?
+  and flags.course_user_id = ?
+group by posts.id
 TAG
                 , [$course_user->course_id,$course_user_id]);
-            $post_ids = array_values(array_column($post_ids, 'id'));
-            $posts = $posts->whereIn('id', $post_ids);
+            $fully_read_posts = array_filter($fully_read_posts, function($post) {
+                return $post->flag_date >= $post->comment_date;
+            });
+            $post_ids = array_values(array_column($fully_read_posts, 'id'));
+            $posts = $posts->whereNotIn('id', $post_ids);
         } elseif ($filter==='my_posts') {
             $posts = $posts->where('author_user_id', $course_user->id);
         }
