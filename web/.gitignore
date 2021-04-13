@@ -3,7 +3,7 @@
 /public/storage
 /public/css/*.css
 /public/css/*.css.map
-/public/fonts
+/public/fonts/vendor
 /public/js/*.js
 /public/js/*.js.map
 /public/js/vendor.js.LICENSE.txt
