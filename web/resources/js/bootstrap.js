@@ -38,10 +38,12 @@ if (process.env.MIX_PUSHER_APP_KEY) {
   let echo_options = {
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
-//    wsHost: process.env.MIX_WS_HOST,
-//    wsPort: 6001,
     forceTLS: false,
     disableStats: true,
+  }
+  if (process.env.MIX_PUSHER_WS_HOST) {
+    echo_options.wsHost = process.env.MIX_PUSHER_WS_HOST;
+    echo_options.wsPort = 6001;
   }
   window.Echo = new Echo(echo_options);
 }

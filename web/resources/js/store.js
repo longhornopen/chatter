@@ -209,20 +209,24 @@ const actions = {
           commit('setPosts', {posts: posts_response.data});
           commit('setPostsLoading', {loading:false});
         }))
-      window.Echo.channel('course.'+course_id)
-        .listen('PostLockedChanged', (e) => {
-          commit('lockPost', { post_id: e.post_id, locked: e.locked });
-        }).listen('PostPinnedChanged', (e) => {
-          commit('pinPost', { post_id: e.post_id, pinned: e.pinned });
-        }).listen('PostDeleted', (e) => {
-          commit('deletePost', { post_id: e.post_id });
-        }).listen('CommentAdded', (e) => {
-          commit('incrementUnreadCommentCount', { post_id: e.post_id, comment_id: e.comment_id })
-        }).listen('CommentEndorsedChanged', (e) => {
-          commit('endorseComment', { comment_id: e.comment_id, post_id: e.post_id, endorsed: e.endorsed });
-        }).listen('CommentMutedChanged', (e) => {
-          commit('muteComment', {comment_id: e.comment_id, post_id: e.post_id, muted_by_user_id: e.muted_by_user_id});
-        });
+      if (window.Echo) {
+        window.Echo.channel('course.' + course_id)
+          .listen('PostLockedChanged', (e) => {
+            commit('lockPost', { post_id: e.post_id, locked: e.locked });
+          }).listen('PostPinnedChanged', (e) => {
+            commit('pinPost', { post_id: e.post_id, pinned: e.pinned });
+          }).listen('PostDeleted', (e) => {
+            commit('deletePost', { post_id: e.post_id });
+          }).listen('CommentAdded', (e) => {
+            commit('incrementUnreadCommentCount', { post_id: e.post_id, comment_id: e.comment_id })
+          }).listen('CommentEndorsedChanged', (e) => {
+            commit('endorseComment', { comment_id: e.comment_id, post_id: e.post_id, endorsed: e.endorsed });
+          }).listen('CommentMutedChanged', (e) => {
+            commit('muteComment', { comment_id: e.comment_id, post_id: e.post_id, muted_by_user_id: e.muted_by_user_id });
+          }).listen('BroadcastTested', (e) => {
+            console.log("broadcast test received", e);
+          });
+      }
     })
   },
 
