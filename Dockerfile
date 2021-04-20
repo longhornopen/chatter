@@ -8,8 +8,7 @@ RUN composer install
 FROM node:9 as npmbuild
 COPY --from=phpbuild /var/www/html /var/www/html
 WORKDIR /var/www/html
-RUN npm install && npm run production
-
+RUN npm install && npm run production && rm -rf /var/www/html/node_modules
 
 FROM php:7.3-apache
 # enable rewrite for Laravel pretty URLs
