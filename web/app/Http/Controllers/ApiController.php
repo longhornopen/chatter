@@ -7,9 +7,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\CommentAdded;
+use App\Events\CommentEdited;
 use App\Events\CommentEndorsedChanged;
 use App\Events\CommentMutedChanged;
 use App\Events\PostDeleted;
+use App\Events\PostEdited;
 use App\Events\PostLockedChanged;
 use App\Events\PostPinnedChanged;
 use App\Exceptions\LoginExpiredException;
@@ -181,7 +183,25 @@ TAG
 
     public function editPost(Request $request, $course_id, $post_id)
     {
-//TODO
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+
+        $post = Post::findOrFail($post_id);
+        if ($post->course_id !== (int)$course_user->course_id) {
+            throw new UnauthorizedException("Unauthorized: Course ID mismatch.");
+        }
+        if ($post->author_user_id !== $course_user->id) {
+            throw new UnauthorizedException("Unauthorized: Not your post");
+        }
+        $post->body = $request->json('body');
+        $post->save();
+
+        event(new PostEdited(
+                  $course_user->course_id,
+                  $post->id,
+                  $post->body
+              ));
+
+        return "ok";
     }
 
     public function deletePost(Request $request, $course_id, $post_id)
@@ -274,7 +294,25 @@ TAG
 
     public function editComment(Request $request, $course_id, $comment_id)
     {
-//TODO
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+
+        $comment = Comment::findOrFail($comment_id);
+        if ($comment->post->course_id !== (int)$course_user->course_id) {
+            throw new UnauthorizedException("Unauthorized: Course ID mismatch.");
+        }
+        if ($comment->post->author_user_id !== $course_user->id) {
+            throw new UnauthorizedException("Unauthorized: Not your post");
+        }
+        $comment->body = $request->json('body');
+        $comment->save();
+
+        event(new CommentEdited(
+                  $course_user->course_id,
+                  $comment->id,
+                  $comment->body
+              ));
+
+        return "ok";
     }
 
     public function endorseComment(Request $request, $course_id, $comment_id, $endorsed)

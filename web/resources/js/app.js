@@ -23,14 +23,8 @@ Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
 Vue.component('formatted-date', FormattedDate);
 
-
-//TEMP
 Vue.use(Vuex);
-import store_defaults from './store';
-const store = new Vuex.Store(
-  store_defaults
-)
-//import store from './store';
+import store from './store';
 
 let onResize = function() {
   const w = window.innerWidth

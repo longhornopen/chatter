@@ -120,8 +120,11 @@ const mutations = {
   editPost(state, payload) {
     let post_id = payload.post_id;
     let body = payload.body;
-    // FIXME update currently_viewed_post if it's the same post_id
-    // FIXME update course_summary
+
+    state.posts.find(p => p.id===post_id).body = body;
+    if (state.currently_viewed_post.id === post_id) {
+      state.currently_viewed_post.body = body
+    }
   },
   pinPost(state, payload) {
     let post_id = payload.post_id;
@@ -172,6 +175,11 @@ const mutations = {
     if (state.currently_viewed_post.id === payload.post_id) {
       state.currently_viewed_post.comments.push(payload);
     }
+  },
+  editComment(state, payload) {
+    state.currently_viewed_post.comments
+      .filter(comment => comment.id === payload.comment_id)
+      .forEach(comment => {comment.body = payload.body})
   },
   incrementUnreadCommentCount(state, payload) {
     let p = state.posts.find(p => payload.post_id);
@@ -261,9 +269,10 @@ const actions = {
         commit('addPost', response.data);
       });
   },
-  editPost({commit}, payload) {
-    commit('editPost', {post_id: payload.post_id, body: payload.body});
-    // FIXME do an API call here and commit the mutation
+  async editPost({commit}, payload) {
+    let response = await axios.post('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id, payload)
+    commit('editPost', {post_id:payload.post_id, body: payload.body});
+    return response;
   },
   pinPost({commit}, payload) {
     axios.post('/api/course/'+this.state.user.course_id+'/post/'+payload.post_id+'/pin/'+payload.pinned)
@@ -300,6 +309,11 @@ const actions = {
         commit('addComment', response.data);
       });
   },
+  async editComment({commit}, payload) {
+    let response = await axios.post('/api/course/'+this.state.user.course_id+'/comment/'+payload.comment_id, payload)
+    commit('editComment', {comment_id:payload.comment_id, body: payload.body});
+    return response;
+  },
   async deanonUserId({commit}, payload) {
     let response = await axios.get('/api/course/' + this.state.user.course_id + '/user/' + payload.user_id)
     return response.data;
@@ -312,13 +326,10 @@ const actions = {
   }
 }
 
-// TEMP
-export default {state:state, getters:getters, actions:actions, mutations:mutations};
-/**
 export default new Vuex.Store({
     state,
     getters,
     actions,
     mutations
 });
-*/
+

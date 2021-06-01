@@ -19,7 +19,5 @@ export default {
 </script>
 
 <template>
-        <span>
-            {{ convert_date }}
-        </span>
+        <span>{{ convert_date }}</span>
 </template>

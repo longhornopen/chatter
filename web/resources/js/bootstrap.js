@@ -112,7 +112,7 @@ window.axios.interceptors.response.use(response => {
       icon: 'error',
     })
   }
-  return error;
+  throw error;
 });
 
 

@@ -1,8 +1,10 @@
 <script>
 import UserName from './UserName';
 import FormattedDate from './FormattedDate';
+import WysiwygEditor from './WysiwygEditor'
+
 export default {
-    components: { UserName, FormattedDate },
+    components: { UserName, FormattedDate, WysiwygEditor },
     props: {
         comment: {
             type: Object,
@@ -11,7 +13,9 @@ export default {
     },
     data() {
         return {
-            show_editor: false,
+            comment_editor_visible: false,
+            edited_comment_body: null,
+            reply_editor_visible: false,
         };
     },
     computed: {
@@ -47,8 +51,8 @@ export default {
                 endorsed: endorse_action
             })
         },
-        toggle_comment_editor: function(action) {
-            this.show_editor = action
+        toggle_reply_editor: function(shown) {
+            this.reply_editor_visible = shown
         },
         post_comments_with_parent_comment_id(pcid) {
             if (!this.$store.state.currently_viewed_post.comments) {
@@ -62,11 +66,29 @@ export default {
                 muted: action,
             })
         },
-        edit_comment: function() {
+        show_comment_editor: function() {
+            this.edited_comment_body = this.comment.body;
+            this.comment_editor_visible = true
+        },
+        hide_comment_editor: function() {
             this.$swal.fire({
-                title: "Editing comments is not yet implemented. Coming soon!",
                 icon: 'warning',
+                title: 'Do you want to abandon your edit without saving?',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.edited_comment_body = null;
+                    this.comment_editor_visible = false
+                }
+            });
+        },
+        async update_comment_body(new_body) {
+            await this.$store.dispatch('editComment', {
+                comment_id: this.comment.id,
+                body: new_body,
             })
+            this.edited_comment_body = null;
+            this.comment_editor_visible = false;
         },
     }
 }
@@ -112,7 +134,7 @@ export default {
                     </div>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button
-                            @click="edit_comment()"
+                            @click="show_comment_editor()"
                             class="dropdown-item"
                             type="button"
                             v-show="can_edit"
@@ -131,6 +153,22 @@ export default {
 
             <div>
                 <div class="comment-container">
+                    <div v-if="comment_editor_visible">
+                        <wysiwyg-editor v-model="edited_comment_body"></wysiwyg-editor>
+                        <div class="btn-groups">
+                            <div class="left"></div>
+                            <div class="right">
+                                <button
+                                    class="btn btn-tertiary"
+                                    @click="hide_comment_editor()">Cancel</button>
+                                <button
+                                    class="btn btn-secondary"
+                                    @click="update_comment_body(edited_comment_body)"
+                                >Save</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="comment-body-group">
                         <div class="comment-body">
                             <div v-if="comment_is_muted">
@@ -171,7 +209,7 @@ export default {
                             <div class="right-actions">
                                 <div
                                     class="reply-action"
-                                    @click="toggle_comment_editor(!show_editor)"
+                                    @click="toggle_reply_editor(!reply_editor_visible)"
                                     v-if="add_comment_allowed">
                                     <font-awesome-icon icon="comment-alt" class="icon"/>
                                     <div>Reply</div>
@@ -180,8 +218,8 @@ export default {
                         </div>
                     </div>
                     <comment-create
-                        v-if="add_comment_allowed && show_editor"
-                        @close_comment_editor="toggle_comment_editor(false)"
+                        v-if="add_comment_allowed && reply_editor_visible"
+                        @close_comment_editor="toggle_reply_editor(false)"
                         :parent_comment_id="comment.id"
                         :post_id="comment.post_id"
                     ></comment-create>
