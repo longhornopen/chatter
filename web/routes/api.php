@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/user/self', [ApiController::class, 'getUserSelf']);
-Route::get('/course/{course_id}', [ApiController::class, 'getCourse']);
+Route::get('/course/{course_id}/summary', [ApiController::class, 'getCourseSummary']);
 Route::get('/course/{course_id}/user/{user_id}', [ApiController::class, 'getUser']);
 Route::get('/course/{course_id}/posts', [ApiController::class, 'getCoursePosts']);
 Route::get('/course/{course_id}/post/{post_id}', [ApiController::class, 'getPost']);
@@ -28,3 +28,5 @@ Route::post('/course/{course_id}/comment/new', [ApiController::class, 'createCom
 Route::post('/course/{course_id}/comment/{comment_id}', [ApiController::class, 'editComment']);
 Route::post('/course/{course_id}/comment/{comment_id}/endorse/{endorsed}', [ApiController::class, 'endorseComment']);
 Route::post('/course/{course_id}/comment/{comment_id}/mute/{muted}', [ApiController::class, 'muteComment']);
+Route::post('/course/{course_id}/comment/{comment_id}/upvote/{upvoted}', [ApiController::class, 'upvoteComment']);
+

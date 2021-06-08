@@ -22,6 +22,10 @@ export default {
         comment_is_endorsed() {
             return this.comment.endorsed;
         },
+        comment_is_upvoted_by_user() {
+            return this.$store.state.user_upvoted_comment_ids
+                .includes(this.comment.id)
+        },
         add_comment_allowed() {
             return !this.$store.state.currently_viewed_post.locked;
         },
@@ -41,7 +45,7 @@ export default {
             return this.can_edit || this.can_hide_unhide;
         },
         num_upvotes() {
-            return 0; // FIXME
+            return this.comment.num_upvotes;
         }
     },
     methods: {
@@ -50,6 +54,17 @@ export default {
                 comment_id: this.comment.id,
                 endorsed: endorse_action
             })
+        },
+        upvote(upvoted) {
+            if (upvoted) {
+                this.$store.dispatch('addCommentUpvote', {
+                    comment_id: this.comment.id,
+                })
+            } else {
+                this.$store.dispatch('removeCommentUpvote', {
+                    comment_id: this.comment.id,
+                })
+            }
         },
         toggle_reply_editor: function(shown) {
             this.reply_editor_visible = shown
@@ -114,17 +129,18 @@ export default {
                     <div class="endorse-icon" v-if="comment_is_endorsed">
                         <font-awesome-icon
                         class="endorsed"
-                        icon="award" size="lg"/>
+                        icon="award" size="lg"
+                        title="An instructor has endorsed this comment"
+                        />
                     </div>
-                    <!-- FIXME: only show if comment has upvotes. Also show number of upvotes here -->
                     <div class="upvote-icon"
-                        v-if="num_upvotes > 0"
+                         v-if="num_upvotes > 0"
+                         :title="'This comment has been upvoted '+num_upvotes+' times.'"
                     >
                         <font-awesome-icon
                         class="upvotes"
                         icon="arrow-circle-up" size="lg"/> {{num_upvotes}}
                     </div>
-
                 </div>
                 <div
                     v-show="should_display_options_menu"
@@ -193,18 +209,27 @@ export default {
                                     <font-awesome-icon
                                         icon="award"
                                         class="action-icon"
-                                        :class="comment_is_endorsed ? 'action-icon-active-secondary' : ''"/>
+                                        :class="comment_is_endorsed ? 'action-icon-active-secondary' : ''"
+                                    />
                                     <div
                                         :class="comment_is_endorsed ? 'action-active-secondary' : ''">
                                         {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
                                     </div>
                                 </div>
-                                <!--
-                                <div class="upvote-action">
-                                    <font-awesome-icon icon="arrow-circle-up" class="action-icon"/>
-                                    <div>Upvote</div>
+                                <div
+                                    class="upvote-action"
+                                    @click="upvote(!comment_is_upvoted_by_user)"
+                                >
+                                    <font-awesome-icon
+                                        icon="arrow-circle-up"
+                                        class="action-icon"
+                                        :class="comment_is_upvoted_by_user ? 'action-icon-active-secondary' : ''"/>
+                                    <div
+                                        :class="comment_is_upvoted_by_user ? 'action-icon-active-secondary' : ''"
+                                    >
+                                        {{comment_is_upvoted_by_user ? 'Upvoted' : 'Upvote'}}
+                                    </div>
                                 </div>
-                                -->
                             </div>
                             <div class="right-actions">
                                 <div

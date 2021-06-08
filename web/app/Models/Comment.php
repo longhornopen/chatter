@@ -32,4 +32,9 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class);
     }
+
+    public function upvotes(): HasMany
+    {
+        return $this->hasMany(CommentUpvote::class);
+    }
 }

@@ -17,6 +17,7 @@ use App\Events\PostPinnedChanged;
 use App\Exceptions\LoginExpiredException;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Comment;
+use App\Models\CommentUpvote;
 use App\Models\Course;
 use App\Models\CourseUser;
 use App\Models\CourseUserPostLastReadFlag;
@@ -47,8 +48,10 @@ class ApiController extends Controller
             ->firstOrFail();
     }
 
-    public function getCourse(Request $request, $course_id)
+    public function getCourseSummary(Request $request, $course_id)
     {
+        $response = [];
+
         $course_user = $this->getCourseUserFromSession($request, $course_id);
 
         $course = Course::where('id',$course_user->course_id)
@@ -58,7 +61,15 @@ class ApiController extends Controller
             $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
             $course->help_url = env('APP_HELP_URL');
         }
-        return $course;
+
+        $response['course'] = $course;
+
+        $upvoted_comment_ids = CommentUpvote::where('course_user_id', $course_user->course_id)
+            ->pluck('comment_id');
+
+        $response['user_upvoted_comment_ids'] = $upvoted_comment_ids;
+
+        return $response;
     }
 
     public function getCoursePosts(Request $request, $course_id)
@@ -143,6 +154,7 @@ TAG
             $is_unread = $post_last_read->wasRecentlyCreated
                        || $comment->updated_at > $post_last_read->updated_at;
             $comment->is_unread = $is_unread;
+            $comment->num_upvotes = $comment->upvotes->count();
             if ($comment->author_anonymous) {
                 $comment->makeHidden(['author_user_name']);
             }
@@ -354,6 +366,32 @@ TAG
                   $comment->id,
                   $comment->muted_by_user_id,
               ));
+
+        return Comment::where('id', $comment->id)
+            ->first();
+    }
+
+    public function upvoteComment(Request $request, $course_id, $comment_id, $upvoted)
+    {
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkIsTeacher($course_user);
+
+        $comment = Comment::findOrFail($comment_id);
+        $this->checkCommentAuths($comment, $course_user);
+
+        if ($upvoted==='true') {
+            $upvote = new CommentUpvote();
+            $upvote->course_user_id = $course_user->id;
+            $upvote->comment_id = $comment_id;
+            $upvote->save();
+        } elseif ($upvoted==='false') {
+            $upvotes = CommentUpvote::where('course_user_id', $course_user->id)
+                ->where('comment_id', $comment_id)
+                ->get();
+            foreach ($upvotes as $upvote) {
+                $upvote->delete();
+            }
+        }
 
         return Comment::where('id', $comment->id)
             ->first();
