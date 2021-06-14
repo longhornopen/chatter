@@ -138,9 +138,14 @@ export default {
                             :class="post.locked ? '' : 'd-none'"
                             icon="lock" />
                         </div>
-                        <div>
+                        <div v-if="post.num_unread_comments === 0">
                             <div class="btn-group" role="group"     aria-label="Basic example">
-                                <button type="button" class="btn badge-unread" :title="post.num_unread_comments + ' unread comments'">{{ post.num_unread_comments }}</button>
+                                <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
+                            </div>
+                        </div>
+                        <div v-if="post.num_unread_comments > 0">
+                            <div class="btn-group" role="group"     aria-label="Basic example">
+                                <button type="button" class="btn btn-primary badge-unread" :title="post.num_unread_comments + ' unread comments'">{{ post.num_unread_comments }}</button>
                                 <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
                             </div>
                         </div>
