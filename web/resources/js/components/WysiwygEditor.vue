@@ -10,6 +10,9 @@ import _Quill from 'quill'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 
+import QuillMarkdown from 'quilljs-markdown'
+import 'quilljs-markdown/dist/quilljs-markdown-common-style.css'
+
 const Quill = window.Quill || _Quill
 const defaultOptions = {
     theme: 'snow',
@@ -138,6 +141,8 @@ export default {
                     this.$emit('input', this._content)
                     this.$emit('change', { html, text, quill })
                 })
+
+                new QuillMarkdown(this.quill, {});
 
                 // Emit ready event
                 this.$emit('ready', this.quill)
