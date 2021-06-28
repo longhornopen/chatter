@@ -47,6 +47,7 @@ export default {
 
 <template>
     <div>
+        <div>**{{comment_body}}**</div>
         <wysiwyg-editor v-model="comment_body"></wysiwyg-editor>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
