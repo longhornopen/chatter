@@ -21,6 +21,7 @@ export default {
         }
     },
     data() {
+        // FIXME latex: https://github.com/nhn/tui.editor/issues/1600
         return {
             current_value: "",
             editor: null,
