@@ -7,6 +7,7 @@ export default {
         return {
             anonymous: false,
             comment_body: '',
+            save_pending: false,
         };
     },
     methods: {
@@ -25,7 +26,7 @@ export default {
                 }
             });
         },
-        submit() {
+        async submit() {
             if (this.comment_body.trim().length === 0) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your comment.",
@@ -33,12 +34,14 @@ export default {
                 });
                 return;
             }
-            this.$store.dispatch('addComment', {
+            this.save_pending = true;
+            await this.$store.dispatch('addComment', {
                 post_id: this.post_id,
                 parent_comment_id: this.parent_comment_id,
                 author_anonymous: this.anonymous,
                 body: this.comment_body,
             });
+            this.save_pending = false;
             this.$emit('close_comment_editor')
         }
     }
@@ -47,6 +50,7 @@ export default {
 
 <template>
     <div>
+        <fieldset v-bind:disabled="save_pending">
         <wysiwyg-editor v-model="comment_body"></wysiwyg-editor>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
@@ -54,8 +58,9 @@ export default {
         </div>
         <div class="editor-btn-group">
             <button class="btn btn-tertiary" @click="cancel()">Cancel</button>
-            <button class="btn btn-primary" @click="submit">Submit</button>
+            <button class="btn btn-primary" @click="submit"><font-awesome-icon v-if="save_pending" icon="spinner" spin /> Submit</button>
         </div>
+        </fieldset>
     </div>
 
 </template>

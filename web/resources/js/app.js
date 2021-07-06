@@ -38,16 +38,16 @@ let onResize = function() {
   })
 }
 
-store.dispatch('init').then(() => {
-  const app = new Vue({
-    el: '#app',
-    store: store,
-    mounted() {
-      onResize()
-      window.addEventListener('resize', onResize)
-    },
-    beforeDestroy() {
-      window.removeEventListener('resize', onResize)
-    }
-  })
-});
+const app = new Vue({
+  el: '#app',
+  store: store,
+  mounted() {
+    onResize()
+    window.addEventListener('resize', onResize)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', onResize)
+  }
+})
+
+store.dispatch('init');

@@ -16,6 +16,7 @@ export default {
             comment_editor_visible: false,
             edited_comment_body: null,
             reply_editor_visible: false,
+            edit_save_pending: false,
         };
     },
     computed: {
@@ -98,10 +99,12 @@ export default {
             });
         },
         async update_comment_body(new_body) {
+            this.edit_save_pending = true;
             await this.$store.dispatch('editComment', {
                 comment_id: this.comment.id,
                 body: new_body,
             })
+            this.edit_save_pending = false;
             this.edited_comment_body = null;
             this.comment_editor_visible = false;
         },
@@ -170,22 +173,26 @@ export default {
             <div>
                 <div class="comment-container">
                     <div v-if="comment_editor_visible">
+                        <fieldset v-bind:disabled="edit_save_pending">
                         <wysiwyg-editor v-model="edited_comment_body"></wysiwyg-editor>
                         <div class="btn-groups">
                             <div class="left"></div>
                             <div class="right">
-                                <button
-                                    class="btn btn-tertiary"
-                                    @click="hide_comment_editor()">Cancel</button>
-                                <button
-                                    class="btn btn-secondary"
-                                    @click="update_comment_body(edited_comment_body)"
-                                >Save</button>
+                                <div class="editor-btn-group">
+                                    <button
+                                        class="btn btn-tertiary"
+                                        @click="hide_comment_editor()">Cancel</button>
+                                    <button
+                                        class="btn btn-primary"
+                                        @click="update_comment_body(edited_comment_body)"
+                                    ><font-awesome-icon v-if="edit_save_pending" icon="spinner" spin /> Save</button>
+                                </div>
                             </div>
                         </div>
+                        </fieldset>
                     </div>
 
-                    <div class="comment-body-group">
+                    <div v-else class="comment-body-group">
                         <div class="comment-body">
                             <div v-if="comment_is_muted">
                                 <div class="comment-body-text comment-body-text-muted">
