@@ -21,14 +21,9 @@ export default {
         }
     },
     data() {
-        // FIXME latex: https://github.com/nhn/tui.editor/issues/1600
         return {
             current_value: "",
             editor: null,
-            // As of ToastUI Editor 3.0.0, getHTML() causes the `change` handler to be fired...
-            //    https://github.com/nhn/tui.editor/issues/1587
-            // ...which leads to an infinite loop for us.  getMarkdown() does not; use it as a
-            // to refuse to get into an infinite loop calling getHTML() if contents have not changed.
             old_markdown: "",
         }
     },
@@ -61,15 +56,8 @@ export default {
                     }
                     comp.oldMarkdown = newMarkdown;
 
-                    //console.log('editor' in comp);
-                    //if (! 'editor' in comp || comp) {
-                    //    return;
-                    //}
-
-                    //console.log(comp);
-                    //let html = comp.editor.getHTML();
-                    //console.log(html);
-                    //comp.$emit('input', html);
+                    let html = comp.editor.getHTML();
+                    comp.$emit('input', html);
                 }
             }
         });
