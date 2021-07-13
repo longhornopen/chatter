@@ -4,9 +4,10 @@ export default {
     components: { WysiwygEditor },
     data() {
         return {
-            'title': '',
-            'body': '',
-            'anonymous': false,
+            title: '',
+            body: '',
+            anonymous: false,
+            save_pending: false,
         };
     },
     computed: {
@@ -30,6 +31,7 @@ export default {
                 });
                 return;
             }
+            this.save_pending = true;
             this.$store.dispatch('createPost', {
                 title: this.title,
                 body: this.body,
@@ -64,7 +66,7 @@ export default {
                             view_post_display: false,
                         })
                     }
-                    
+
                 }
             });
         },
@@ -86,7 +88,7 @@ export default {
 
 <template>
     <div class="new-post">
-        <!-- <form> -->
+        <fieldset v-bind:disabled="save_pending">
             <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
                 <font-awesome-icon class="back-icon" icon="chevron-left" size="2x"/>
                 <h5>Back</h5>
@@ -109,10 +111,10 @@ export default {
                     @click="close_post_editor()">Cancel</button>
                 <button
                     class="btn btn-secondary"
-                    @click="submit_new_post()">Post</button>
+                    @click="submit_new_post()"><font-awesome-icon v-if="save_pending" icon="spinner" spin /> Post</button>
             </div>
 
-        <!-- </form> -->
+        </fieldset>
 
     </div>
 

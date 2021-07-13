@@ -11,6 +11,9 @@ export default {
             comment_editor_visible: false,
             post_editor_visible: false,
             edited_post_body: null,
+            edit_save_pending: false,
+            pin_pending: false,
+            lock_pending: false,
         };
     },
     computed: {
@@ -40,11 +43,13 @@ export default {
         }
     },
     methods: {
-        pin(pinned) {
-            this.$store.dispatch('pinPost', {
+        async pin(pinned) {
+            this.pin_pending = true;
+            await this.$store.dispatch('pinPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
                 pinned: pinned
             });
+            this.pin_pending = false;
         },
         remove() {
             this.$swal.fire({
@@ -59,11 +64,13 @@ export default {
                 }
             });
         },
-        lock(locked) {
-            this.$store.dispatch('lockPost', {
+        async lock(locked) {
+            this.lock_pending = true;
+            await this.$store.dispatch('lockPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
                 locked: locked
             });
+            this.lock_pending = false;
         },
         post_comments_with_parent_comment_id(pcid) {
             if (!this.$store.state.currently_viewed_post.comments) {
@@ -89,11 +96,13 @@ export default {
             });
         },
         async update_post_body(new_body) {
+            this.edit_save_pending = true;
             await this.$store.dispatch('editPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
                 body: new_body,
             })
             this.post_editor_visible = false;
+            this.edit_save_pending = false;
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -164,6 +173,7 @@ export default {
                 </div>
 
                 <div v-if="post_editor_visible">
+                    <fieldset v-bind:disabled="edit_save_pending">
                     <wysiwyg-editor v-model="edited_post_body"></wysiwyg-editor>
                     <div class="btn-groups">
                         <div class="left"></div>
@@ -174,9 +184,10 @@ export default {
                             <button
                                 class="btn btn-secondary"
                                 @click="update_post_body(edited_post_body)"
-                            >Save</button>
+                            ><font-awesome-icon v-if="edit_save_pending" icon="spinner" spin /> Save</button>
                         </div>
                     </div>
+                    </fieldset>
                 </div>
                 <div v-if="!post_editor_visible">
                     <div class="post-display-body" v-html="post.body"></div>
@@ -186,12 +197,14 @@ export default {
                                 class="btn btn-secondary"
                                 :class="user_is_teacher && !comment_editor_visible?'':'d-none'"
                                 @click="pin(!post.pinned)"
-                            >{{post.pinned ? "Unpin" : "Pin"}}</button>
+                                :disabled="pin_pending"
+                            ><font-awesome-icon v-if="pin_pending" icon="spinner" spin /> {{post.pinned ? "Unpin" : "Pin"}}</button>
                             <button
                                 class="btn btn-secondary"
                                 :class="user_is_teacher && !comment_editor_visible?'':'d-none'"
                                 @click="lock(!post.locked)"
-                            >{{post.locked ? "Unlock" : "Lock"}}</button>
+                                :disabled="lock_pending"
+                            ><font-awesome-icon v-if="lock_pending" icon="spinner" spin /> {{post.locked ? "Unlock" : "Lock"}}</button>
                         </div>
 
                         <div class="right" v-if="add_comment_allowed">

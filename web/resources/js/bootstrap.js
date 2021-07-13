@@ -66,7 +66,8 @@ import {
     faEyeSlash,
     faCaretSquareRight,
     faEllipsisH,
-    faChevronLeft
+    faChevronLeft,
+    faSpinner,
   } from '@fortawesome/free-solid-svg-icons'
 library.add(faCog);
 library.add(faPlus);
@@ -82,6 +83,7 @@ library.add(faEyeSlash);
 library.add(faCaretSquareRight);
 library.add(faEllipsisH);
 library.add(faChevronLeft);
+library.add(faSpinner);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
