@@ -24,7 +24,6 @@ export default {
         return {
             current_value: "",
             editor: null,
-            old_markdown: "",
         }
     },
     mounted() {
@@ -48,13 +47,6 @@ export default {
                     if (comp.editor === null) {
                         return;
                     }
-
-                    // see 'oldMarkdown' comment above
-                    let newMarkdown = comp.editor.getMarkdown();
-                    if (newMarkdown === comp.oldMarkdown) {
-                        return;
-                    }
-                    comp.oldMarkdown = newMarkdown;
 
                     let html = comp.editor.getHTML();
                     comp.$emit('input', html);

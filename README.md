@@ -15,7 +15,7 @@ class discussions.
 ## Configuring
 
 FIXME
-
+Describe Sentry integration, email setup, flysystem configuration
 ## Deploying on an LMS
 
 FIXME

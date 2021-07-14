@@ -1,5 +1,9 @@
 <script>
+import HelpViewer from './HelpViewer'
+import SettingsEditor from './SettingsEditor'
+
 export default {
+    components: { SettingsEditor, HelpViewer },
     data() {
         return {
         };
@@ -27,14 +31,36 @@ export default {
             this.$store.dispatch('search');
         },
         open_settings() {
-            this.$store.dispatch('setAppMainPanelMode', {mode: 'show_settings'});
-        }
+            this.$bvModal.show('settings-modal');
+        },
+        open_help() {
+            this.$bvModal.show('help-modal');
+        },
     }
 }
 </script>
 
 <template>
     <div class="app-header-bar">
+
+        <b-modal
+            id="settings-modal"
+            size="xl"
+            title="Settings"
+            ok-only
+        >
+            <settings-editor />
+        </b-modal>
+
+        <b-modal
+            id="help-modal"
+            size="xl"
+            title="Help"
+            ok-only
+        >
+            <help-viewer />
+        </b-modal>
+
         <div class="d-flex justify-content-between">
             <div class="header-col">
                 <form
@@ -74,12 +100,20 @@ export default {
                 <div
                     class="settings-control"
                     @click="open_settings()"
+                    title="Settings"
                 >
                     <font-awesome-icon color="white" icon="cog"/>
+                </div>
+                <div
+                    class="settings-control"
+                    @click="open_help()"
+                    title="Help"
+                >
+                    <font-awesome-icon color="white" icon="question"/>
                 </div>
             </div>
         </div>
         <div class="course-name mobile">{{ course_name }}</div>
-       
+
     </div>
 </template>
