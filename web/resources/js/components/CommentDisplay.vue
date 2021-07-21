@@ -1,10 +1,12 @@
 <script>
-import UserName from './UserName';
-import FormattedDate from './FormattedDate';
+import UserName from './UserName'
+import FormattedDate from './FormattedDate'
 import WysiwygEditor from './WysiwygEditor'
+import component_mixins from '../component_mixins'
 
 export default {
     components: { UserName, FormattedDate, WysiwygEditor },
+    mixins: [component_mixins.course_closed_mixin],
     props: {
         comment: {
             type: Object,
@@ -28,7 +30,8 @@ export default {
                 .includes(this.comment.id)
         },
         add_comment_allowed() {
-            return !this.$store.state.currently_viewed_post.locked;
+            return !this.$store.state.currently_viewed_post.locked
+                && !this.course_is_closed
         },
         user_is_teacher() {
             return this.$store.state.user.role === 'teacher'
@@ -37,10 +40,19 @@ export default {
             return !(this.comment.muted_by_user_id === null)
         },
         can_edit() {
-            return this.comment.author_user_id === this.$store.getters.user.id;
+            return this.comment.author_user_id === this.$store.getters.user.id
+                && !this.course_is_closed
         },
         can_hide_unhide() {
-            return this.user_is_teacher;
+            return this.user_is_teacher
+                && !this.course_is_closed
+        },
+        can_endorse() {
+            return this.user_is_teacher
+                && !this.course_is_closed
+        },
+        can_upvote() {
+            return !this.course_is_closed
         },
         should_display_options_menu() {
             return this.can_edit || this.can_hide_unhide;
@@ -210,7 +222,7 @@ export default {
                             <div class="left-actions">
                                 <div
                                     class="endorse-action"
-                                    v-if="user_is_teacher"
+                                    v-if="can_endorse"
                                     @click="endorse(!comment_is_endorsed)"
                                 >
                                     <font-awesome-icon
@@ -225,6 +237,7 @@ export default {
                                 </div>
                                 <div
                                     class="upvote-action"
+                                    v-if="can_upvote"
                                     @click="upvote(!comment_is_upvoted_by_user)"
                                 >
                                     <font-awesome-icon

@@ -1,11 +1,6 @@
 window._ = require('lodash');
 
-try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
-
-    require('bootstrap');
-} catch (e) {}
+require('bootstrap');
 
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -31,6 +26,7 @@ if (process.env.MIX_PUSHER_APP_KEY) {
 import Vue from 'vue';
 import { BootstrapVue } from 'bootstrap-vue'
 Vue.use(BootstrapVue);
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

@@ -33,6 +33,7 @@ Vue.use(Vuex)
  */
 
 const state = {
+  course: {},
   course_summary: {},
   posts: [],
   currently_viewed_post: {},
@@ -76,6 +77,16 @@ const getters = {
   show_post_create: state => { return state.view_post_create },
 
   currently_viewed_comment_by_id: (state) => (comment_id) => { return state.currently_viewed_post.comments.find(c => c.id === comment_id) },
+  user_is_teacher: (state) => { return state.user.role === 'teacher' },
+  course: (state) => { return state.course },
+  course_is_closed: (state) => {
+    if (!state.course_summary.close_date) {
+      return false
+    }
+    let close_at = new Date(state.course_summary.close_date)
+    let now = new Date()
+    return close_at < now
+  },
 }
 
 const mutations = {
@@ -109,6 +120,10 @@ const mutations = {
   setFilteredPosts (state, payload) {
     state.filtered_posts = payload.posts
     state.search_results_available = true
+  },
+
+  setCourse (state, payload) {
+    state.course = payload.course
   },
 
   addPost (state, payload) {
@@ -250,6 +265,16 @@ const actions = {
           console.log('broadcast test received', e)
         })
     }
+  },
+  async getCourse ({commit}) {
+    let response = await axios.get('/api/course/' + this.state.user.course_id);
+    commit('setCourse', {course: response.data});
+    return response.data;
+  },
+  async updateCourse ({commit}, payload) {
+    let response = await axios.post('/api/course/' + this.state.user.course_id, payload);
+    commit('setCourse', {course: response.data});
+    return response.data;
   },
 
   setSearchString ({ commit }, payload) {

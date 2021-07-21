@@ -38,16 +38,18 @@ let onResize = function() {
   })
 }
 
-const app = new Vue({
-  el: '#app',
-  store: store,
-  mounted() {
-    onResize()
-    window.addEventListener('resize', onResize)
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', onResize)
-  }
+store.dispatch('init').then(()=> {
+  const app = new Vue({
+    el: '#app',
+    store: store,
+    mounted () {
+      onResize()
+      window.addEventListener('resize', onResize)
+      document.getElementById('loading-splash').remove();
+    },
+    beforeDestroy () {
+      window.removeEventListener('resize', onResize)
+    }
+  })
 })
 
-store.dispatch('init');

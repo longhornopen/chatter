@@ -1,11 +1,13 @@
 <script>
-import UserName from './UserName';
-import FormattedDate from './FormattedDate';
-import _ from 'lodash';
+import UserName from './UserName'
+import FormattedDate from './FormattedDate'
+import _ from 'lodash'
 import WysiwygEditor from './WysiwygEditor'
+import component_mixins from '../component_mixins'
 
 export default {
     components: { UserName, FormattedDate, WysiwygEditor },
+    mixins: [component_mixins.course_closed_mixin],
     data() {
         return {
             comment_editor_visible: false,
@@ -27,16 +29,27 @@ export default {
             return this.$store.getters.user.role === 'teacher';
         },
         can_edit() {
-            return this.$store.getters.currently_viewed_post.author_user_id === this.$store.getters.user.id;
+            return this.$store.getters.currently_viewed_post.author_user_id === this.$store.getters.user.id
+                && !this.course_is_closed
         },
         can_delete() {
-            return this.user_is_teacher;
+            return this.user_is_teacher
+                && !this.course_is_closed
+        },
+        can_pin() {
+            return this.user_is_teacher && !this.comment_editor_visible
+                && !this.course_is_closed
+        },
+        can_lock() {
+            return this.user_is_teacher && !this.comment_editor_visible
+                && !this.course_is_closed
         },
         should_display_options_menu() {
             return this.can_edit || this.can_delete;
         },
         add_comment_allowed() {
-            return !this.$store.state.currently_viewed_post.locked;
+            return !this.$store.state.currently_viewed_post.locked
+                && !this.course_is_closed
         },
         in_mobile_mode() {
             return this.$store.getters.mobile;
@@ -195,13 +208,13 @@ export default {
                         <div class="left">
                             <button
                                 class="btn btn-secondary"
-                                :class="user_is_teacher && !comment_editor_visible?'':'d-none'"
+                                v-if="can_pin"
                                 @click="pin(!post.pinned)"
                                 :disabled="pin_pending"
                             ><font-awesome-icon v-if="pin_pending" icon="spinner" spin /> {{post.pinned ? "Unpin" : "Pin"}}</button>
                             <button
                                 class="btn btn-secondary"
-                                :class="user_is_teacher && !comment_editor_visible?'':'d-none'"
+                                v-if="can_lock"
                                 @click="lock(!post.locked)"
                                 :disabled="lock_pending"
                             ><font-awesome-icon v-if="lock_pending" icon="spinner" spin /> {{post.locked ? "Unlock" : "Lock"}}</button>

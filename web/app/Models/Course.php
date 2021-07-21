@@ -20,6 +20,10 @@ class Course extends Model
         'lti_context_pk',
     ];
 
+    protected $casts = [
+        'close_date' => 'datetime'
+    ];
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);

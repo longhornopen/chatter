@@ -1,7 +1,10 @@
 <script>
-import FormattedDate from './FormattedDate.vue';
+import FormattedDate from './FormattedDate.vue'
+import component_mixins from '../component_mixins'
+
 export default {
     components: { FormattedDate },
+    mixins: [component_mixins.course_closed_mixin],
     data () {
         return {
             posts_styles: {}
@@ -154,7 +157,7 @@ export default {
             </div>
             <div v-if="search_returned_zero_posts" class="no-search-results">No Search Results</div>
         </div>
-        <div>
+        <div v-if="!course_is_closed">
             <button
                 class="btn btn-post-topic"
                 @click="open_new_post_editor()"

@@ -1,8 +1,11 @@
 <script>
 import SplashPage from './SplashPage.vue';
 import SettingsEditor from './SettingsEditor.vue';
+import component_mixins from '../component_mixins'
+
 export default {
     components: { SplashPage, SettingsEditor },
+    mixins: [component_mixins.course_closed_mixin],
     data() {
         return {
 
@@ -22,11 +25,19 @@ export default {
             return this.$store.getters.show_post_create
         }
     },
+    mounted() {
+        if (this.course_is_closed) {
+            this.$bvModal.show('course_closed');
+        }
+    }
 }
 </script>
 
 <template>
     <div style="height: 100%;">
+        <b-modal id="course_closed" title="Chatter Closed" :ok-only="true">
+            <p>Your teacher has closed this Chatter.  You can still view existing conversations.</p>
+        </b-modal>
         <div class="row no-gutters">
             <div class="app-title-bar">
                 <img class="app-logo" src="/images/logo/logo.svg" alt="Chatter logo">

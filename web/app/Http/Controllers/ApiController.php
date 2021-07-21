@@ -48,6 +48,29 @@ class ApiController extends Controller
             ->firstOrFail();
     }
 
+    public function getCourse(Request $request, $course_id)
+    {
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkIsTeacher($course_user);
+
+        return Course::where('id', $course_id)
+            ->select(['id', 'name', 'close_date'])
+            ->firstOrFail();
+    }
+
+    public function postCourse(Request $request, $course_id)
+    {
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkIsTeacher($course_user);
+
+        $course = Course::findOrFail($course_id);
+        if ($request->has('close_date')) {
+            $course->close_date = $request->input('close_date');
+        }
+        $course->save();
+        return $course;
+    }
+
     public function getCourseSummary(Request $request, $course_id)
     {
         $response = [];
@@ -55,7 +78,7 @@ class ApiController extends Controller
         $course_user = $this->getCourseUserFromSession($request, $course_id);
 
         $course = Course::where('id',$course_user->course_id)
-            ->select('id','name')
+            ->select('id','name','close_date')
             ->first();
         if (env('APP_HELP_URL')) {
             $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
@@ -169,6 +192,7 @@ TAG
     public function createPost(Request $request, $course_id)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
 
         $body = $request->get('body');
         $body = $this->stripTags($body);
@@ -196,6 +220,7 @@ TAG
     public function editPost(Request $request, $course_id, $post_id)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
 
         $post = Post::findOrFail($post_id);
         if ($post->course_id !== (int)$course_user->course_id) {
@@ -219,6 +244,7 @@ TAG
     public function deletePost(Request $request, $course_id, $post_id)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
         $this->checkIsTeacher($course_user);
 
         $post = Post::findOrFail($post_id);
@@ -236,6 +262,7 @@ TAG
     public function pinPost(Request $request, $course_id, $post_id, $pinned)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
         $this->checkIsTeacher($course_user);
 
         $post = Post::findOrFail($post_id);
@@ -255,6 +282,7 @@ TAG
     public function lockPost(Request $request, $course_id, $post_id, $locked)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
         $this->checkIsTeacher($course_user);
 
         $post = Post::findOrFail($post_id);
@@ -276,6 +304,7 @@ TAG
         $course_user = $this->getCourseUserFromSession($request, $course_id);
         $post = Post::findOrFail($request->get('post_id'));
         $this->checkPostAuths($post, $course_user);
+        $this->checkCourseCloseDate($course_id);
 
         if ($post->locked) {
             throw new UnauthorizedException("You can't create a comment because that post has been locked.");
@@ -307,6 +336,7 @@ TAG
     public function editComment(Request $request, $course_id, $comment_id)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
 
         $comment = Comment::findOrFail($comment_id);
         if ($comment->post->course_id !== (int)$course_user->course_id) {
@@ -330,6 +360,7 @@ TAG
     public function endorseComment(Request $request, $course_id, $comment_id, $endorsed)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
         $this->checkIsTeacher($course_user);
 
         $comment = Comment::findOrFail($comment_id);
@@ -352,6 +383,7 @@ TAG
     public function muteComment(Request $request, $course_id, $comment_id, $muted)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
         $this->checkIsTeacher($course_user);
 
         $comment = Comment::findOrFail($comment_id);
@@ -374,6 +406,7 @@ TAG
     public function upvoteComment(Request $request, $course_id, $comment_id, $upvoted)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
         $this->checkIsTeacher($course_user);
 
         $comment = Comment::findOrFail($comment_id);
@@ -431,6 +464,16 @@ TAG
     {
         if ($course_user->role !== 'teacher') {
             throw new UnauthorizedException("Unauthorized: Only teachers may perform this action.");
+        }
+    }
+
+    protected function checkCourseCloseDate($course_id) {
+        $course = Course::findOrFail($course_id);
+        if (!$course->close_date) {
+            return;
+        }
+        if (Carbon::now()->greaterThan($course->close_date)) {
+            throw new UnauthorizedException("Unauthorized: This course is closed.");
         }
     }
 

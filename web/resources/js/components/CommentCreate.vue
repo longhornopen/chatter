@@ -1,5 +1,6 @@
 <script>
 import WysiwygEditor from './WysiwygEditor'
+
 export default {
     components: { WysiwygEditor },
     props: ['parent_comment_id', 'post_id'],
