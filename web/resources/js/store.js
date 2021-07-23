@@ -5,7 +5,11 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-/*
+/**
+@typedef {object} Course
+@property {number} id
+@property {array} post_tags
+
 @typedef Post
 @type {object}
 @property {number} id
@@ -78,7 +82,6 @@ const getters = {
 
   currently_viewed_comment_by_id: (state) => (comment_id) => { return state.currently_viewed_post.comments.find(c => c.id === comment_id) },
   user_is_teacher: (state) => { return state.user.role === 'teacher' },
-  course: (state) => { return state.course },
   course_is_closed: (state) => {
     if (!state.course_summary.close_date) {
       return false
@@ -96,6 +99,9 @@ const mutations = {
   setCourseSummary (state, payload) {
     state.course_summary = payload.course
     state.user_upvoted_comment_ids = payload.user_upvoted_comment_ids
+  },
+  updateCourseSummary (state, payload) {
+    state.course_summary = Object.assign(state.course_summary, payload)
   },
   setPosts (state, payload) {
     state.posts = payload.posts
@@ -120,10 +126,6 @@ const mutations = {
   setFilteredPosts (state, payload) {
     state.filtered_posts = payload.posts
     state.search_results_available = true
-  },
-
-  setCourse (state, payload) {
-    state.course = payload.course
   },
 
   addPost (state, payload) {
@@ -266,15 +268,15 @@ const actions = {
         })
     }
   },
+  /** @return Course */
   async getCourse ({commit}) {
-    let response = await axios.get('/api/course/' + this.state.user.course_id);
-    commit('setCourse', {course: response.data});
-    return response.data;
+    let response = await axios.get('/api/course/' + this.state.user.course_id)
+    return response.data
   },
   async updateCourse ({commit}, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id, payload);
-    commit('setCourse', {course: response.data});
-    return response.data;
+    let response = await axios.post('/api/course/' + this.state.user.course_id, payload)
+    commit('updateCourseSummary', response.data)
+    return response.data
   },
 
   setSearchString ({ commit }, payload) {

@@ -1,9 +1,10 @@
 <script>
-import FormattedDate from './FormattedDate.vue'
+import FormattedDate from './FormattedDate'
+import PostTagBadge from './PostTagBadge'
 import component_mixins from '../component_mixins'
 
 export default {
-    components: { FormattedDate },
+    components: { FormattedDate, PostTagBadge },
     mixins: [component_mixins.course_closed_mixin],
     data () {
         return {
@@ -119,7 +120,7 @@ export default {
                             <formatted-date :dateIso="post.created_at" italicized="true"></formatted-date>
                         </div>
                         <h5 class="post-title">
-                            {{ post.title }}
+                            <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
                         </h5>
                         <!--
                         // Removing this until we find a way of effectively producing a one-line summary of

@@ -48,6 +48,10 @@ import {
   faChevronLeft,
   faSpinner,
   faQuestion,
+  faEdit,
+  faTimes,
+  faSearch,
+  faSearchPlus,
   } from '@fortawesome/free-solid-svg-icons'
 library.add(
   faCog,
@@ -66,6 +70,10 @@ library.add(
   faChevronLeft,
   faSpinner,
   faQuestion,
+  faEdit,
+  faTimes,
+  faSearch,
+  faSearchPlus,
   );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

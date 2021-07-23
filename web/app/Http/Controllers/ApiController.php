@@ -50,11 +50,8 @@ class ApiController extends Controller
 
     public function getCourse(Request $request, $course_id)
     {
-        $course_user = $this->getCourseUserFromSession($request, $course_id);
-        $this->checkIsTeacher($course_user);
-
         return Course::where('id', $course_id)
-            ->select(['id', 'name', 'close_date'])
+            ->select(['id', 'name', 'close_date', 'post_tags'])
             ->firstOrFail();
     }
 
@@ -67,24 +64,26 @@ class ApiController extends Controller
         if ($request->has('close_date')) {
             $course->close_date = $request->input('close_date');
         }
+        if ($request->has('post_tags')) {
+            $course->post_tags = $request->input('post_tags');
+        }
         $course->save();
         return $course;
     }
 
     public function getCourseSummary(Request $request, $course_id)
     {
-        $response = [];
-
         $course_user = $this->getCourseUserFromSession($request, $course_id);
 
         $course = Course::where('id',$course_user->course_id)
-            ->select('id','name','close_date')
+            ->select('id','name','close_date','post_tags')
             ->first();
         if (env('APP_HELP_URL')) {
             $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
             $course->help_url = env('APP_HELP_URL');
         }
 
+        $response = [];
         $response['course'] = $course;
 
         $upvoted_comment_ids = CommentUpvote::where('course_user_id', $course_user->course_id)
@@ -127,10 +126,17 @@ TAG
             $posts = $posts->where('author_user_id', $course_user->id);
         }
         if ($search) {
-            $posts = $posts->where(function ($query) use ($search) {
-                $query->where('title', 'like', '%' . $search . '%')
-                    ->orWhere('body', 'like', '%' . $search . '%');
-            });
+            foreach (preg_split('/\s+/', $search) as $search_term) {
+                if (str_starts_with($search_term, 'tag:')) {
+                    $tag = explode('tag:', $search_term)[1];
+                    $posts = $posts->where('tag', $tag);
+                } else {
+                    $posts = $posts->where(function ($query) use ($search_term) {
+                        $query->where('title', 'like', '%' . $search_term . '%')
+                            ->orWhere('body', 'like', '%' . $search_term . '%');
+                    });
+                }
+            }
         }
         $posts = $posts
             ->get()
@@ -205,6 +211,16 @@ TAG
         $post->author_anonymous = $request->get('author_anonymous');
         $post->title = $request->get('title');
         $post->body = $body;
+        if ($request->get('tag')) {
+            $post_tags = Course::findOrFail($course_id)->post_tags;
+            $post_tag = collect($post_tags)->first(function ($t) use ($request) {
+                return $t['name'] === $request->get('tag');
+            });
+            if ($post_tag && $post_tag['teacher_only']) {
+                $this->checkIsTeacher($course_user);
+            }
+        }
+        $post->tag = $request->get('tag');
         $post->save();
 
         $flag = new CourseUserPostLastReadFlag();
@@ -230,6 +246,16 @@ TAG
             throw new UnauthorizedException("Unauthorized: Not your post");
         }
         $post->body = $request->json('body');
+        if ($request->get('tag')) {
+            $post_tags = Course::findOrFail($course_id)->post_tags;
+            $post_tag = collect($post_tags)->first(function ($t) use ($request) {
+                return $t['name'] === $request->get('tag');
+            });
+            if ($post_tag && $post_tag['teacher_only']) {
+                $this->checkIsTeacher($course_user);
+            }
+        }
+        $post->tag = $request->json('tag');
         $post->save();
 
         event(new PostEdited(
@@ -273,7 +299,7 @@ TAG
         event(new PostPinnedChanged(
                   $course_user->course_id,
                   $post->id,
-                  $post->pinned ? true : false
+                  (bool)$post->pinned
               ));
 
         return $post;
@@ -293,7 +319,7 @@ TAG
         event(new PostLockedChanged(
             $course_user->course_id,
             $post->id,
-            $post->locked ? true : false
+            (bool)$post->locked
               ));
 
         return $post;
@@ -373,7 +399,7 @@ TAG
                   $course_user->course_id,
                   $comment->post_id,
                   $comment->id,
-                  $comment->endorsed ? true : false,
+                  (bool)$comment->endorsed,
               ));
 
         return Comment::where('id', $comment->id)

@@ -7,6 +7,7 @@ export default {
         return {
             title: '',
             body: '',
+            post_tag: null,
             anonymous: false,
             save_pending: false,
         };
@@ -14,7 +15,15 @@ export default {
     computed: {
         in_mobile_mode() {
             return this.$store.getters.mobile;
-        }
+        },
+        post_tag_options() {
+            let user_is_teacher = this.$store.getters.user.role === 'teacher'
+            let post_tags = this.$store.getters.course_summary.post_tags
+                .filter(t => {return user_is_teacher || !t.teacher_only})
+                .map(t => {return { value: t.name, text: t.name }})
+            post_tags.unshift({ value: null, text: '(no tag)' })
+            return post_tags;
+        },
     },
     methods: {
         submit_new_post() {
@@ -36,6 +45,7 @@ export default {
             this.$store.dispatch('createPost', {
                 title: this.title,
                 body: this.body,
+                tag: this.post_tag,
                 author_anonymous: this.anonymous,
             });
         },
@@ -97,6 +107,10 @@ export default {
             <div class="form-group">
                 <label for="post-title">Post Title</label>
                 <input class="form-control" id="post-title" v-model="title">
+            </div>
+            <div class="form-group">
+                <label for="post-tag">Tag post as:</label>
+                <b-form-select v-model="post_tag" :options="post_tag_options"></b-form-select>
             </div>
             <div class="form-group">
                 <label for="post-body">Post Body</label>

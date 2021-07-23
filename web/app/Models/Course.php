@@ -21,11 +21,38 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'close_date' => 'datetime'
+        'close_date' => 'datetime',
+        'post_tags' => 'array',
     ];
 
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($query) {
+            $query->post_tags = $this->get_default_post_tags();
+        });
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public static function get_default_post_tags()
+    {
+        return json_decode(
+            "[" .
+            "{\"name\":\"announcement\",\"bgcolor\":\"#9A2617\",\"teacher_only\":true}," .
+            "{\"name\":\"question\",\"bgcolor\":\"#093145\",\"teacher_only\":false}," .
+            "{\"name\":\"discussion\",\"bgcolor\":\"#C2571A\",\"teacher_only\":false}" .
+            "]",
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
     }
 }

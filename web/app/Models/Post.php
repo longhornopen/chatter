@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int author_anonymous
  * @property string title
  * @property string body
+ * @property string tag
  * @property int id
  */
 class Post extends Model

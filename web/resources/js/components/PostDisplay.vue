@@ -1,12 +1,13 @@
 <script>
 import UserName from './UserName'
 import FormattedDate from './FormattedDate'
+import PostTagBadge from './PostTagBadge'
 import _ from 'lodash'
 import WysiwygEditor from './WysiwygEditor'
 import component_mixins from '../component_mixins'
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor },
+    components: { UserName, FormattedDate, WysiwygEditor, PostTagBadge },
     mixins: [component_mixins.course_closed_mixin],
     data() {
         return {
@@ -144,7 +145,7 @@ export default {
             </div>
             <div>
                 <h2>
-                    {{ post.title }}
+                    <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
                 </h2>
                 <div class="post-top-row">
                     <div>

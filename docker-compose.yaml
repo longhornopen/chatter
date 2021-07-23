@@ -15,7 +15,6 @@ services:
       VIRTUAL_HOST: chatter.docker
     links:
       - "database:database"
-      - "redis:redis"
   broadcast:
     build:
       context: .
@@ -31,9 +30,5 @@ services:
       VIRTUAL_PORT: 6001
   database:
     image: mysql:8
-    networks:
-      - backend
-  redis:
-    image: redis
     networks:
       - backend
