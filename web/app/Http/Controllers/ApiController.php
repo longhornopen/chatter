@@ -368,8 +368,8 @@ TAG
         if ($comment->post->course_id !== (int)$course_user->course_id) {
             throw new UnauthorizedException("Unauthorized: Course ID mismatch.");
         }
-        if ($comment->post->author_user_id !== $course_user->id) {
-            throw new UnauthorizedException("Unauthorized: Not your post");
+        if ($comment->author_user_id !== $course_user->id) {
+            throw new UnauthorizedException("Unauthorized: Not your comment");
         }
         $comment->body = $request->json('body');
         $comment->save();
