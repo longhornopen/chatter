@@ -34,7 +34,6 @@ export default {
             this.$store.dispatch('search');
         },
         open_post(post_id) {
-            this.$store.dispatch('setAppMainPanelMode', {mode: 'show_post', post_id: post_id});
             if (this.$store.getters.mobile) {
                 this.$store.dispatch('switchScreen', {
                     view_post_list: false,
@@ -42,6 +41,11 @@ export default {
                     view_post_create: false,
                 })
             }
+            this.$router.push('/post/'+post_id).catch(error => {
+                if (error.name !== "NavigationDuplicated") {
+                    throw error;
+                }
+            });
         },
         open_new_post_editor() {
             if (this.$store.getters.mobile) {
@@ -51,7 +55,7 @@ export default {
                     view_post_create: true,
                 })
             }
-            this.$store.dispatch('setAppMainPanelMode', {mode: 'new_post'});
+            this.$router.push('/post/new')
         },
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;

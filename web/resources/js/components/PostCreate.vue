@@ -50,18 +50,6 @@ export default {
             });
         },
         close_post_editor() {
-            if (this.body.trim().length === 0) {
-                if (!this.in_mobile_mode) {
-                    this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
-                } else {
-                    this.$store.dispatch('switchScreen', {
-                        view_post_create: false,
-                        view_post_list: true,
-                        view_post_display: false,
-                    })
-                }
-                return;
-            }
             this.$swal.fire({
                 title: "Are you sure you want to abandon this post without saving it?",
                 icon: 'warning',
@@ -80,6 +68,16 @@ export default {
 
                 }
             });
+            if (this.body.trim().length === 0) {
+                if (this.in_mobile_mode) {
+                    this.$store.dispatch('switchScreen', {
+                        view_post_create: false,
+                        view_post_list: true,
+                        view_post_display: false,
+                    })
+                }
+                return;
+            }
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -87,9 +85,6 @@ export default {
                     view_post_list: true,
                     view_post_display: false,
                     view_post_create: false,
-                })
-                this.$store.dispatch('setAppMainPanelMode', {
-                    mode: 'show_post',
                 })
             }
         },

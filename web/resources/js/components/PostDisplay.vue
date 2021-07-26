@@ -9,6 +9,7 @@ import component_mixins from '../component_mixins'
 export default {
     components: { UserName, FormattedDate, WysiwygEditor, PostTagBadge },
     mixins: [component_mixins.course_closed_mixin],
+    props: ['post_id'],
     data() {
         return {
             comment_editor_visible: false,
@@ -75,6 +76,7 @@ export default {
                     this.$store.dispatch('deletePost', {
                         post_id: this.$store.getters.currently_viewed_post.id,
                     });
+                    this.$router.push('/')
                 }
             });
         },
@@ -128,6 +130,9 @@ export default {
             }
         },
     },
+    async mounted() {
+        await this.$store.dispatch('setCurrentlyViewedPost', {'post_id': this.post_id});
+    }
 }
 </script>
 

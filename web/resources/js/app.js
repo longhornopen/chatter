@@ -12,6 +12,7 @@ import PostCreate from './components/PostCreate.vue';
 import CommentCreate from './components/CommentCreate.vue';
 import CommentDisplay from './components/CommentDisplay.vue';
 import FormattedDate from './components/FormattedDate.vue';
+import SplashPage from './components/SplashPage';
 
 
 Vue.component('app-framework', AppFramework);
@@ -38,10 +39,21 @@ let onResize = function() {
   })
 }
 
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+const router = new VueRouter({
+  routes: [
+    { path: '/', component: SplashPage},
+    { path: '/post/new', component: PostCreate},
+    { path: '/post/:post_id', component: PostDisplay, props:true },
+  ],
+})
+
 store.dispatch('init').then(()=> {
   const app = new Vue({
     el: '#app',
     store: store,
+    router,
     mounted () {
       onResize()
       window.addEventListener('resize', onResize)

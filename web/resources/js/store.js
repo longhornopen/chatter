@@ -50,10 +50,10 @@ const state = {
   filtered_posts: [],
   search_results_available: false,
 
-  app_main_panel_mode: 'welcome',
   posts_loading: false,
 
   // for mobile display
+  // FIXME might be able to do this all in CSS
   mobile: null,
   view_post_list: null,
   view_post_display: null,
@@ -71,7 +71,6 @@ const getters = {
   filtered_posts: state => { return state.filtered_posts },
   search_results_available: state => { return state.search_results_available },
 
-  app_main_panel_mode: state => { return state.app_main_panel_mode },
   posts_loading: state => { return state.posts_loading },
 
   // for mobile display
@@ -107,9 +106,6 @@ const mutations = {
     state.posts = payload.posts
   },
 
-  setAppMainPanelMode (state, payload) {
-    state.app_main_panel_mode = payload.mode
-  },
   setCurrentlyViewedPost (state, payload) {
     state.currently_viewed_post = payload.post
   },
@@ -137,7 +133,6 @@ const mutations = {
     }
     state.posts.unshift(payload)
     state.currently_viewed_post = payload
-    state.app_main_panel_mode = 'show_post'
   },
   editPost (state, payload) {
     let post_id = payload.post_id
@@ -168,7 +163,6 @@ const mutations = {
   },
   deletePost (state, payload) {
     state.currently_viewed_post = {}
-    state.app_main_panel_mode = 'welcome'
     state.posts = state.posts.filter(p => p.id !== payload.post_id)
   },
   endorseComment (state, payload) {
@@ -293,13 +287,9 @@ const actions = {
     commit('setPostsLoading', { loading: false })
     return response
   },
-  async setAppMainPanelMode ({ commit }, payload) {
-    commit('setCurrentlyViewedPost', { post: {} })
-    commit('setAppMainPanelMode', { mode: payload.mode })
-    if (payload.mode === 'show_post') {
-      let response = await axios.get('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id)
-      commit('setCurrentlyViewedPost', { post: response.data })
-    }
+  async setCurrentlyViewedPost({commit}, payload) {
+    let response = await axios.get('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id)
+    commit('setCurrentlyViewedPost', { post: response.data })
   },
   async createPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/new', payload)

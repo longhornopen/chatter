@@ -12,9 +12,6 @@ export default {
         };
     },
     computed: {
-        app_main_panel_mode() {
-            return this.$store.getters.app_main_panel_mode;
-        },
         show_post_list() {
             return this.$store.getters.show_post_list
         },
@@ -50,18 +47,7 @@ export default {
         <div class="row main-app-area no-gutters">
             <div v-if="show_post_list" class="col-md-4"><post-list></post-list></div>
             <div v-if="show_post_display || show_post_create" class="col-md-8">
-                <div v-if="app_main_panel_mode==='welcome'">
-                    <splash-page></splash-page>
-                </div>
-                <div v-if="app_main_panel_mode==='show_post'">
-                    <post-display></post-display>
-                </div>
-                <div v-if="app_main_panel_mode==='new_post'">
-                    <post-create></post-create>
-                </div>
-                <div v-if="app_main_panel_mode==='show_settings'">
-                    <settings-editor></settings-editor>
-                </div>
+                <router-view :key="$route.fullPath"></router-view>
             </div>
         </div>
     </div>
