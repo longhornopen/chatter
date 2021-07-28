@@ -14,7 +14,7 @@ class AddCloseDateToCourseTable extends Migration
     public function up()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->datetime('close_date')->nullable();
+            $table->timestamp('close_date')->nullable();
         });
     }
 

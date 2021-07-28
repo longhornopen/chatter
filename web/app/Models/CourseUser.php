@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -22,6 +23,16 @@ class CourseUser extends Model
         'role',
         'lti_user_id',
     ];
+
+    protected $casts = [
+        'previous_mail_digest_at' => 'datetime',
+        'last_launch_at' => 'datetime',
+    ];
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
 
     public function posts(): HasMany
     {

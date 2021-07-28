@@ -34,7 +34,7 @@ class ApiController extends Controller
         $course_user_id = $course_user->id;
 
         return CourseUser::where('id',$course_user_id)
-            ->select(['id','course_id','name','email','role'])
+            ->select(['id','course_id','name','email','role','mail_digest_frequency'])
             ->first();
     }
 
@@ -47,6 +47,21 @@ class ApiController extends Controller
             ->where('id', $user_id)
             ->firstOrFail();
     }
+
+    public function postUser(Request $request, $course_id, $user_id)
+    {
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+        if ($course_user->id !== (int)$user_id) {
+            throw new UnauthorizedException("Can't edit a user other than yourself");
+        }
+
+        if ($request->has('mail_digest_frequency')) {
+            $course_user->mail_digest_frequency = $request->input('mail_digest_frequency');
+        }
+        $course_user->save();
+        return $course_user;
+    }
+
 
     public function getCourse(Request $request, $course_id)
     {
@@ -82,9 +97,14 @@ class ApiController extends Controller
             $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
             $course->help_url = env('APP_HELP_URL');
         }
+        $app_settings = ['feature_flags'=>[]];
+        if (env('APP_FEATURE_MAIL_ACTIVITY_DIGESTS')) {
+            $app_settings['feature_flags'] []= 'mail_activity_digests';
+        }
 
         $response = [];
         $response['course'] = $course;
+        $response['app_settings'] = $app_settings;
 
         $upvoted_comment_ids = CommentUpvote::where('course_user_id', $course_user->course_id)
             ->pluck('comment_id');
@@ -221,6 +241,7 @@ TAG
             }
         }
         $post->tag = $request->get('tag');
+        $post->last_comment_at = new Carbon();
         $post->save();
 
         $flag = new CourseUserPostLastReadFlag();
@@ -349,6 +370,17 @@ TAG
         $comment->body = $body;
         $comment->save();
 
+        $now = new Carbon();
+        $post->last_comment_at = $now;
+        $post->save();
+
+        $post_last_read = CourseUserPostLastReadFlag::firstOrCreate([
+            'post_id'=>$post->id,
+            'course_user_id'=>$course_user->id
+        ]);
+        $post_last_read->updated_at = $now;
+        $post_last_read->save();
+
         event(new CommentAdded(
                   $course_user->course_id,
                   $comment->post_id,
@@ -371,6 +403,7 @@ TAG
         if ($comment->author_user_id !== $course_user->id) {
             throw new UnauthorizedException("Unauthorized: Not your comment");
         }
+        $comment->edited_at = new Carbon();
         $comment->body = $request->json('body');
         $comment->save();
 
@@ -433,7 +466,6 @@ TAG
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);
         $this->checkCourseCloseDate($course_id);
-        $this->checkIsTeacher($course_user);
 
         $comment = Comment::findOrFail($comment_id);
         $this->checkCommentAuths($comment, $course_user);

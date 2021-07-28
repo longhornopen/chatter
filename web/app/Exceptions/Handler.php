@@ -15,7 +15,6 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         LoginExpiredException::class,
-        UnauthorizedException::class
     ];
 
     /**

@@ -26,6 +26,10 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $casts = [
+        'last_comment_at' => 'datetime',
+    ];
+
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
@@ -34,5 +38,10 @@ class Post extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function course_user_post_last_read_flags(): HasMany
+    {
+        return $this->hasMany(CourseUserPostLastReadFlag::class);
     }
 }

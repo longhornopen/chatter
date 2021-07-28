@@ -2,24 +2,25 @@
 
 namespace App\Console\Commands;
 
-use App\Events\BroadcastTested;
+use App\Mail\Test;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
-class TestBroadcast extends Command
+class TestMail extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'chatter:broadcast_test';
+    protected $signature = 'chatter:mail_test {email_address}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Test broadcast features by sending a message to clients, which will be console.log()\'ed';
+    protected $description = 'Send a test mail to an address';
 
     /**
      * Create a new command instance.
@@ -38,8 +39,8 @@ class TestBroadcast extends Command
      */
     public function handle()
     {
-        event(new BroadcastTested());
-
+        Mail::to($this->argument('email_address'))
+            ->send(new Test());
         return 0;
     }
 }

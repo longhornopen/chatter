@@ -7,6 +7,9 @@ export default {
 
             course: null,
 
+            edited_course_user_mail_digest_frequency: null,
+            course_user_mail_digest_frequency_save_state: '',
+
             course_close_datetime: null,
             course_close_date_save_state: '',
 
@@ -29,8 +32,20 @@ export default {
         user_is_instructor() {
             return this.$store.getters.user_is_teacher;
         },
+        has_feature_mail_activity_digest() {
+            return this.$store.state.app_settings.feature_flags.includes('mail_activity_digests')
+        },
+        course_user_mail_digest_frequency() {
+            return this.$store.getters.user.mail_digest_frequency;
+        },
     },
     methods: {
+        async save_course_user_mail_digest_frequency() {
+            this.course_user_mail_digest_frequency_save_state = 'pending'
+            await this.$store.dispatch('updateCourseUser', {mail_digest_frequency: this.edited_course_user_mail_digest_frequency})
+            this.$bvToast.toast('Email frequency saved.', {title:'Save successful', autoHideDelay: 5000})
+            this.course_user_mail_digest_frequency_save_state = ''
+        },
         async save_course_close_date() {
             // assume times are always end-of-day for now; maybe add a timepicker control here later
             if (this.course_close_datetime) {
@@ -83,6 +98,7 @@ export default {
         this.course = await this.$store.dispatch('getCourse')
         this.course_close_datetime = this.course.close_date ? new Date(this.course.close_date) : null
         this.course_post_tags = this.course.post_tags ?? []
+        this.edited_course_user_mail_digest_frequency = this.course_user_mail_digest_frequency;
     }
 }
 </script>
@@ -153,24 +169,39 @@ export default {
             </div>
         </form>
 
-        <div v-if="false">
-        <h2>Email Frequency</h2>
-        <form>
-            <b-form-group label="Receive an update of unread posts by email:" v-slot="{ ariaDescribedby }">
-                <b-form-radio v-model="selected" :aria-describedby="ariaDescribedby" name="some-radios" value="A">Never</b-form-radio>
-                <b-form-radio v-model="selected" :aria-describedby="ariaDescribedby" name="some-radios" value="B">Every two hours</b-form-radio>
-                <b-form-radio v-model="selected" :aria-describedby="ariaDescribedby" name="some-radios" value="B">Every day</b-form-radio>
-            </b-form-group>
-        </form>
+        <div v-if="has_feature_mail_activity_digest">
+            <b-card>
+                <b-card-text>
+                <h3>Email Updates</h3>
+                <b-form>
+                    <b-form-group label="Receive an update of new activity by email:" v-slot="{ ariaDescribedby }">
+                        <b-form-radio-group
+                            v-model="edited_course_user_mail_digest_frequency"
+                            :aria-describedby="ariaDescribedby"
+                            name="mail-digest-frequency"
+                            @change="course_user_mail_digest_frequency_save_state='enabled'"
+                        >
+                            <b-form-radio value="-1">Never</b-form-radio>
+                            <b-form-radio value="2">Every two hours</b-form-radio>
+                            <b-form-radio value="24">Every day</b-form-radio>
+                        </b-form-radio-group>
+                    </b-form-group>
+                </b-form>
+                </b-card-text>
+                <b-button
+                    variant="primary"
+                    :disabled="course_user_mail_digest_frequency_save_state!=='enabled'"
+                    @click="save_course_user_mail_digest_frequency()"
+                ><font-awesome-icon v-if="course_user_mail_digest_frequency_save_state==='pending'" icon="spinner" spin /> Save changes</b-button>
+            </b-card>
         </div>
 
-        <div v-if="user_is_instructor">
+        <div v-if="user_is_instructor" style="margin-top:12px;">
             <h2>Instructor Settings</h2>
             <b-card>
                 <b-card-text>
                     <h3>Course close date</h3>
                     <p>Closing a course will remove students' ability to create or edit posts and comments.  Students will not be able to participate in this course after the date listed here.</p>
-                    <!--suppress XmlInvalidId -->
                     <label for="closeat">Close course at end of day:</label>
                     <b-input-group size="sm">
                         <b-form-datepicker id="closeat"

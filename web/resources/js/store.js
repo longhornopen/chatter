@@ -39,6 +39,7 @@ Vue.use(Vuex)
 const state = {
   course: {},
   course_summary: {},
+  app_settings: [],
   posts: [],
   currently_viewed_post: {},
   user: {},
@@ -98,9 +99,13 @@ const mutations = {
   setCourseSummary (state, payload) {
     state.course_summary = payload.course
     state.user_upvoted_comment_ids = payload.user_upvoted_comment_ids
+    state.app_settings = payload.app_settings
   },
   updateCourseSummary (state, payload) {
     state.course_summary = Object.assign(state.course_summary, payload)
+  },
+  updateCourseUser (state, payload) {
+    state.user = Object.assign(state.user, payload)
   },
   setPosts (state, payload) {
     state.posts = payload.posts
@@ -272,6 +277,12 @@ const actions = {
     commit('updateCourseSummary', response.data)
     return response.data
   },
+  async updateCourseUser ({commit}, payload) {
+    let response = await axios.post('/api/course/' + this.state.user.course_id + '/user/' + this.state.user.id, payload);
+    commit('updateCourseUser', response.data)
+    return response.data
+  },
+
 
   setSearchString ({ commit }, payload) {
     commit('setSearchString', { search_string: payload.search_string })
@@ -294,6 +305,7 @@ const actions = {
   async createPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/new', payload)
     commit('addPost', response.data)
+    return response.data
   },
   async editPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id, payload)
@@ -330,6 +342,7 @@ const actions = {
   async addComment ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/new', payload)
     commit('addComment', response.data)
+    return response.data
   },
   async editComment ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id, payload)

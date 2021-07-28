@@ -26,7 +26,7 @@ export default {
         },
     },
     methods: {
-        submit_new_post() {
+        async submit_new_post() {
             if (this.title.trim().length === 0) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your post title.",
@@ -42,12 +42,14 @@ export default {
                 return;
             }
             this.save_pending = true;
-            this.$store.dispatch('createPost', {
+            let post = await this.$store.dispatch('createPost', {
                 title: this.title,
                 body: this.body,
                 tag: this.post_tag,
                 author_anonymous: this.anonymous,
             });
+            this.save_pending = false;
+            await this.$router.push('/post/'+post.id);
         },
         close_post_editor() {
             this.$swal.fire({

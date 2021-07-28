@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseUser;
+use Illuminate\Support\Carbon;
 use LonghornOpen\LaravelCelticLTI\LtiTool;
 
 class LtiController extends Controller
@@ -24,6 +25,7 @@ class LtiController extends Controller
                     'name' => $tool->userResult->fullname,
                     'email' => $tool->userResult->email,
                     'role' => ($is_teacher ? 'teacher' : 'student'),
+                    'last_launch_at' => new Carbon(),
                 ]
             );
 

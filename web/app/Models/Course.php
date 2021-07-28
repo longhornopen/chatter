@@ -35,7 +35,7 @@ class Course extends Model
         parent::boot();
 
         static::creating(function ($query) {
-            $query->post_tags = $this->get_default_post_tags();
+            $query->post_tags = self::get_default_post_tags();
         });
     }
 
