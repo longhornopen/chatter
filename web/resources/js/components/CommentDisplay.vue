@@ -111,6 +111,13 @@ export default {
             });
         },
         async update_comment_body(new_body) {
+            if (new_body.trim().length === 0) {
+                this.$swal.fire({
+                    title: "Looks like you forgot to write your comment.",
+                    icon: 'warning'
+                });
+                return;
+            }
             this.edit_save_pending = true;
             await this.$store.dispatch('editComment', {
                 comment_id: this.comment.id,

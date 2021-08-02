@@ -112,6 +112,13 @@ export default {
             });
         },
         async update_post_body(new_body) {
+            if (new_body.trim().length === 0) {
+                this.$swal.fire({
+                    title: "Looks like you forgot to write your post body.",
+                    icon: 'warning'
+                });
+                return;
+            }
             this.edit_save_pending = true;
             await this.$store.dispatch('editPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
