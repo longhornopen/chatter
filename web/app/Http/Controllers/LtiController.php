@@ -25,9 +25,10 @@ class LtiController extends Controller
                     'name' => $tool->userResult->fullname,
                     'email' => $tool->userResult->email,
                     'role' => ($is_teacher ? 'teacher' : 'student'),
-                    'last_launch_at' => new Carbon(),
                 ]
             );
+            $course_user->last_launch_at = new Carbon();
+            $course_user->save();
 
             session(
                 [
