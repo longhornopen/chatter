@@ -279,7 +279,7 @@ TAG
         $post->tag = $request->json('tag');
         $post->save();
 
-        event(new PostEdited(
+        broadcast(new PostEdited(
                   $course_user->course_id,
                   $post->id,
                   $post->body
@@ -298,7 +298,7 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->delete();
 
-        event(new PostDeleted(
+        broadcast(new PostDeleted(
                   $course_user->course_id,
                   $post->id,
               ));
@@ -317,7 +317,7 @@ TAG
         $post->pinned = $pinned === 'true';
         $post->save();
 
-        event(new PostPinnedChanged(
+        broadcast(new PostPinnedChanged(
                   $course_user->course_id,
                   $post->id,
                   (bool)$post->pinned
@@ -337,11 +337,11 @@ TAG
         $post->locked = $locked==='true' ? 1 : 0;
         $post->save();
 
-        event(new PostLockedChanged(
+        broadcast(new PostLockedChanged(
             $course_user->course_id,
             $post->id,
             (bool)$post->locked
-              ));
+        ));
 
         return $post;
     }
@@ -381,7 +381,7 @@ TAG
         $post_last_read->updated_at = $now;
         $post_last_read->save();
 
-        event(new CommentAdded(
+        broadcast(new CommentAdded(
                   $course_user->course_id,
                   $comment->post_id,
                   $comment->id,
@@ -407,7 +407,7 @@ TAG
         $comment->body = $request->json('body');
         $comment->save();
 
-        event(new CommentEdited(
+        broadcast(new CommentEdited(
                   $course_user->course_id,
                   $comment->id,
                   $comment->body
@@ -428,7 +428,7 @@ TAG
         $comment->endorsed = $endorsed==='true' ? 1 : 0;
         $comment->save();
 
-        event(new CommentEndorsedChanged(
+        broadcast(new CommentEndorsedChanged(
                   $course_user->course_id,
                   $comment->post_id,
                   $comment->id,
@@ -451,7 +451,7 @@ TAG
         $comment->muted_by_user_id = $muted==='true' ? $course_user->id : null;
         $comment->save();
 
-        event(new CommentMutedChanged(
+        broadcast(new CommentMutedChanged(
                   $course_user->course_id,
                   $comment->post_id,
                   $comment->id,
