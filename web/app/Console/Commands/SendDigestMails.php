@@ -51,9 +51,11 @@ class SendDigestMails extends Command
             ->where('mail_digest_frequency', '>=', 0)
             ->get();
         foreach ($course_users as $course_user) {
-            $next_digest_due_at = $course_user->previous_mail_digest_at->addHours($course_user->mail_digest_frequency);
-            if ($next_digest_due_at->greaterThan(Carbon::now())) {
-                continue;
+            if ($course_user->previous_mail_digest_at !== null) {
+                $next_digest_due_at = $course_user->previous_mail_digest_at->addHours($course_user->mail_digest_frequency);
+                if ($next_digest_due_at->greaterThan(Carbon::now())) {
+                    continue;
+                }
             }
             $mail = new ActivityDigest($course_user);
             if ($mail->hasContents()) {
