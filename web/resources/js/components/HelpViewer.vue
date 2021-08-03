@@ -47,6 +47,12 @@ export default {
             <h4>Have questions or need help?</h4>
             <a :href="help_url" target="_blank">{{help_url_display}}</a>.
         </div>
+
+        <hr>
+        <div style="font-size:80%;">
+            <a href="https://longhornopen.github.io/" target="_blank"><img src="/images/longhorn-open-logo.svg" alt="Longhorn Open logo" width="30" height="30"></a>
+            Chatter is an open-source project from <a href="https://longhornopen.github.io/" target="_blank">Longhorn Open Ed Tech</a>.  Visit our site to learn more or to help!
+        </div>
     </div>
 </template>
 
