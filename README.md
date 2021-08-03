@@ -1,24 +1,13 @@
 # Chatter
 
-Chatter is an LTI-enabled tool for powering 
-class discussions.  
+Chatter is an LTI-enabled forum for powering 
+class discussions.
 
 ![](images/screenshot.png)
 
 ## Installation
 
-* Clone this Github repo.
-* FIXME: npm, composer, artisan 
-* FIXME: point to laravel documentation
-* FIXME: docker
-
-## Configuring
-
-FIXME
-Describe Sentry integration, email setup, flysystem configuration
-## Deploying on an LMS
-
-FIXME
+See the file `INSTALL.md` for installation or upgrade instructions.
 
 ## Meta
 
