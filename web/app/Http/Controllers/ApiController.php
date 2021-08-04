@@ -127,11 +127,11 @@ class ApiController extends Controller
         if ($filter==='pinned') {
             $posts = $posts->where('pinned', true);
         } elseif ($filter==='unread') {
+            // FIXME clunky
             $fully_read_posts = DB::select(<<<'TAG'
-SELECT posts.id as id, max(comments.created_at) as comment_date, max(flags.updated_at) as flag_date
-from comments,posts,course_user_post_last_read_flags as flags
-where comments.post_id = posts.id
-  and flags.post_id = posts.id
+SELECT posts.id as id, posts.last_comment_at as comment_date, max(flags.updated_at) as flag_date
+from posts,course_user_post_last_read_flags as flags
+where flags.post_id = posts.id
   and posts.course_id = ?
   and flags.course_user_id = ?
 group by posts.id
