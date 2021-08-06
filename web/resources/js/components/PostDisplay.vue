@@ -111,14 +111,16 @@ export default {
                 }
             });
         },
-        async update_post_body(new_body) {
-            if (new_body.trim().length === 0) {
+        async save_post() {
+            if (!this.$refs['postEditor'].hasContents()) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your post body.",
                     icon: 'warning'
                 });
                 return;
             }
+            let new_body = this.$refs['postEditor'].getContents()
+            this.$refs['postEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
             await this.$store.dispatch('editPost', {
                 post_id: this.$store.getters.currently_viewed_post.id,
@@ -200,7 +202,7 @@ export default {
 
                 <div v-if="post_editor_visible">
                     <fieldset v-bind:disabled="edit_save_pending">
-                    <wysiwyg-editor v-model="edited_post_body"></wysiwyg-editor>
+                    <wysiwyg-editor v-model="edited_post_body" ref="postEditor"></wysiwyg-editor>
                     <div class="btn-groups">
                         <div class="left"></div>
                         <div class="right">
@@ -209,7 +211,7 @@ export default {
                                 @click="close_post_editor()">Cancel</button>
                             <button
                                 class="btn btn-secondary"
-                                @click="update_post_body(edited_post_body)"
+                                @click="save_post()"
                             ><font-awesome-icon v-if="edit_save_pending" icon="spinner" spin /> Save</button>
                         </div>
                     </div>

@@ -81,6 +81,9 @@ export default {
         },
         toggle_reply_editor: function(shown) {
             this.reply_editor_visible = shown
+            if (shown) {
+                this.$nextTick(() => {this.$refs['replyEditor'].$el.scrollIntoView()})
+            }
         },
         post_comments_with_parent_comment_id(pcid) {
             if (!this.$store.state.currently_viewed_post.comments) {
@@ -95,8 +98,9 @@ export default {
             })
         },
         show_comment_editor: function() {
-            this.edited_comment_body = this.comment.body;
+            this.edited_comment_body = this.comment.body
             this.comment_editor_visible = true
+            this.$nextTick(() => {this.$refs['commentEditor'].$el.scrollIntoView()})
         },
         hide_comment_editor: function() {
             this.$swal.fire({
@@ -110,18 +114,20 @@ export default {
                 }
             });
         },
-        async update_comment_body(new_body) {
-            if (new_body.trim().length === 0) {
+        async save_comment() {
+            if (!this.$refs['commentEditor'].hasContents()) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your comment.",
                     icon: 'warning'
                 });
                 return;
             }
+            this.edited_comment_body = this.$refs['commentEditor'].getContents()
+            this.$refs['commentEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
             await this.$store.dispatch('editComment', {
                 comment_id: this.comment.id,
-                body: new_body,
+                body: this.edited_comment_body,
             })
             this.edit_save_pending = false;
             this.edited_comment_body = null;
@@ -193,7 +199,7 @@ export default {
                 <div class="comment-container">
                     <div v-if="comment_editor_visible">
                         <fieldset v-bind:disabled="edit_save_pending">
-                        <wysiwyg-editor v-model="edited_comment_body"></wysiwyg-editor>
+                        <wysiwyg-editor v-model="edited_comment_body" ref="commentEditor"></wysiwyg-editor>
                         <div class="btn-groups">
                             <div class="left"></div>
                             <div class="right">
@@ -203,7 +209,7 @@ export default {
                                         @click="hide_comment_editor()">Cancel</button>
                                     <button
                                         class="btn btn-primary"
-                                        @click="update_comment_body(edited_comment_body)"
+                                        @click="save_comment()"
                                     ><font-awesome-icon v-if="edit_save_pending" icon="spinner" spin /> Save</button>
                                 </div>
                             </div>
@@ -269,12 +275,15 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <comment-create
-                        v-if="add_comment_allowed && reply_editor_visible"
-                        @close_comment_editor="toggle_reply_editor(false)"
-                        :parent_comment_id="comment.id"
-                        :post_id="comment.post_id"
-                    ></comment-create>
+                    <div style="padding-left:20px;">
+                        <comment-create
+                            v-if="add_comment_allowed && reply_editor_visible"
+                            @close_comment_editor="toggle_reply_editor(false)"
+                            :parent_comment_id="comment.id"
+                            :post_id="comment.post_id"
+                            ref="replyEditor"
+                        ></comment-create>
+                    </div>
                     <div style="padding-left:20px;">
                         <div v-for="child_comment in post_comments_with_parent_comment_id(comment.id)">
                             <comment-display :comment="child_comment"></comment-display>

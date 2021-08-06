@@ -13,10 +13,6 @@ export default {
     },
     methods: {
         cancel() {
-            if (this.comment_body.trim().length === 0) {
-                this.$emit('close_comment_editor')
-                return;
-            }
             this.$swal.fire({
                 title: "Are you sure you want to abandon this comment without saving it?",
                 icon: 'warning',
@@ -28,13 +24,15 @@ export default {
             });
         },
         async submit() {
-            if (this.comment_body.trim().length === 0) {
+            if (!this.$refs['commentEditor'].hasContents()) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your comment.",
                     icon: 'warning'
                 });
                 return;
             }
+            this.comment_body = this.$refs['commentEditor'].getContents()
+            this.$refs['commentEditor'].$el.scrollIntoView();
             this.save_pending = true;
             await this.$store.dispatch('addComment', {
                 post_id: this.post_id,
@@ -52,7 +50,7 @@ export default {
 <template>
     <div>
         <fieldset v-bind:disabled="save_pending">
-        <wysiwyg-editor v-model="comment_body"></wysiwyg-editor>
+        <wysiwyg-editor v-model="comment_body" ref="commentEditor"></wysiwyg-editor>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
             <label class="form-check-label" for="postAnonymously">Post Anonymously</label>

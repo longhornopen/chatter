@@ -27,7 +27,6 @@ export default {
         }
     },
     mounted() {
-        let comp = this;
         this.editor = new Editor({
             el: this.$refs.editor.querySelector('div'),
             height: '300px',
@@ -42,19 +41,15 @@ export default {
                 ['table', 'image', 'link'],
                 ['codeblock'],
             ],
-            events: {
-                change() {
-                    if (comp.editor === null) {
-                        return;
-                    }
-
-                    let html = comp.editor.getHTML();
-                    comp.$emit('input', html);
-                }
-            }
         });
     },
     methods: {
+        hasContents() {
+            return this.editor.getMarkdown().trim().length !== 0;
+        },
+        getContents() {
+            return this.editor.getHTML();
+        }
     }
 }
 </script>

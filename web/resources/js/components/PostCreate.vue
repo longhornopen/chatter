@@ -34,13 +34,15 @@ export default {
                 });
                 return;
             }
-            if (this.body.trim().length === 0) {
+            if (!this.$refs['postEditor'].hasContents()) {
                 this.$swal.fire({
                     title: "Looks like you forgot to write your post body.",
                     icon: 'warning'
                 });
                 return;
             }
+            this.body = this.$refs['postEditor'].getContents()
+            this.$refs['postEditor'].$el.scrollIntoView();
             this.save_pending = true;
             let post = await this.$store.dispatch('createPost', {
                 title: this.title,
@@ -111,7 +113,7 @@ export default {
             </div>
             <div class="form-group">
                 <label for="post-body">Post Body</label>
-                <wysiwyg-editor v-model="body"></wysiwyg-editor>
+                <wysiwyg-editor v-model="body" ref="postEditor"></wysiwyg-editor>
             </div>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="postAnonymously" v-model="anonymous">
