@@ -8,7 +8,6 @@ export default {
     mixins: [component_mixins.course_closed_mixin],
     data () {
         return {
-            posts_styles: {}
         }
     },
     computed: {
@@ -26,6 +25,9 @@ export default {
         },
         posts_loaded() {
             return !this.$store.getters.posts_loading;
+        },
+        currently_viewed_post_id() {
+            return this.$store.state.currently_viewed_post?.id;
         },
     },
     methods: {
@@ -59,6 +61,13 @@ export default {
         },
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
+        },
+        post_style(post) {
+            // FIXME make this a class instead of a style
+            if (this.currently_viewed_post_id === post.id) {
+                return "background-color: #EEEEEE"
+            }
+            return "";
         },
     },
 }
@@ -116,7 +125,7 @@ export default {
                 class="post"
                 v-if="posts_loaded"
                 v-for="post in posts"
-                :style="posts_styles">
+                :style="post_style(post)">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
