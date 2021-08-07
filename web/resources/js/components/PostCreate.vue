@@ -60,28 +60,16 @@ export default {
                 showCancelButton: true,
             }).then(result => {
                 if (result.isConfirmed) {
-                    if (!this.in_mobile_mode) {
-                        this.$store.dispatch('setAppMainPanelMode', {mode: 'welcome'});
-                    } else {
+                    if (this.in_mobile_mode) {
                         this.$store.dispatch('switchScreen', {
                             view_post_create: false,
                             view_post_list: true,
                             view_post_display: false,
                         })
                     }
-
+                    this.$router.push('/')
                 }
             });
-            if (this.body.trim().length === 0) {
-                if (this.in_mobile_mode) {
-                    this.$store.dispatch('switchScreen', {
-                        view_post_create: false,
-                        view_post_list: true,
-                        view_post_display: false,
-                    })
-                }
-                return;
-            }
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -91,6 +79,7 @@ export default {
                     view_post_create: false,
                 })
             }
+            this.$router.push('/')
         },
     }
 }
