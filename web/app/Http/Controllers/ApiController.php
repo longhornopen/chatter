@@ -129,7 +129,7 @@ class ApiController extends Controller
         } elseif ($filter==='unread') {
             // FIXME clunky
             $fully_read_posts = DB::select(<<<'TAG'
-SELECT posts.id as id, posts.last_comment_at as comment_date, max(flags.updated_at) as flag_date
+SELECT posts.id as id, max(posts.last_comment_at) as comment_date, max(flags.updated_at) as flag_date
 from posts,course_user_post_last_read_flags as flags
 where flags.post_id = posts.id
   and posts.course_id = ?
