@@ -176,3 +176,112 @@ export default {
 
     </div>
 </template>
+
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
+
+.app-header-bar {
+    background-color: $bg-dark;
+    padding: 10px;
+    position: relative;
+    .justify-content-between {
+        align-items: center;
+        .header-col {
+            flex: 1;
+        }
+        .header-col.middle {
+            flex: 2;
+        }
+        .header-col.right {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+
+    .settings-control:hover {
+        cursor: pointer;
+    }
+    .course-name {
+        color: $white;
+        font-size: large;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        line-height: 1.2em;
+    }
+    .course-name.mobile {
+        display: none;
+    }
+    @media screen and (max-width: 1077px) {
+        .course-name {
+            height: 70px;
+        }
+    }
+    .form-inline {
+        flex-flow: nowrap;
+        .form-control, .form-control:focus {
+            background-color: $darkgray;
+            border-radius: 6px;
+            border: none;
+            color: $white;
+            margin: 0 10px 0 0;
+        }
+
+        .btn-search-submit {
+            background-color: $darkgray;
+            color: $white;
+            border: none;
+            border-radius: 6px;
+            margin-right: 6px;
+        }
+        .btn-search-submit:hover {
+            background-color: $primary;
+        }
+    }
+    .settings-control {
+        font-size: 1.5rem;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .clear-search-icon {
+        display: flex;
+        align-items: center;
+        margin-left: -50px;
+        z-index: 100;
+        box-shadow: none;
+        border: 0;
+        .times-icon {
+            color: $bg-dark;
+        }
+    }
+    .clear-search-icon:focus {
+        box-shadow: none;
+    }
+}
+
+@media screen and (max-width: 1077px) {
+    .app-header-bar {
+        display: flex;
+        flex-direction: column-reverse;
+        .course-name.mobile {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 10px 10px;
+        }
+        .header-col.middle {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .app-header-bar {
+        .input-group {
+            width: auto;
+        }
+    }
+}
+</style>

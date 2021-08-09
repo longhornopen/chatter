@@ -52,3 +52,45 @@ export default {
         </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
+
+.main-app-area {
+    height: calc(#{$full-height} - #{$title-bar-height} - map-get($app-header-height, 1920));
+    .col-md-4 {
+        padding-right: 0;
+    }
+    .col-md-8 {
+        padding-left: 0;
+    }
+}
+
+.app-title-bar {
+    .app-logo {
+        width: $app-logo-size;
+        height: $app-logo-size;
+        margin: 0 10px 0 0;
+    }
+    .app-logo.large {
+        width: $app-logo-size-large;
+        height: $app-logo-size-large;
+        margin: 0 20px 0 0;
+    }
+
+    .app-title {
+        font-size: x-large;
+        font-weight: 900;
+    }
+    .app-title.large {
+        font-size: xxx-large;
+    }
+    margin: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+.app-title-bar.large {
+    margin: 10% 5% 30px 5%;
+}
+
+</style>

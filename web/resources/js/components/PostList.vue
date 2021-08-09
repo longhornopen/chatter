@@ -182,3 +182,134 @@ export default {
         </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
+
+.app-post-list {
+    background-color: $lightgray;
+    padding: $post-list-padding;
+    height: 100%;
+    padding-bottom: $write-post-btn-height;
+    position: relative;
+    .nav-tabs {
+        display: flex;
+        .nav-item {
+            flex: 1;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            background-color: $bg-dark;
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+            transition: 0.3s;
+            a, a:hover, a:visited {
+                color: $white;
+            }
+            .nav-link {
+                height: 100%;
+            }
+            .nav-link.active {
+                background: $darkgray;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+        }
+        .nav-item:hover {
+            background-color: darken($bg-dark, $darken-amount);
+        }
+
+    }
+    .btn-post-topic {
+        width: calc(100% - #{$post-list-padding * 2});
+        background-color: $primary;
+        color: $white;
+        border-radius: 0;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        position: absolute;
+        bottom: 0;
+    }
+    .btn-post-topic:hover {
+        background-color: darken($primary, $darken-amount);
+    }
+
+    .app-post-list-body {
+        background-color: $body-bg;
+        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1920)} - #{$post-list-padding} - #{$write-post-btn-height});
+        overflow-y: auto;
+        .post {
+            background-color: $body-bg;
+            padding: 10px;
+            border-bottom: 0.25px dotted $lightgray;
+            .post-misc-info {
+                color: $tertiary;
+            }
+            .post-title {
+                margin: 0;
+            }
+            .post-btn-group {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 5px 0 0 0;
+                .pin-icon, .lock-icon {
+                    color: $tertiary;
+                    margin: 0 5px 0 0;
+                }
+                span {
+                    margin: 0 0 0 5px;
+                    color: $white;
+                }
+                .btn {
+                    color: $white;
+                    box-shadow: none;
+                    padding: 0.05rem 0.25rem;
+                    font-size: small;
+                }
+                .badge-read {
+                    background-color: $grayvariation;
+                }
+            }
+        }
+        .no-search-results {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .post-clickable-container {
+            cursor: pointer;
+        }
+    }
+    @media screen and (max-width: 1152px){
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1152)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+    @media screen and (max-width: 1077px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1077)} - #{map-get($tabs-height, 1077)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+    @media screen and (max-width: 900px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)} - #{map-get($tabs-height, 900)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+    @media screen and (max-width: 884px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 884)} - #{map-get($tabs-height, 884)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+    @media screen and (max-width: 767px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 767)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+    @media screen and (max-width: 384px) {
+        .app-post-list-body {
+            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 384)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
+        }
+    }
+
+}
+</style>

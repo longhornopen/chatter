@@ -63,3 +63,8 @@ export default {
     </div>
 
 </template>
+
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
+
+</style>

@@ -21,3 +21,8 @@ export default {
 <template>
         <span>{{ convert_date }}</span>
 </template>
+
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
+
+</style>

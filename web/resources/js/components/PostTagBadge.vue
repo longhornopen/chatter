@@ -26,6 +26,7 @@ export default {
     </span>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
 
 </style>

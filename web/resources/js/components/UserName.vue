@@ -42,8 +42,8 @@ export default {
     <span>
         {{display_user_name}}
         <span class="anon" v-if="show_deanon_button">
-            <font-awesome-icon 
-                icon="caret-square-right" 
+            <font-awesome-icon
+                icon="caret-square-right"
                 class="icon"
                 @click.prevent="handle_deanon_click"
                 size="lg"
@@ -54,3 +54,8 @@ export default {
 
     </span>
 </template>
+
+<style lang="scss" scoped>
+@import '../../sass/_variables.scss';
+
+</style>
