@@ -1,5 +1,5 @@
 // Fonts
-/* FIXME: import nunito here */
+@import '@fontsource/nunito';
 
 // Variables
 @import 'variables';
@@ -137,7 +137,6 @@
         display: flex;
         flex-direction: column-reverse;
         .course-name.mobile {
-            display: block;
             display: flex;
             justify-content: center;
             align-items: center;

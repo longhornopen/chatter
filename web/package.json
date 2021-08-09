@@ -8,6 +8,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@fontsource/nunito": "^4.5.0",
         "@fortawesome/fontawesome-svg-core": "^1.2.32",
         "@fortawesome/free-solid-svg-icons": "^5.15.1",
         "@fortawesome/vue-fontawesome": "^2.0.2",
@@ -20,7 +21,7 @@
         "css-loader": "^6.2.0",
         "jquery": "^3.2",
         "laravel-echo": "^1.10.0",
-        "laravel-mix": "6.0.6",
+        "laravel-mix": "^6.0.27",
         "lodash": "^4.17.19",
         "pusher-js": "^7.0.2",
         "resolve-url-loader": "^4.0.0",
