@@ -31,8 +31,9 @@ export default {
             el: this.$refs.editor.querySelector('div'),
             height: '300px',
             initialValue: this.value,
-            initialEditType: 'wysiwyg',
-            previewStyle: 'vertical',
+            initialEditType: 'markdown',
+            hideModeSwitch: true,
+            previewStyle: 'tab',
             usageStatistics: false,
             plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
             toolbarItems: [
@@ -48,7 +49,7 @@ export default {
             return this.editor.getMarkdown().trim().length !== 0;
         },
         getContents() {
-            return this.editor.getHTML();
+            return this.editor.getMarkdown();
         }
     }
 }
