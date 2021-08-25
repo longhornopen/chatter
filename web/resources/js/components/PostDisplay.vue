@@ -4,16 +4,11 @@ import FormattedDate from './FormattedDate'
 import PostTagBadge from './PostTagBadge'
 import _ from 'lodash'
 import WysiwygEditor from './WysiwygEditor'
+import WysiwygViewer from './WysiwygViewer'
 import component_mixins from '../component_mixins'
 
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css';
-import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js';
-import Viewer from '@toast-ui/editor/viewer';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, PostTagBadge },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge },
     mixins: [component_mixins.course_closed_mixin],
     props: ['post_id'],
     data() {
@@ -24,7 +19,6 @@ export default {
             edit_save_pending: false,
             pin_pending: false,
             lock_pending: false,
-            post_body_viewer: null,
         };
     },
     computed: {
@@ -148,24 +142,7 @@ export default {
     },
     async mounted() {
         await this.$store.dispatch('setCurrentlyViewedPost', {'post_id': this.post_id});
-
-        if (this.$refs.post_body_viewer) {
-            this.post_body_viewer = new Viewer({
-                el: this.$refs.post_body_viewer,
-                initialValue: this.post.body,
-                plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
-            });
-        }
     },
-    updated() {
-        if (this.$refs.post_body_viewer) {
-            this.post_body_viewer = new Viewer({
-                el: this.$refs.post_body_viewer,
-                initialValue: this.post.body,
-                plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
-            });
-        }
-    }
 }
 </script>
 
@@ -242,7 +219,9 @@ export default {
                     </fieldset>
                 </div>
                 <div v-if="!post_editor_visible">
-                    <div class="post-display-body" ref="post_body_viewer"></div>
+                    <div class="post-display-body">
+                        <wysiwyg-viewer v-model="post.body"></wysiwyg-viewer>
+                    </div>
                     <div class="btn-groups">
                         <div class="left">
                             <button

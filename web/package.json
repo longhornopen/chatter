@@ -20,6 +20,7 @@
         "cross-env": "^7.0",
         "css-loader": "^6.2.0",
         "jquery": "^3.2",
+        "katex": "^0.13.13",
         "laravel-echo": "^1.10.0",
         "laravel-mix": "^6.0.27",
         "lodash": "^4.17.19",

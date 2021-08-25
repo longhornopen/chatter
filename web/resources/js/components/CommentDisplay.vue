@@ -2,16 +2,11 @@
 import UserName from './UserName'
 import FormattedDate from './FormattedDate'
 import WysiwygEditor from './WysiwygEditor'
+import WysiwygViewer from './WysiwygViewer'
 import component_mixins from '../component_mixins'
 
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css';
-import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js';
-import Viewer from '@toast-ui/editor/viewer';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         comment: {
@@ -25,7 +20,6 @@ export default {
             edited_comment_body: null,
             reply_editor_visible: false,
             edit_save_pending: false,
-            comment_body_viewer: null,
         };
     },
     computed: {
@@ -141,24 +135,6 @@ export default {
             this.comment_editor_visible = false;
         },
     },
-    mounted() {
-        if (this.$refs.comment_body_viewer) {
-            this.comment_body_viewer = new Viewer({
-                el: this.$refs.comment_body_viewer,
-                initialValue: this.comment.body,
-                plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
-            });
-        }
-    },
-    updated() {
-        if (this.$refs.comment_body_viewer) {
-            this.comment_body_viewer = new Viewer({
-                el: this.$refs.comment_body_viewer,
-                initialValue: this.comment.body,
-                plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
-            });
-        }
-    }
 }
 </script>
 
@@ -252,8 +228,9 @@ export default {
                             <div v-else>
                                 <div
                                     class="comment-body-text"
-                                    ref="comment_body_viewer"
-                                ></div>
+                                >
+                                    <wysiwyg-viewer v-model="comment.body"></wysiwyg-viewer>
+                                </div>
                             </div>
                         </div>
                         <div class="comment-actions">
