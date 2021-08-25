@@ -41,7 +41,7 @@ const state = {
   course_summary: {},
   app_settings: [],
   posts: [],
-  currently_viewed_post: {},
+  currently_viewed_post: {}, // deprecated
   user: {},
 
   user_upvoted_comment_ids: [],
@@ -64,6 +64,7 @@ const state = {
 const getters = {
   course_summary: state => { return state.course_summary },
   posts: state => { return state.posts },
+  post_by_id: (state) => (post_id) => { return state.posts.find(p => p.id == post_id) },
   currently_viewed_post: state => { return state.currently_viewed_post },
   user: state => { return state.user },
 
@@ -175,22 +176,36 @@ const mutations = {
     if (state.currently_viewed_post.id !== payload.post_id) {
       return
     }
-    let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+
+    let comment1 = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+    if (comment1) {
+      comment1.endorsed = endorsed
+    }
+
+    let comment = this.getters.post_by_id(payload.post_id)?.comments.find(c => c.id === payload.comment_id)
     if (comment) {
       comment.endorsed = endorsed
     }
+
   },
   muteComment (state, payload) {
     let muted_by_user_id = payload.muted_by_user_id
     if (state.currently_viewed_post.id !== payload.post_id) {
       return
     }
-    let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+
+    let comment1 = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+    if (comment1) {
+      comment1.muted_by_user_id = muted_by_user_id || null
+    }
+
+    let comment = this.getters.post_by_id(payload.post_id)?.comments.find(c => c.id === payload.comment_id)
     if (comment) {
       comment.muted_by_user_id = muted_by_user_id || null
     }
   },
   addComment (state, payload) {
+    state.posts.find(p => p.id === payload.post_id).comments.push(payload)
     if (state.currently_viewed_post.id === payload.post_id) {
       state.currently_viewed_post.comments.push(payload)
     }

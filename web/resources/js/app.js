@@ -45,7 +45,13 @@ const router = new VueRouter({
   routes: [
     { path: '/', component: SplashPage},
     { path: '/post/new', component: PostCreate},
-    { path: '/post/:post_id', component: PostDisplay, props:true },
+    {
+      path: '/post/:post_id',
+      component: PostDisplay,
+      props: (route) => {
+          const pid = Number.parseInt(route.params.post_id)
+          return { post_id: pid }
+      }},
   ],
 })
 

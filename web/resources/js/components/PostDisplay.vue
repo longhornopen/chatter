@@ -10,7 +10,9 @@ import component_mixins from '../component_mixins'
 export default {
     components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge },
     mixins: [component_mixins.course_closed_mixin],
-    props: ['post_id'],
+    props: {
+        post_id: { type: Number, required: true },
+    },
     data() {
         return {
             comment_editor_visible: false,
@@ -23,16 +25,16 @@ export default {
     },
     computed: {
         post() {
-            return this.$store.getters.currently_viewed_post;
+            return this.$store.getters.post_by_id(this.post_id);
         },
         post_loaded() {
-            return !_.isEmpty(this.$store.getters.currently_viewed_post);
+            return !_.isEmpty(this.post);
         },
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
         },
         can_edit() {
-            return this.$store.getters.currently_viewed_post.author_user_id === this.$store.getters.user.id
+            return this.post.author_user_id === this.$store.getters.user.id
                 && !this.course_is_closed
         },
         can_delete() {
@@ -51,7 +53,7 @@ export default {
             return this.can_edit || this.can_delete;
         },
         add_comment_allowed() {
-            return !this.$store.state.currently_viewed_post.locked
+            return !this.post.locked
                 && !this.course_is_closed
         },
         in_mobile_mode() {
@@ -62,7 +64,7 @@ export default {
         async pin(pinned) {
             this.pin_pending = true;
             await this.$store.dispatch('pinPost', {
-                post_id: this.$store.getters.currently_viewed_post.id,
+                post_id: this.post_id,
                 pinned: pinned
             });
             this.pin_pending = false;
@@ -75,7 +77,7 @@ export default {
             }).then(result => {
                 if (result.isConfirmed) {
                     this.$store.dispatch('deletePost', {
-                        post_id: this.$store.getters.currently_viewed_post.id,
+                        post_id: this.post_id,
                     });
                     this.$router.push('/')
                 }
@@ -84,16 +86,16 @@ export default {
         async lock(locked) {
             this.lock_pending = true;
             await this.$store.dispatch('lockPost', {
-                post_id: this.$store.getters.currently_viewed_post.id,
+                post_id: this.post_id,
                 locked: locked
             });
             this.lock_pending = false;
         },
         post_comments_with_parent_comment_id(pcid) {
-            if (!this.$store.state.currently_viewed_post.comments) {
+            if (!this.post.comments) {
                 return [];
             }
-            return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
+            return this.post.comments.filter(c => c.parent_comment_id === pcid);
         },
         open_post_editor() {
             this.post_editor_visible = true;
@@ -124,7 +126,7 @@ export default {
             this.$refs['postEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
             await this.$store.dispatch('editPost', {
-                post_id: this.$store.getters.currently_viewed_post.id,
+                post_id: this.post_id,
                 body: new_body,
             })
             this.post_editor_visible = false;
