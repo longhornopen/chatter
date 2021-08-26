@@ -251,7 +251,11 @@ const mutations = {
 }
 
 const actions = {
-  async init ({ commit }, user_id) {
+  async init ({ commit }, payload) {
+    axios.interceptors.request.use(function(config) {
+      config.headers['X-Chatter-CourseUserID'] = payload.course_user_id;
+      return config;
+    })
     commit('setPostsLoading', { loading: true })
     let user_response = await axios.get('/api/user/self')
     commit('setUser', { user: user_response.data })

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseUser;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use LonghornOpen\LaravelCelticLTI\LtiTool;
 
 class LtiController extends Controller
 {
-    public function ltiMessage() {
+    public function ltiMessage(Request $request) {
         $tool = new LtiTool();
         $tool->handleRequest();
 
@@ -30,14 +31,11 @@ class LtiController extends Controller
             $course_user->last_launch_at = new Carbon();
             $course_user->save();
 
-            session(
-                [
-                    'course_user_id' => $course_user->id
-                ]
-            );
+            $request->session()->push('course_user_ids', $course_user->id);
 
+            return redirect('/app/'.$course_user->id);
         }
 
-        return redirect('/app');
+        abort(500, "Error: Unknown LTI Launch type");
     }
 }
