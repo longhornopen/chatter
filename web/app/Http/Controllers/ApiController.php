@@ -494,11 +494,7 @@ TAG
 
     protected function getCourseUserFromSession(Request $request, $course_id)
     {
-        $course_user_id = $request->attributes->get('course_user_id');
-        $course_user = CourseUser::find($course_user_id);
-        if ($course_user === null) {
-            throw new LoginExpiredException("Login expired.");
-        }
+        $course_user = $request->attributes->get('course_user');
         if ($course_id!==null && $course_user->course_id != $course_id) {
             throw new LoginExpiredException("Login mismatch.");
         }
