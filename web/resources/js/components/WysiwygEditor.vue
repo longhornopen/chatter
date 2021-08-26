@@ -92,6 +92,9 @@ export default {
             ],
         });
     },
+    destroyed() {
+        this.editor.destroy();
+    },
     methods: {
         hasContents() {
             return this.editor.getMarkdown().trim().length !== 0;

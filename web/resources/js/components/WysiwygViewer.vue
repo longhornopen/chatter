@@ -56,6 +56,9 @@ export default {
             plugins: [latexPlugin, [codeSyntaxHighlight, { highlighter: Prism }]],
         });
     },
+    destroyed() {
+        this.viewer.destroy();
+    },
     methods: {
 
     }
