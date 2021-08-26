@@ -173,9 +173,6 @@ TAG
                         ->where('created_at', '>', $post_last_read->updated_at);
                 }
                 $post->num_unread_comments = $unread_comments->count();
-                if ($post->author_anonymous) {
-                    $post->makeHidden(['author_user_name']);
-                }
                 return $post;
               });
         return $posts;
@@ -204,9 +201,6 @@ TAG
                        || $comment->updated_at > $post_last_read->updated_at;
             $comment->is_unread = $is_unread;
             $comment->num_upvotes = $comment->upvotes->count();
-            if ($comment->author_anonymous) {
-                $comment->makeHidden(['author_user_name']);
-            }
             return $comment;
         });
         $post_last_read->updated_at = new Carbon();
@@ -285,7 +279,9 @@ TAG
                   $post->body
               ));
 
-        return "ok";
+        return Post::where('id',$post->id)
+            ->with(['comments'])
+            ->first();
     }
 
     public function deletePost(Request $request, $course_id, $post_id)
@@ -387,8 +383,7 @@ TAG
                   $comment->id,
               ));
 
-        return Comment::where('id', $comment->id)
-            ->first();
+        return Comment::where('id', $comment->id)->firstOrFail();
     }
 
     public function editComment(Request $request, $course_id, $comment_id)
@@ -413,7 +408,7 @@ TAG
                   $comment->body
               ));
 
-        return "ok";
+        return Comment::where('id', $comment->id)->firstOrFail();
     }
 
     public function endorseComment(Request $request, $course_id, $comment_id, $endorsed)
@@ -435,8 +430,7 @@ TAG
                   (bool)$comment->endorsed,
               ));
 
-        return Comment::where('id', $comment->id)
-            ->first();
+        return Comment::where('id', $comment->id)->firstOrFail();
     }
 
     public function muteComment(Request $request, $course_id, $comment_id, $muted)
@@ -458,8 +452,7 @@ TAG
                   $comment->muted_by_user_id,
               ));
 
-        return Comment::where('id', $comment->id)
-            ->first();
+        return Comment::where('id', $comment->id)->firstOrFail();
     }
 
     public function upvoteComment(Request $request, $course_id, $comment_id, $upvoted)
@@ -484,8 +477,7 @@ TAG
             }
         }
 
-        return Comment::where('id', $comment->id)
-            ->first();
+        return Comment::where('id', $comment->id)->firstOrFail();
     }
 
     /*

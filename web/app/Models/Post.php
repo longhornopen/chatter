@@ -44,4 +44,13 @@ class Post extends Model
     {
         return $this->hasMany(CourseUserPostLastReadFlag::class);
     }
+
+    public function toArray(): array
+    {
+        if ($this->author_anonymous) {
+            $this->makeHidden(['author_user_name']);
+        }
+
+        return parent::toArray();
+    }
 }
