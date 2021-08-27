@@ -2,7 +2,7 @@
     <div>
         <div ref="editor"><div></div></div>
         <b-modal ref="math-help-modal" title="Math/LaTeX help" ok-only>
-            <p>To enter math in LaTeX form, surround it with <code>$$latex</code> and <code>$$</code>.</p>
+            <p>To enter math in LaTeX form, surround it with <code>$$latex</code> and <code>$$</code> on separate lines.</p>
             <h4>Example</h4>
             <pre style="border:solid 1px black; padding: 10px; margin:10px;" ref="latex-example">
 $$latex
