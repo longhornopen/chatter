@@ -253,7 +253,7 @@ const mutations = {
 const actions = {
   async init ({ commit }, payload) {
     axios.interceptors.request.use(function(config) {
-      config.headers['X-Chatter-CourseUserID'] = payload.course_user_id;
+      config.headers['X-Chatter-CourseID'] = payload.course_id;
       return config;
     })
     commit('setPostsLoading', { loading: true })

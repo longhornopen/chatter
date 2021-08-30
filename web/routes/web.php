@@ -18,9 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/app/{course_user_id}', function($course_user_id) {
+Route::get('/course/{course_id}', function($course_id) {
     return view('chatter_home', [
-        'course_user_id'=>$course_user_id
+        'course_id'=>$course_id
     ]);
 });
 
@@ -32,8 +32,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // For local development, it's useful to be able to run this without a full LMS.
 // Allow impersonating an existing user ID.
 if (env('APP_ALLOW_IMPERSONATION')) {
-    Route::get('/demo/impersonate/{id}', function(Request $request, $id) {
-        $request->session()->push('course_user_ids', $id);
-        return 'Impersonating user id #'.$id.'.  <a href="/app/'.$id.'">Go to app.</a>';
+    Route::get('/demo/impersonate/{id}', function(Request $request, $course_user_id) {
+        $cu = \DB::select('SELECT * FROM course_users where id=?', [$course_user_id])[0];
+        $logins = $request->session()->get('course_users', []);
+        $logins[$cu->course_id] = $cu->id;
+        $request->session()->put('course_users', $logins);
+        return 'Impersonating user id #'.$cu->id.'.  <a href="/course/'.$cu->course_id.'">Go to app.</a>';
     });
 }

@@ -18,18 +18,17 @@ class AddLoginAttributes
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->session()->has('course_user_ids')) {
+        if (!$request->session()->has('course_users')) {
             throw new LoginExpiredException('Login expired.');
         }
-        $request->attributes->set('course_user_ids', $request->session()->get('course_user_ids'));
-        $course_user_ids = $request->attributes->get('course_user_ids');
-        $request_course_user_id = $request->header('X-Chatter-CourseUserID');
+        $logins = $request->session()->get('course_users');
+        $request_course_id = $request->header('X-Chatter-CourseID');
 
-        if (!in_array($request_course_user_id, array_values($course_user_ids))) {
+        if (!array_key_exists($request_course_id, $logins)) {
             throw new LoginExpiredException("Login mismatch.");
         }
 
-        $course_user = CourseUser::find($request_course_user_id);
+        $course_user = CourseUser::find($logins[$request_course_id]);
         if ($course_user === null) {
             throw new LoginExpiredException("Login expired.");
         }

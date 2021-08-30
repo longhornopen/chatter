@@ -31,9 +31,11 @@ class LtiController extends Controller
             $course_user->last_launch_at = new Carbon();
             $course_user->save();
 
-            $request->session()->push('course_user_ids', $course_user->id);
+            $logins = $request->session()->get('course_users', []);
+            $logins[$course_user->course_id] = $course_user->id;
+            $request->session()->put('course_users', $logins);
 
-            return redirect('/app/'.$course_user->id);
+            return redirect('/course/'.$course_user->course_id);
         }
 
         abort(500, "Error: Unknown LTI Launch type");

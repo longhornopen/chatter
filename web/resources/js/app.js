@@ -55,7 +55,7 @@ const router = new VueRouter({
   ],
 })
 
-store.dispatch('init', {course_user_id:window.course_user_id}).then(()=> {
+store.dispatch('init', {course_id:window.course_id}).then(()=> {
   const app = new Vue({
     el: '#app',
     store: store,
