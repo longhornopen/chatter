@@ -20,6 +20,8 @@ export default {
             edited_comment_body: null,
             reply_editor_visible: false,
             edit_save_pending: false,
+            endorse_promise_pending: false,
+            upvote_promise_pending: false,
         };
     },
     computed: {
@@ -63,21 +65,30 @@ export default {
         }
     },
     methods: {
-        endorse(endorse_action) {
-            this.$store.dispatch('endorseComment', {
-                comment_id: this.comment.id,
-                endorsed: endorse_action
-            })
+        async endorse(endorse_action) {
+            this.endorse_promise_pending = true;
+            try {
+                let store_promise = this.$store.dispatch('endorseComment', {
+                    comment_id: this.comment.id,
+                    endorsed: endorse_action
+                })
+                let mintimer_promise = new Promise((resolve, reject) => (setTimeout(() => resolve(true), 1000)))
+                await Promise.all([store_promise, mintimer_promise])
+            } finally {
+                this.endorse_promise_pending = false;
+            }
         },
-        upvote(upvoted) {
-            if (upvoted) {
-                this.$store.dispatch('addCommentUpvote', {
+        async upvote(upvoted) {
+            this.upvote_promise_pending = true;
+            try {
+                let action_name = upvoted ? 'addCommentUpvote' : 'removeCommentUpvote';
+                let store_promise =  this.$store.dispatch(action_name, {
                     comment_id: this.comment.id,
                 })
-            } else {
-                this.$store.dispatch('removeCommentUpvote', {
-                    comment_id: this.comment.id,
-                })
+                let mintimer_promise = new Promise((resolve, reject) => (setTimeout(() => resolve(true), 1000)))
+                await Promise.all([store_promise, mintimer_promise])
+            } finally {
+                this.upvote_promise_pending = false;
             }
         },
         toggle_reply_editor: function(shown) {
@@ -235,36 +246,44 @@ export default {
                         </div>
                         <div class="comment-actions">
                             <div class="left-actions">
-                                <div
-                                    class="endorse-action"
+                                <b-button
+                                    class="no-shadow endorse-action"
                                     v-if="can_endorse"
                                     @click="endorse(!comment_is_endorsed)"
+                                    ref="endorse_button"
+                                    :class="comment_is_endorsed ? 'action-active-secondary' : ''"
+                                    :disabled="endorse_promise_pending"
                                 >
                                     <font-awesome-icon
                                         icon="award"
-                                        class="action-icon"
-                                        :class="comment_is_endorsed ? 'action-icon-active-secondary' : ''"
+                                        v-if="!endorse_promise_pending"
                                     />
-                                    <div
-                                        :class="comment_is_endorsed ? 'action-active-secondary' : ''">
+                                    <b-spinner small
+                                        v-if="endorse_promise_pending"
+                                    ></b-spinner>
+                                    <span class="left-action-button-text">
                                         {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
-                                    </div>
-                                </div>
-                                <div
-                                    class="upvote-action"
+                                    </span>
+                                </b-button>
+                                <b-button
+                                    class="no-shadow upvote-action"
                                     v-if="can_upvote"
                                     @click="upvote(!comment_is_upvoted_by_user)"
+                                    ref="upvote_button"
+                                    :class="comment_is_upvoted_by_user ? 'action-active-secondary' : ''"
+                                    :disabled="upvote_promise_pending"
                                 >
                                     <font-awesome-icon
                                         icon="arrow-circle-up"
-                                        class="action-icon"
-                                        :class="comment_is_upvoted_by_user ? 'action-icon-active-secondary' : ''"/>
-                                    <div
-                                        :class="comment_is_upvoted_by_user ? 'action-icon-active-secondary' : ''"
-                                    >
+                                        v-if="!upvote_promise_pending"
+                                    />
+                                    <b-spinner small
+                                               v-if="upvote_promise_pending"
+                                    ></b-spinner>
+                                    <span class="left-action-button-text">
                                         {{comment_is_upvoted_by_user ? 'Upvoted' : 'Upvote'}}
-                                    </div>
-                                </div>
+                                    </span>
+                                </b-button>
                             </div>
                             <div class="right-actions">
                                 <div
@@ -302,4 +321,114 @@ export default {
 <style lang="scss" scoped>
 @import '../../sass/_variables.scss';
 
+.comment-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.comment-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .ellipsis {
+        display: flex;
+        align-items: baseline;
+        border: none;
+    }
+}
+
+.comment-metadata {
+    font-style: italic;
+    font-size: 80%;
+    display: flex;
+    align-items: center;
+    div {
+        margin: 0 7px 0 0;
+    }
+    .endorsed {
+        color: $secondary;
+    }
+    .upvotes {
+        color: $tertiary;
+    }
+}
+
+.unread-dot {
+    width: 7px;
+    height: 7px;
+    background-color: $primary;
+    opacity: 70%;
+    border-radius: 5px;
+}
+
+.comment-body-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+// the gray comment bubble
+.comment-body {
+    background-color: $commentgray;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 0 5px 0;
+    position: relative;
+    width: 100%;
+}
+
+.comment-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 10px 0;
+    .left-actions, .right-actions {
+        display: flex;
+        .btn {
+            background-color: transparent;
+            border-color: transparent;
+            margin-right: 7px;
+            padding: 3px 6px;
+            color: $middlegray;
+            .left-action-button-text {
+                margin-left: 5px;
+            }
+        }
+        .btn.action-active-secondary {
+            color: $secondary;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+    }
+    .right-actions div {
+        margin-right: 0;
+        color: $tertiary;
+    }
+}
+
+.comment-body-text {
+    padding-right: 30px;
+}
+.comment-body-text p:last-child {
+    margin-bottom: 0;
+}
+.reply-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+.single-comment {
+    .row {
+        .col-11 {
+            padding-left: 0;
+        }
+    }
+    .comment-row {
+        display: flex;
+        margin: 0;
+    }
+}
 </style>

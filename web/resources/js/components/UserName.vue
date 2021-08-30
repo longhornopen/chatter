@@ -41,13 +41,14 @@ export default {
 <template>
     <span>
         {{display_user_name}}
-        <span class="anon" v-if="show_deanon_button">
+        <span class="anon" v-if="show_deanon_button"
+              title="Click to show this person's name"
+              @click.prevent="handle_deanon_click"
+        >
             <font-awesome-icon
                 icon="caret-square-right"
                 class="icon"
-                @click.prevent="handle_deanon_click"
                 size="lg"
-                title="Click to show this person's name"
                 v-if="this.temp_shown === false"/>
             <span :class="this.deanon_user_name === '' ? 'd-none' : 'deanon-label'">{{ deanon_label }}</span>
         </span>
