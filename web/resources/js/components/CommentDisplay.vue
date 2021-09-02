@@ -161,6 +161,7 @@ export default {
                             :name="comment.author_user_name"
                             :anonymous="comment.author_anonymous"
                             :user-id="comment.author_user_id"
+                            :role="comment.author_user_role"
                         ></user-name>
                         <formatted-date
                             :date-iso="comment.created_at"

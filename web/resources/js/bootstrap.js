@@ -52,6 +52,7 @@ import {
   faTimes,
   faSearch,
   faSearchPlus,
+  faChalkboardTeacher,
   } from '@fortawesome/free-solid-svg-icons'
 library.add(
   faCog,
@@ -74,7 +75,8 @@ library.add(
   faTimes,
   faSearch,
   faSearchPlus,
-  );
+  faChalkboardTeacher,
+);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;

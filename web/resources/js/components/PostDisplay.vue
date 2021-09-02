@@ -170,6 +170,7 @@ export default {
                             :name="post.author_user_name"
                             :anonymous="post.author_anonymous"
                             :user-id="post.author_user_id"
+                            :role="post.author_user_role"
                         ></user-name>
                         <formatted-date
                             :date-iso="post.created_at"
