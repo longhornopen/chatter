@@ -117,6 +117,7 @@ export default {
                 >
                     <b-input-group class="input-group">
                         <b-form-input
+                            class="search-input"
                             placeholder="Search posts..."
                             autocomplete="off"
                             v-model="search_term"
@@ -234,6 +235,7 @@ export default {
             border: none;
             border-radius: 6px;
             margin-right: 6px;
+            white-space: nowrap;
         }
         .btn-search-submit:hover {
             background-color: $primary;
