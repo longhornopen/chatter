@@ -24,6 +24,6 @@ RUN apt-get update \
 RUN docker-php-ext-install xml opcache pdo_mysql
 
 COPY --from=npmbuild /var/www/html /var/www/html
-RUN chmod +w -R /var/www/html/bootstrap/cache
-RUN chmod +w -R /var/www/html/storage
+RUN chmod a+w -R /var/www/html/bootstrap/cache
+RUN chmod a+w -R /var/www/html/storage
 RUN chown -R www-data:www-data /var/www/html

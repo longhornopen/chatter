@@ -14,9 +14,9 @@
         <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     </head>
-    <div class="app-title-bar large">
-        <img class="app-logo large" src="/images/logo/logo.svg" alt="Chatter logo">
-        <span class="app-title large">CHATTER</span>
+    <div class="app-title-bar large" style=" margin: 10px 20px; display: flex; align-items: center;">
+        <img class="app-logo large" src="/images/logo/logo.svg" width="80" height="80" alt="Chatter logo">
+        <span class="app-title large" style="font-size: xxx-large; font-weight: 900;">CHATTER</span>
     </div>
     <div class="color-bar"></div>
     <div class="home-content">
