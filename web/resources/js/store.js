@@ -329,6 +329,7 @@ const actions = {
   async editPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id, payload)
     commit('editPost', { post_id: payload.post_id, body: payload.body })
+    return response.data
   },
   async pinPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id + '/pin/' + payload.pinned)
@@ -366,6 +367,7 @@ const actions = {
   async editComment ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id, payload)
     commit('editComment', { comment_id: payload.comment_id, body: payload.body })
+    return response.data
   },
   async addCommentUpvote ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id + '/upvote/true', payload)

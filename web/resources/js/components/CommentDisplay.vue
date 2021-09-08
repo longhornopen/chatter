@@ -137,10 +137,11 @@ export default {
             this.edited_comment_body = this.$refs['commentEditor'].getContents()
             this.$refs['commentEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
-            await this.$store.dispatch('editComment', {
+            let comment = await this.$store.dispatch('editComment', {
                 comment_id: this.comment.id,
                 body: this.edited_comment_body,
             })
+            this.comment = comment
             this.edit_save_pending = false;
             this.edited_comment_body = null;
             this.comment_editor_visible = false;
@@ -291,8 +292,7 @@ export default {
                                     class="reply-action"
                                     @click="toggle_reply_editor(!reply_editor_visible)"
                                     v-if="add_comment_allowed">
-                                    <font-awesome-icon icon="comment-alt" class="icon"/>
-                                    <div>Reply</div>
+                                    <font-awesome-icon icon="comment-alt" class="icon"/> Reply
                                 </div>
                             </div>
                         </div>
