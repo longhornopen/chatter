@@ -59,7 +59,11 @@ class SendDigestMails extends Command
             }
             $mail = new ActivityDigest($course_user);
             if ($mail->hasContents()) {
-                Mail::to($course_user->email)->send($mail);
+                try {
+                    Mail::to($course_user->email)->send($mail);
+                } catch (\Throwable $e) {
+                    Log::error($e);
+                }
             }
             $course_user->previous_mail_digest_at = $mail->period_end;
             $course_user->save();
