@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Chatter update for: {{$course->name}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,6 +35,9 @@
             </li>
         @endforeach
     </ul>
+    <div style="font-size: 80%;">
+        Thanks for using Chatter!  If you'd like to stop receiving these emails, <a href="{{$unsub_url}}">click here to unsubscribe</a>.
+    </div>
 </div>
 </body>
 </html>

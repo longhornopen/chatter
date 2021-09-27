@@ -18,11 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/course/{course_id}', function($course_id) {
-    return view('chatter_home', [
-        'course_id'=>$course_id
-    ]);
-});
+Route::get('/course/{course_id}', [\App\Http\Controllers\ContentController::class, 'getHome']);
+Route::get('/course/{course_id}/unsubscribe', [\App\Http\Controllers\ContentController::class, 'getUnsubscribe']);
 
 //Auth::routes();
 Route::post('/lti', [App\Http\Controllers\LtiController::class, 'ltiMessage']);

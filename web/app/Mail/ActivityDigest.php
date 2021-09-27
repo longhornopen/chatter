@@ -17,6 +17,7 @@ class ActivityDigest extends Mailable
     public $posts;
     public $period_begin;
     public $period_end;
+    public $unsub_url;
 
     /**
      * Create a new message instance.
@@ -31,6 +32,9 @@ class ActivityDigest extends Mailable
             $this->period_begin = Carbon::createFromDate(2020,1,1);
         }
         $this->period_end = new Carbon();
+        $token = $course_user->createToken('unsubscribe', ['digest:unsubscribe'])->plainTextToken;
+        $this->unsub_url = env('APP_URL') . '/course/' . $course_user->course_id
+            . '/unsubscribe?user=' . $course_user->id . '&token=' . $token;
         $this->computePosts();
     }
 
@@ -44,6 +48,7 @@ class ActivityDigest extends Mailable
         return $this->view('emails.activity_digest', [
             'course'=>$this->course_user->course,
             'posts'=>$this->posts,
+            'unsubscribe_url'=>$this->unsub_url,
         ]);
     }
 
