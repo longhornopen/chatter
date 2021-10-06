@@ -15,7 +15,16 @@ class ContentController extends Controller
         ]);
     }
 
-    public function getUnsubscribe(Request $request, $course_id)
+    public function getUnsubscribeConfirm(Request $request, $course_id)
+    {
+        return view('unsub_confirm', [
+            'course_id' => $course_id,
+            'user' => $request->get('user'),
+            'token' => $request->get('token')
+        ]);
+    }
+
+    public function postUnsubscribe(Request $request, $course_id)
     {
         $course_user = CourseUser::findOrFail($request->get('user'));
         $token = PersonalAccessToken::findToken($request->get('token'));

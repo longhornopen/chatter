@@ -19,7 +19,8 @@ Route::get('/', function () {
 });
 
 Route::get('/course/{course_id}', [\App\Http\Controllers\ContentController::class, 'getHome']);
-Route::get('/course/{course_id}/unsubscribe', [\App\Http\Controllers\ContentController::class, 'getUnsubscribe']);
+Route::get('/course/{course_id}/unsubscribe', [\App\Http\Controllers\ContentController::class, 'getUnsubscribeConfirm']);
+Route::post('/course/{course_id}/unsubscribe_complete', [\App\Http\Controllers\ContentController::class, 'postUnsubscribe']);
 
 //Auth::routes();
 Route::post('/lti', [App\Http\Controllers\LtiController::class, 'ltiMessage']);
