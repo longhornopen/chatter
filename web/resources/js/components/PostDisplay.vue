@@ -175,9 +175,9 @@ export default {
                         <formatted-date
                             :date-iso="post.created_at"
                         ></formatted-date>
-                        <span v-if="post.created_at !== post.updated_at">
+                        <span v-if="post.edited_at">
                         <i style="font-size:90%;">
-                            (Edited <formatted-date :date-iso="post.updated_at"></formatted-date>)
+                            (Edited)
                         </i>
                         </span>
                     </div>

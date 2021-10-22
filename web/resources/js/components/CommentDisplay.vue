@@ -167,6 +167,11 @@ export default {
                         <formatted-date
                             :date-iso="comment.created_at"
                         ></formatted-date>
+                        <span v-if="comment.edited_at">
+                        <i style="font-size:90%;">
+                            (Edited)
+                        </i>
+                        </span>
                     </div>
                     <div class="endorse-icon" v-if="comment_is_endorsed">
                         <font-awesome-icon

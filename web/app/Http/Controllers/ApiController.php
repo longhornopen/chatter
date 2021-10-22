@@ -271,6 +271,7 @@ TAG
             }
         }
         $post->tag = $request->json('tag');
+        $post->edited_at = new Carbon();
         $post->save();
 
         broadcast(new PostEdited(
