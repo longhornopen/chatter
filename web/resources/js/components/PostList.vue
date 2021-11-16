@@ -19,9 +19,14 @@ export default {
                 && this.$store.getters.filtered_posts.length === 0;
         },
         posts() {
-            return this.$store.getters.search_results_available
+            let posts = this.$store.getters.search_results_available
                 ? this.$store.getters.filtered_posts
                 : this.$store.getters.posts;
+            return posts.sort((a,b) => {
+                if (a.pinned && !b.pinned) { return -1; }
+                if (b.pinned && !a.pinned) { return 1; }
+                return 0;
+            });
         },
         posts_loaded() {
             return !this.$store.getters.posts_loading;
@@ -62,12 +67,15 @@ export default {
         poster_name(post) {
             return post.author_anonymous ? '(anonymous)' : post.author_user_name;
         },
-        post_style(post) {
-            // FIXME make this a class instead of a style
-            if (this.currently_viewed_post_id === post.id) {
-                return "background-color: #EEEEEE"
+        post_class(post) {
+            let css_class = "";
+            if (post.pinned) {
+                css_class += " pinned";
             }
-            return "";
+            if (this.currently_viewed_post_id === post.id) {
+                css_class += " selected";
+            }
+            return css_class;
         },
     },
 }
@@ -84,15 +92,6 @@ export default {
                            @click.prevent="set_post_sort_order('newest')"
                         >
                             All
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           :class="post_order==='pinned'?'active':''"
-                           href="#"
-                           @click.prevent="set_post_sort_order('pinned')"
-                        >
-                            Pinned
                         </a>
                     </li>
                     <li class="nav-item">
@@ -115,6 +114,13 @@ export default {
                     </li>
                 </ul>
             </div>
+        <!--
+        <div>
+            <div>
+                New posts .. click here to refresh
+            </div>
+        </div>
+        -->
         <div class="app-post-list-body">
             <div v-if="!posts_loaded" class="d-flex justify-content-center mt-5">
                 <div class="spinner-border" role="status">
@@ -125,7 +131,7 @@ export default {
                 class="post"
                 v-if="posts_loaded"
                 v-for="post in posts"
-                :style="post_style(post)">
+                :class="post_class(post)">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
                         <div class="post-misc-info">
@@ -135,14 +141,6 @@ export default {
                         <h5 class="post-title">
                             <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
                         </h5>
-                        <!--
-                        // Removing this until we find a way of effectively producing a one-line summary of
-                        // a post body (which may contain images, formulas, links, etc.  So it's not as simple
-                        // as showing the first N characters of the post body.
-                        <div>
-                            {{ post.body }}
-                        </div>
-                        -->
                     </div>
                     <div class="post-btn-group">
                         <div>
@@ -156,12 +154,12 @@ export default {
                             icon="lock" />
                         </div>
                         <div v-if="post.num_unread_comments === 0">
-                            <div class="btn-group" role="group"     aria-label="Basic example">
+                            <div class="btn-group" role="group" :aria-label="post.num_comments + 'comments'">
                                 <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
                             </div>
                         </div>
                         <div v-if="post.num_unread_comments > 0">
-                            <div class="btn-group" role="group"     aria-label="Basic example">
+                            <div class="btn-group" role="group" :aria-label="post.num_unread_comments + ' unread comments'">
                                 <button type="button" class="btn btn-primary badge-unread" :title="post.num_unread_comments + ' unread comments'">{{ post.num_unread_comments }}</button>
                                 <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
                             </div>
@@ -189,8 +187,8 @@ export default {
 .app-post-list {
     background-color: $lightgray;
     padding: $post-list-padding;
-    height: 100%;
     padding-bottom: $write-post-btn-height;
+    height: 100%;
     position: relative;
     .nav-tabs {
         display: flex;
@@ -231,7 +229,6 @@ export default {
     .btn-post-topic:hover {
         background-color: darken($primary, $darken-amount);
     }
-
     .app-post-list-body {
         background-color: $body-bg;
         height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1920)} - #{$post-list-padding} - #{$write-post-btn-height});
@@ -269,6 +266,12 @@ export default {
                     background-color: $grayvariation;
                 }
             }
+        }
+        .post.pinned {
+            background-color: rgba($post-pinned-background-color, $post-pinned-background-opacity);
+        }
+        .post.selected {
+            background-color: #EEEEEE;
         }
         .no-search-results {
             display: flex;
@@ -310,6 +313,5 @@ export default {
             height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 384)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
         }
     }
-
 }
 </style>

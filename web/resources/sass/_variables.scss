@@ -19,6 +19,9 @@ $grayvariation: #636363;
 $middlegray: #aeabab;
 $commentgray: #e0e0e0;
 
+$post-pinned-background-color: #4B5D6D;
+$post-pinned-background-opacity: 0.15;
+
 // darken color amount on button hover
 $darken-amount: 10%;
 
@@ -40,7 +43,7 @@ $post-list-padding: 10px;
 $write-post-btn-height: 37px;
 $course-name-height: 70px; // only starting max-width 1077px
 
-// map for tabs height 
+// map for tabs height
 $tabs-height: (
     1920: 39px,
     1152: 62px,
