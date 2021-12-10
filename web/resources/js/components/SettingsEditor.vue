@@ -7,7 +7,7 @@ export default {
 
             course: null,
 
-            edited_course_user_mail_digest_frequency: null,
+            edited_course_user_mail_digest_frequency_minutes: null,
             course_user_mail_digest_frequency_save_state: '',
 
             course_close_datetime: null,
@@ -35,14 +35,14 @@ export default {
         has_feature_mail_activity_digest() {
             return this.$store.state.app_settings.feature_flags.includes('mail_activity_digests')
         },
-        course_user_mail_digest_frequency() {
-            return this.$store.getters.user.mail_digest_frequency;
+        course_user_mail_digest_frequency_minutes() {
+            return this.$store.getters.user.mail_digest_frequency_minutes;
         },
     },
     methods: {
-        async save_course_user_mail_digest_frequency() {
+        async save_course_user_mail_digest_frequency_minutes() {
             this.course_user_mail_digest_frequency_save_state = 'pending'
-            await this.$store.dispatch('updateCourseUser', {mail_digest_frequency: this.edited_course_user_mail_digest_frequency})
+            await this.$store.dispatch('updateCourseUser', {mail_digest_frequency_minutes: this.edited_course_user_mail_digest_frequency_minutes})
             this.$bvToast.toast('Email frequency saved.', {title:'Save successful', autoHideDelay: 5000})
             this.course_user_mail_digest_frequency_save_state = ''
         },
@@ -98,7 +98,7 @@ export default {
         this.course = await this.$store.dispatch('getCourse')
         this.course_close_datetime = this.course.close_date ? new Date(this.course.close_date) : null
         this.course_post_tags = this.course.post_tags ?? []
-        this.edited_course_user_mail_digest_frequency = this.course_user_mail_digest_frequency;
+        this.edited_course_user_mail_digest_frequency_minutes = this.course_user_mail_digest_frequency_minutes;
     }
 }
 </script>
@@ -176,14 +176,15 @@ export default {
                 <b-form>
                     <b-form-group label="Receive an update of new activity by email:" v-slot="{ ariaDescribedby }">
                         <b-form-radio-group
-                            v-model="edited_course_user_mail_digest_frequency"
+                            v-model="edited_course_user_mail_digest_frequency_minutes"
                             :aria-describedby="ariaDescribedby"
                             name="mail-digest-frequency"
                             @change="course_user_mail_digest_frequency_save_state='enabled'"
                         >
                             <b-form-radio value="-1">Never</b-form-radio>
-                            <b-form-radio value="2">Every two hours</b-form-radio>
-                            <b-form-radio value="24">Every day</b-form-radio>
+                            <b-form-radio value="1440">Rarely <i>(every day)</i></b-form-radio>
+                            <b-form-radio value="120">Often <i>(every two hours)</i></b-form-radio>
+                            <b-form-radio value="15">As soon as possible <i>(every fifteen minutes)</i></b-form-radio>
                         </b-form-radio-group>
                     </b-form-group>
                 </b-form>
@@ -191,7 +192,7 @@ export default {
                 <b-button
                     variant="primary"
                     :disabled="course_user_mail_digest_frequency_save_state!=='enabled'"
-                    @click="save_course_user_mail_digest_frequency()"
+                    @click="save_course_user_mail_digest_frequency_minutes()"
                 ><font-awesome-icon v-if="course_user_mail_digest_frequency_save_state==='pending'" icon="spinner" spin /> Save changes</b-button>
             </b-card>
         </div>
