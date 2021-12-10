@@ -64,7 +64,7 @@ const state = {
 const getters = {
   course_summary: state => { return state.course_summary },
   posts: state => { return state.posts },
-  post_by_id: (state) => (post_id) => { return state.posts.find(p => p.id == post_id) },
+  post_by_id: (state) => (post_id) => { return state.posts.find(p => p.id == post_id) }, // FIXME deprecate this getter
   currently_viewed_post: state => { return state.currently_viewed_post },
   user: state => { return state.user },
 

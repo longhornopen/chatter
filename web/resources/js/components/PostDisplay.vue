@@ -25,7 +25,7 @@ export default {
     },
     computed: {
         post() {
-            return this.$store.getters.post_by_id(this.post_id);
+            return this.$store.state.currently_viewed_post
         },
         post_loaded() {
             return !_.isEmpty(this.post);
@@ -223,7 +223,7 @@ export default {
                 </div>
                 <div v-if="!post_editor_visible">
                     <div class="post-display-body">
-                        <wysiwyg-viewer v-model="post.body"></wysiwyg-viewer>
+                        <wysiwyg-viewer v-model="post.body" :key="'postbody_'+post.id"></wysiwyg-viewer>
                     </div>
                     <div class="btn-groups">
                         <div class="left">
@@ -260,6 +260,7 @@ export default {
             <div class="comments">
                 <div v-for="comment in post_comments_with_parent_comment_id(null)">
                     <comment-display
+                        :key="comment.id"
                         :comment="comment"
                     ></comment-display>
                 </div>
