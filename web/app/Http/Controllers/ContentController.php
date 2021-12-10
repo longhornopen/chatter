@@ -33,7 +33,7 @@ class ContentController extends Controller
             $token->tokenable_id===$course_user->id &&
             $token->can('digest:unsubscribe')) {
 
-            $course_user->mail_digest_frequency = -1;
+            $course_user->mail_digest_frequency_minutes = -1;
             $course_user->save();
 
             return view('unsub_result_success', ['course'=>$course_user->course]);

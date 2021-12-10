@@ -34,7 +34,7 @@ class ApiController extends Controller
         $course_user_id = $course_user->id;
 
         return CourseUser::where('id',$course_user_id)
-            ->select(['id','course_id','name','email','role','mail_digest_frequency'])
+            ->select(['id','course_id','name','email','role','mail_digest_frequency_minutes'])
             ->first();
     }
 
@@ -55,8 +55,8 @@ class ApiController extends Controller
             throw new UnauthorizedException("Can't edit a user other than yourself");
         }
 
-        if ($request->has('mail_digest_frequency')) {
-            $course_user->mail_digest_frequency = $request->input('mail_digest_frequency');
+        if ($request->has('mail_digest_frequency_minutes')) {
+            $course_user->mail_digest_frequency_minutes = $request->input('mail_digest_frequency_minutes');
         }
         $course_user->save();
         return $course_user;
