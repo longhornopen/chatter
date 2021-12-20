@@ -160,6 +160,7 @@ TAG
             ->get()
             ->map(function($post) use ($course_user_id) {
                 $post->makeHidden('readComments');
+                $post->makeHidden('comments'); // FIXME would be better to not get this from the DB in the first place...
                 $post->makeHidden('body'); // FIXME would be better to not get this from the DB in the first place...
                 $post->num_comments = $post->comments->count();
                 $post_last_read = CourseUserPostLastReadFlag
