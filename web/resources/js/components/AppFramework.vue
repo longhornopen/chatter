@@ -40,7 +40,7 @@ export default {
         if (this.course_is_closed) {
             this.$bvModal.show('course_closed');
         }
-        let alert_stale_minutes = 1;
+        let alert_stale_minutes = 60;
         setTimeout(() => this.alert_stale(), alert_stale_minutes*60*1000);
     }
 }
