@@ -7,8 +7,6 @@ networks:
 services:
   web:
     build: .
-    networks:
-      - frontend
     volumes:
       - ./web:/var/www/html
     environment:
@@ -17,5 +15,3 @@ services:
       - "database:database"
   database:
     image: mysql:8
-    networks:
-      - backend
