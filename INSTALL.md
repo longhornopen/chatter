@@ -9,7 +9,7 @@ Chatter is a fairly straightforward Laravel 8 (https://laravel.com/docs/8.x) app
 
 ### Manual installation
 * Clone this Github repo.
-* Install PHP (7.4 or higher) and Composer (https://getcomposer.org).
+* Install PHP (8.0 or higher) and Composer (https://getcomposer.org).
 * Install NPM.
 * `cd web`, `composer install`, `npm install`, `npm run production`
 * Supply your environment variables by adding a `.env` file. `.env.example` describes the environment variables that you'll need to give.
