@@ -11,6 +11,20 @@ export default {
 
         };
     },
+    methods: {
+        alert_stale() {
+            this.$swal({
+                'html': 'Chatter has been open for a while, and you may not be looking at the most recent posts.  Click "OK" to refresh.',
+                'showCancelButton': true,
+            }).then(resolution => {
+                if (resolution.isConfirmed) {
+                    let homepage = new URL(document.location.href);
+                    homepage.hash = "";
+                    document.location.href = homepage.href;
+                }
+            })
+        }
+    },
     computed: {
         show_post_list() {
             return this.$store.getters.show_post_list
@@ -26,6 +40,8 @@ export default {
         if (this.course_is_closed) {
             this.$bvModal.show('course_closed');
         }
+        let alert_stale_minutes = 1;
+        setTimeout(() => this.alert_stale(), alert_stale_minutes*60*1000);
     }
 }
 </script>

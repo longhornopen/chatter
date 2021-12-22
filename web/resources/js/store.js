@@ -64,7 +64,6 @@ const state = {
 const getters = {
   course_summary: state => { return state.course_summary },
   posts: state => { return state.posts },
-  post_by_id: (state) => (post_id) => { return state.posts.find(p => p.id == post_id) }, // FIXME deprecate this getter
   currently_viewed_post: state => { return state.currently_viewed_post },
   user: state => { return state.user },
 
@@ -144,7 +143,6 @@ const mutations = {
     let post_id = payload.post_id
     let body = payload.body
 
-    state.posts.find(p => p.id === post_id).body = body
     if (state.currently_viewed_post.id === post_id) {
       state.currently_viewed_post.body = body
     }
@@ -181,12 +179,6 @@ const mutations = {
     if (comment1) {
       comment1.endorsed = endorsed
     }
-
-    let comment = this.getters.post_by_id(payload.post_id)?.comments.find(c => c.id === payload.comment_id)
-    if (comment) {
-      comment.endorsed = endorsed
-    }
-
   },
   muteComment (state, payload) {
     let muted_by_user_id = payload.muted_by_user_id
@@ -198,14 +190,9 @@ const mutations = {
     if (comment1) {
       comment1.muted_by_user_id = muted_by_user_id || null
     }
-
-    let comment = this.getters.post_by_id(payload.post_id)?.comments.find(c => c.id === payload.comment_id)
-    if (comment) {
-      comment.muted_by_user_id = muted_by_user_id || null
-    }
   },
   addComment (state, payload) {
-    state.posts.find(p => p.id === payload.post_id).comments.push(payload)
+    state.posts.find(p => p.id === payload.post_id).num_comments++;
     if (state.currently_viewed_post.id === payload.post_id) {
       state.currently_viewed_post.comments.push(payload)
     }
@@ -229,15 +216,6 @@ const mutations = {
     let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
     if (comment) {
       comment.num_upvotes = comment.num_upvotes - 1
-    }
-  },
-  incrementUnreadCommentCount (state, payload) {
-    let post = state.posts.find(p => p.id === payload.post_id)
-    if (post) {
-      post.num_comments += 1
-      if (post.id !== state.currently_viewed_post.id) {
-        post.num_unread_comments += 1
-      }
     }
   },
   switchScreen (state, payload) {
@@ -267,24 +245,6 @@ const actions = {
     commit('setCourseSummary', course_response.data)
     commit('setPosts', { posts: posts_response.data })
     commit('setPostsLoading', { loading: false })
-    if (window.Echo) {
-      window.Echo.channel('course.' + course_id)
-        .listen('PostLockedChanged', (e) => {
-          commit('lockPost', { post_id: e.post_id, locked: e.locked })
-        }).listen('PostPinnedChanged', (e) => {
-          commit('pinPost', { post_id: e.post_id, pinned: e.pinned })
-        }).listen('PostDeleted', (e) => {
-          commit('deletePost', { post_id: e.post_id })
-        }).listen('CommentAdded', (e) => {
-          commit('incrementUnreadCommentCount', { post_id: e.post_id, comment_id: e.comment_id })
-        }).listen('CommentEndorsedChanged', (e) => {
-          commit('endorseComment', { comment_id: e.comment_id, post_id: e.post_id, endorsed: e.endorsed })
-        }).listen('CommentMutedChanged', (e) => {
-          commit('muteComment', { comment_id: e.comment_id, post_id: e.post_id, muted_by_user_id: e.muted_by_user_id })
-        }).listen('BroadcastTested', (e) => {
-          console.log('broadcast test received', e)
-        })
-    }
   },
   /** @return Course */
   async getCourse ({commit}) {

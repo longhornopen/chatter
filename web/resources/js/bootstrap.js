@@ -5,24 +5,6 @@ require('bootstrap');
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-import Echo from 'laravel-echo';
-
-if (process.env.MIX_PUSHER_APP_KEY) {
-  window.Pusher = require('pusher-js');
-
-  let echo_options = {
-    broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    forceTLS: false,
-    disableStats: true,
-  }
-  if (process.env.MIX_PUSHER_WS_HOST) {
-    echo_options.wsHost = process.env.MIX_PUSHER_WS_HOST;
-    echo_options.wsPort = 6001;
-  }
-  window.Echo = new Echo(echo_options);
-}
-
 import Vue from 'vue';
 import { BootstrapVue } from 'bootstrap-vue'
 Vue.use(BootstrapVue);

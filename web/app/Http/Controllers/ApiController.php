@@ -6,14 +6,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CommentAdded;
-use App\Events\CommentEdited;
-use App\Events\CommentEndorsedChanged;
-use App\Events\CommentMutedChanged;
-use App\Events\PostDeleted;
-use App\Events\PostEdited;
-use App\Events\PostLockedChanged;
-use App\Events\PostPinnedChanged;
 use App\Exceptions\LoginExpiredException;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Comment;
@@ -274,12 +266,6 @@ TAG
         $post->edited_at = new Carbon();
         $post->save();
 
-        broadcast(new PostEdited(
-                  $course_user->course_id,
-                  $post->id,
-                  $post->body
-              ));
-
         return Post::where('id',$post->id)
             ->with(['comments'])
             ->first();
@@ -295,11 +281,6 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->delete();
 
-        broadcast(new PostDeleted(
-                  $course_user->course_id,
-                  $post->id,
-              ));
-
         return "ok";
     }
 
@@ -314,12 +295,6 @@ TAG
         $post->pinned = $pinned === 'true';
         $post->save();
 
-        broadcast(new PostPinnedChanged(
-                  $course_user->course_id,
-                  $post->id,
-                  (bool)$post->pinned
-              ));
-
         return $post;
     }
 
@@ -333,12 +308,6 @@ TAG
         $this->checkPostAuths($post, $course_user);
         $post->locked = $locked==='true' ? 1 : 0;
         $post->save();
-
-        broadcast(new PostLockedChanged(
-            $course_user->course_id,
-            $post->id,
-            (bool)$post->locked
-        ));
 
         return $post;
     }
@@ -378,12 +347,6 @@ TAG
         $post_last_read->updated_at = $now;
         $post_last_read->save();
 
-        broadcast(new CommentAdded(
-                  $course_user->course_id,
-                  $comment->post_id,
-                  $comment->id,
-              ));
-
         return Comment::where('id', $comment->id)->firstOrFail();
     }
 
@@ -403,12 +366,6 @@ TAG
         $comment->body = $request->json('body');
         $comment->save();
 
-        broadcast(new CommentEdited(
-                  $course_user->course_id,
-                  $comment->id,
-                  $comment->body
-              ));
-
         return Comment::where('id', $comment->id)->firstOrFail();
     }
 
@@ -424,13 +381,6 @@ TAG
         $comment->endorsed = $endorsed==='true' ? 1 : 0;
         $comment->save();
 
-        broadcast(new CommentEndorsedChanged(
-                  $course_user->course_id,
-                  $comment->post_id,
-                  $comment->id,
-                  (bool)$comment->endorsed,
-              ));
-
         return Comment::where('id', $comment->id)->firstOrFail();
     }
 
@@ -445,13 +395,6 @@ TAG
 
         $comment->muted_by_user_id = $muted==='true' ? $course_user->id : null;
         $comment->save();
-
-        broadcast(new CommentMutedChanged(
-                  $course_user->course_id,
-                  $comment->post_id,
-                  $comment->id,
-                  $comment->muted_by_user_id,
-              ));
 
         return Comment::where('id', $comment->id)->firstOrFail();
     }

@@ -24,10 +24,6 @@ When updating to a new version, run `php artisan migrate` again to apply new dat
 ## Features
 Chatter runs a fairly basic web server with a no-frills user experience by default.  Additional Chatter features require some setup.
 
-### Broadcasting updates
-Chatter can broadcast data updates between users.  (For example, when a comment is added to a post, all currently logged-on users can see the comment count change immediately.)
-In order to do this, you'll need to tell Chatter about the pub/sub service you want to broadcast with.  `config/broadcasting.php` lists the services available, and the environment variables for each.  Some pub/sub services are commercial and require a subscription.
-
 ### Sending activity notifications via email
 Chatter can offer users the option to receive email updates listing new posts or comments.  To turn this feature on, you'll need to do three things:
 * Set the environment variable 'APP_FEATURE_MAIL_ACTIVITY_DIGESTS' to 'true'

@@ -114,13 +114,6 @@ export default {
                     </li>
                 </ul>
             </div>
-        <!--
-        <div>
-            <div>
-                New posts .. click here to refresh
-            </div>
-        </div>
-        -->
         <div class="app-post-list-body">
             <div v-if="!posts_loaded" class="d-flex justify-content-center mt-5">
                 <div class="spinner-border" role="status">
