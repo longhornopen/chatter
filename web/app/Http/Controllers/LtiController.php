@@ -35,7 +35,11 @@ class LtiController extends Controller
             $logins[$course_user->course_id] = $course_user->id;
             $request->session()->put('course_users', $logins);
 
-            return redirect('/course/'.$course_user->course_id);
+            $url = '/course/' . $course_user->course_id;
+            if ($course_user->wasRecentlyCreated) {
+                $url .= '/welcome';
+            }
+            return redirect($url);
         }
 
         abort(500, "Error: Unknown LTI Launch type");
