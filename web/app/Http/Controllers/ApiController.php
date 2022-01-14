@@ -90,9 +90,6 @@ class ApiController extends Controller
             $course->help_url = env('APP_HELP_URL');
         }
         $app_settings = ['feature_flags'=>[]];
-        if (env('APP_FEATURE_MAIL_ACTIVITY_DIGESTS')) {
-            $app_settings['feature_flags'] []= 'mail_activity_digests';
-        }
 
         $response = [];
         $response['course'] = $course;

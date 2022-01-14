@@ -42,10 +42,6 @@ class SendDigestMails extends Command
      */
     public function handle()
     {
-        if ( ! env('APP_FEATURE_MAIL_ACTIVITY_DIGESTS') ) {
-            Log::debug("Refusing to send emails due to APP_FEATURE_MAIL_ACTIVITY_DIGESTS being off");
-            return 0;
-        }
         $a_while_ago = Carbon::now()->subMonths(1);
         $course_users = CourseUser::where('last_launch_at', '>', $a_while_ago)
             ->where('mail_digest_frequency_minutes', '>=', 0)

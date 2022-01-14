@@ -24,12 +24,6 @@ When updating to a new version, run `php artisan migrate` again to apply new dat
 ## Features
 Chatter runs a fairly basic web server with a no-frills user experience by default.  Additional Chatter features require some setup.
 
-### Sending activity notifications via email
-Chatter can offer users the option to receive email updates listing new posts or comments.  To turn this feature on, you'll need to do three things:
-* Set the environment variable 'APP_FEATURE_MAIL_ACTIVITY_DIGESTS' to 'true'
-* Fill in the MAIL_* environment variables with info about your SMTP server
-* Set up a schedule runner, as described under 'Configuring' below.
-
 ## Configuring
 
 The above will give you a server that can be used in several ways.
@@ -40,7 +34,7 @@ You'll need at least one web server to run Chatter.  The Docker image runs one b
 
 ### As a schedule runner
 
-Several features need a schedule runner.  Two ways to get one up and running are:
+You'll also need one schedule runner.  Two ways to get one up and running are:
 * The Docker image, using the command `php artisan schedule:work`, or
 * A crontab similar to the one at https://laravel.com/docs/8.x/scheduling#running-the-scheduler
 

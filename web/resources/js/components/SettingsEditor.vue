@@ -33,7 +33,7 @@ export default {
             return this.$store.getters.user_is_teacher;
         },
         has_feature_mail_activity_digest() {
-            return this.$store.state.app_settings.feature_flags.includes('mail_activity_digests')
+            return true; // FIXME refactor out
         },
         course_user_mail_digest_frequency_minutes() {
             return this.$store.getters.user.mail_digest_frequency_minutes;
