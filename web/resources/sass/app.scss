@@ -7,6 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Katex
+@import 'katex/dist/katex.min.css';
+
 #app {
     height: $full-height;
 }

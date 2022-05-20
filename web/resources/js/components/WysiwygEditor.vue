@@ -23,26 +23,6 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 
 import katex from 'katex/dist/katex';
 
-function latexPlugin() {
-    const toHTMLRenderers = {
-        latex(node) {
-            let formatted = katex.renderToString(node.literal, {
-                throwOnError: false,
-                output: 'mathml',
-                trust: false,
-            })
-
-            return [
-                { type: 'openTag', tagName: 'div', outerNewLine: true },
-                { type: 'html', content: formatted },
-                { type: 'closeTag', tagName: 'div', outerNewLine: true }
-            ];
-        },
-    }
-
-    return { toHTMLRenderers }
-}
-
 // export
 export default {
     props: {
@@ -78,7 +58,7 @@ export default {
             hideModeSwitch: true,
             previewStyle: 'tab',
             usageStatistics: false,
-            plugins: [latexPlugin, [codeSyntaxHighlight, { highlighter: Prism }]],
+            plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
             toolbarItems: [
                 ['heading', 'bold', 'italic'],
                 ['ul', 'ol'],
@@ -90,6 +70,19 @@ export default {
                     tooltip: 'Math (as LaTeX)',
                 }],
             ],
+            customHTMLRenderer: {
+                latex(node) {
+                    let html = katex.renderToString(node.literal, {
+                        throwOnError: false
+                    });
+
+                    return [
+                        { type: 'openTag', tagName: 'div', outerNewLine: true },
+                        { type: 'html', content: html },
+                        { type: 'closeTag', tagName: 'div', outerNewLine: true }
+                    ]
+                }
+            },
         });
     },
     destroyed() {
