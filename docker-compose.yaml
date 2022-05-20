@@ -1,8 +1,4 @@
-version: '3.3'
-
-networks:
-  frontend:
-  backend:
+version: '3.4'
 
 services:
   web:
@@ -10,10 +6,42 @@ services:
     volumes:
       - ./web:/var/www/html
     environment:
-      VIRTUAL_HOST: chatter.docker
+      - VIRTUAL_HOST=${VIRTUAL_HOST:-chatter.docker}
+      - APP_NAME=Chatter
+      - APP_ENV=local
+      - APP_KEY=base64:MHLjzpUSRe5Y229TnPpokCQXW/a6l9C769NXRxRRJK8=
+      - APP_DEBUG=true
+      - APP_URL=${APP_URL:-http://chatter.docker}
+      - APP_ALLOW_DEV_ROUTES=true
+      - LOG_CHANNEL=errorlog
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=chatter
+      - DB_USERNAME=chatter
+      - DB_PASSWORD=chatter
+      - CACHE_DRIVER=database
+      - MAIL_MAILER=log
+      - SESSION_DRIVER=database
+      - SESSION_LIFETIME=120
+      - VIEW_COMPILED_PATH=/tmp/laravelviews
     links:
-      - "database:database"
+      - "db:db"
     ports:
       - "80"
-  database:
+  db:
     image: mysql:8
+    environment:
+      MYSQL_DATABASE: 'chatter'
+      MYSQL_USER: 'chatter'
+      MYSQL_PASSWORD: 'chatter'
+      MYSQL_ROOT_PASSWORD: 'chatter'
+    ports:
+      - '${DB_EXPOSED_PORT:-13307}:3306'
+    expose:
+      - '3306'
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
