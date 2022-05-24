@@ -32,4 +32,5 @@ Route::post('/course/{course_id}/comment/{comment_id}', [ApiController::class, '
 Route::post('/course/{course_id}/comment/{comment_id}/endorse/{endorsed}', [ApiController::class, 'endorseComment']);
 Route::post('/course/{course_id}/comment/{comment_id}/mute/{muted}', [ApiController::class, 'muteComment']);
 Route::post('/course/{course_id}/comment/{comment_id}/upvote/{upvoted}', [ApiController::class, 'upvoteComment']);
+Route::post('/course/{course_id}/upload_file', [ApiController::class, 'uploadFile']);
 

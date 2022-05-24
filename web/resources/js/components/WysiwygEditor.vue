@@ -70,6 +70,16 @@ export default {
                     tooltip: 'Math (as LaTeX)',
                 }],
             ],
+            hooks: {
+                addImageBlobHook: (blob, callback) => {
+                    const url = '/api/course/' + comp.$store.getters.user.course_id + '/upload_file'
+                    const payload = new FormData();
+                    payload.append('image', blob);
+                    axios.post(url, payload).then(resp=>{
+                        callback(resp.data.url,'image')
+                    });
+                }
+            },
             customHTMLRenderer: {
                 latex(node) {
                     let html = katex.renderToString(node.literal, {

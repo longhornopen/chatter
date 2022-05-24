@@ -17,6 +17,7 @@ use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ApiController extends Controller
 {
@@ -419,6 +420,29 @@ TAG
         }
 
         return Comment::where('id', $comment->id)->firstOrFail();
+    }
+
+    public function uploadFile(Request $request, $course_id) {
+        ini_set('post_max_size', '10M');
+        ini_set('upload_max_filesize', '10M');
+
+        $this->getCourseUserFromSession($request, $course_id);
+
+        $uploaded_image = $request->file('image');
+        $upload_storage_type = config('chatter.uploaded_file_storage');
+        $filesystem_disks = array_keys(config('filesystems.disks'));
+        if ($upload_storage_type === 'database') {
+            $url = 'data:' . $uploaded_image->getClientMimeType() . ';base64,' .
+                base64_encode($uploaded_image->getContent());
+        } else if (in_array($upload_storage_type, $filesystem_disks)) {
+            $disk = Storage::disk($upload_storage_type);
+            $path = $disk->put('uploads/'.$course_id, $uploaded_image);
+            $url = $disk->url($path);
+        } else {
+            throw new \Exception('Unknown upload storage type: ' . $upload_storage_type);
+        }
+
+        return [ 'url' => $url ];
     }
 
     /*

@@ -52,6 +52,16 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'minio' => [
+            'driver' => 's3',
+            'endpoint' => env('MINIO_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'key' => env('MINIO_KEY'),
+            'secret' => env('MINIO_SECRET'),
+            'region' => 'not-real-1',
+            'bucket' => env('MINIO_BUCKET'),
+        ],
+
     ],
 
     /*
