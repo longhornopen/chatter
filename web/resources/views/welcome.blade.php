@@ -23,6 +23,14 @@
         <h2>Welcome to Chatter!</h2>
         <p>Chatter is a communication platform where instructors and students can post discussion posts containing questions, comments, and notices.</p>
         <p>Go to your class homepage to use Chatter.</p>
+        @if (env('APP_HELP_URL'))
+            <hr>
+        <h3>Need Help?</h3>
+        <p>
+            <div>Have questions or need help?</div>
+            <div>Contact us: <a href="{{env('APP_HELP_URL')}}" target="_blank">{{env('APP_HELP_URL_TEXT')}}</a></div>
+        </p>
+        @endif
     </div>
     <body>
 
