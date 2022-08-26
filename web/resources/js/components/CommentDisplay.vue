@@ -66,6 +66,9 @@ export default {
     },
     methods: {
         async endorse(endorse_action) {
+            if (this.endorse_promise_pending) {
+                return;
+            }
             this.endorse_promise_pending = true;
             try {
                 let store_promise = this.$store.dispatch('endorseComment', {
@@ -79,6 +82,9 @@ export default {
             }
         },
         async upvote(upvoted) {
+            if (this.upvote_promise_pending) {
+                return;
+            }
             this.upvote_promise_pending = true;
             try {
                 let action_name = upvoted ? 'addCommentUpvote' : 'removeCommentUpvote';
