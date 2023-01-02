@@ -32,21 +32,17 @@ The above will give you a server that can be used in several ways.
 
 You'll need at least one web server to run Chatter.  The Docker image runs one by default, or you can start one manually with Apache/PHP or `php artisan serve`.
 
-### As a schedule runner
+### As a scheduled-task runner
 
-You'll also need one schedule runner.  Two ways to get one up and running are:
+You'll also need one scheduled-task runner, in order to send emails.  Two ways to get one up and running are:
 * The Docker image, using the command `php artisan schedule:work`, or
 * A crontab similar to the one at https://laravel.com/docs/8.x/scheduling#running-the-scheduler
 
 ### LMS Setup
 Full docs about how to generate the info you need to install this tool in an LMS are at https://github.com/longhornopen/laravel-celtic-lti/wiki/LTI-Key-Generation
 
-But for most users, something like this will suffice:
+LTI 1.3 installations are preferred over 1.2 or earlier.  Most LTI 1.3 installations will probably want a 'Course Navigation' placement (as opposed to an assignment-level placement).
 
-#### LTI 1.2
-* `cd web`
-* `php artisan lti:add_platform_1.2 my_lms_name my_consumer_key my_shared_secret`
-* Install into LMS with launch URL: `{YOUR_SERVER_URL}/lti` and the consumer key/secret you created above.
-
-#### LTI 1.3
-Coming soon...
+Give the LTI 1.3 key appropriate permissions:
+* If the LMS requires it, set the Privacy Level to 'Public'.  (In Canvas, Addition Settings > Privacy Level.)
+* Grant access to the LTI Service corresponding to "https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly".  (In Canvas, this'll be the 'Can retrieve user data associated with the context' setting, under 'LTI Advantage Services').
