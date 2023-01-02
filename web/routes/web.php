@@ -26,6 +26,7 @@ Route::post('/course/{course_id}/unsubscribe_complete', [\App\Http\Controllers\C
 
 //Auth::routes();
 Route::post('/lti', [App\Http\Controllers\LtiController::class, 'ltiMessage']);
+Route::get('/lti/jwks', [App\Http\Controllers\LtiController::class, 'getJWKS']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

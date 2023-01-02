@@ -11,7 +11,7 @@ use LonghornOpen\LaravelCelticLTI\LtiTool;
 class LtiController extends Controller
 {
     public function ltiMessage(Request $request) {
-        $tool = new LtiTool();
+        $tool = LtiTool::getLtiTool();
         $tool->handleRequest();
 
         if ($tool->getLaunchType() === $tool::LAUNCH_TYPE_LAUNCH) {
@@ -43,5 +43,10 @@ class LtiController extends Controller
         }
 
         abort(500, "Error: Unknown LTI Launch type");
+    }
+
+    public function getJWKS() {
+        $tool = LtiTool::getLtiTool();
+        return $tool->getJWKS();
     }
 }
