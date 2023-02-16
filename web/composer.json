@@ -10,9 +10,8 @@
     "require": {
         "php": "^8.0.2",
         "ans-group/laravel-health-check": "^1.13",
-        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.1",
