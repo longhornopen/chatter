@@ -17,7 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.1",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "longhornopen/laravel-celtic-lti": "^0.4.4",
+        "longhornopen/laravel-celtic-lti": "^0.4.5",
         "predis/predis": "~1.0",
         "pusher/pusher-php-server": "~5.0",
         "sentry/sentry-laravel": "^2.7"
