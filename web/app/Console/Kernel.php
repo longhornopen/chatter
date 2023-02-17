@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(SendDigestMails::class)->hourly();
+        $schedule->command('sanctum:prune-expired --hours=24')->daily();
     }
 
     /**
