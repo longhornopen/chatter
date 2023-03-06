@@ -1,7 +1,7 @@
 FROM composer:2 as phpbuild
 ADD web /var/www/html
 WORKDIR /var/www/html
-RUN composer install
+RUN composer install --no-dev --ignore-platform-reqs
 
 
 FROM node:13 as npmbuild
