@@ -16,7 +16,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^4.0",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "longhornopen/laravel-celtic-lti": "^0.4.5",
+        "longhornopen/laravel-celtic-lti": "^0.4.7",
         "predis/predis": "~1.0",
         "pusher/pusher-php-server": "~7.0",
         "sentry/sentry-laravel": "^3.0"
@@ -31,7 +31,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {
