@@ -406,14 +406,19 @@ TAG
         $this->checkCommentAuths($comment, $course_user);
 
         if ($upvoted==='true') {
-            $upvote = new CommentUpvote();
-            $upvote->course_user_id = $course_user->id;
-            $upvote->comment_id = $comment_id;
-            $upvote->save();
+            $num_upvotes = CommentUpvote::where('course_user_id', $course_user->id)
+            ->where('comment_id', $comment_id)
+            ->count();
+            if ($num_upvotes===0) {
+                $upvote = new CommentUpvote();
+                $upvote->course_user_id = $course_user->id;
+                $upvote->comment_id = $comment_id;
+                $upvote->save();
+            }
         } elseif ($upvoted==='false') {
             $upvotes = CommentUpvote::where('course_user_id', $course_user->id)
-                ->where('comment_id', $comment_id)
-                ->get();
+            ->where('comment_id', $comment_id)
+            ->get();
             foreach ($upvotes as $upvote) {
                 $upvote->delete();
             }
