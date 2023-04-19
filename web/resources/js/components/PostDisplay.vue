@@ -70,18 +70,13 @@ export default {
             this.pin_pending = false;
         },
         remove() {
-            this.$swal.fire({
-                title: "Are you sure you want to remove this post and all its comments?",
-                icon: 'warning',
-                showCancelButton: true,
-            }).then(result => {
-                if (result.isConfirmed) {
-                    this.$store.dispatch('deletePost', {
-                        post_id: this.post_id,
-                    });
-                    this.$router.push('/')
-                }
+            this.$bvModal.show('delete_post');
+        },
+        handle_remove_ok() {
+            this.$store.dispatch('deletePost', {
+                post_id: this.post_id,
             });
+            this.$router.push('/')
         },
         async lock(locked) {
             this.lock_pending = true;
@@ -103,23 +98,15 @@ export default {
             this.edited_post_body = "" + this.post.body; //copy
         },
         close_post_editor() {
-            this.$swal.fire({
-                icon: 'warning',
-                title: 'Do you want to abandon your edit without saving?',
-                showCancelButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.edited_post_body = null;
-                    this.post_editor_visible = false;
-                }
-            });
+            this.$bvModal.show('abandon_post');
+        },
+        handle_close_post_editor_ok() {
+            this.edited_post_body = null;
+            this.post_editor_visible = false;
         },
         async save_post() {
             if (!this.$refs['postEditor'].hasContents()) {
-                this.$swal.fire({
-                    title: "Looks like you forgot to write your post body.",
-                    icon: 'warning'
-                });
+                this.$bvModal.show('missing_body');
                 return;
             }
             let new_body = this.$refs['postEditor'].getContents()
@@ -150,6 +137,24 @@ export default {
 
 <template>
     <div>
+        <b-modal id="missing_body" title="Missing Body" :ok-only="true"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>It looks like you forgot to write your post body.</p>
+        </b-modal>
+        <b-modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>Are you sure you want to abandon this post without saving it?</p>
+        </b-modal>
+        <b-modal id="delete_post" title="Remove Post?" @ok="handle_remove_ok"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>Are you sure you want to remove this post and all its comments?</p>
+        </b-modal>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>

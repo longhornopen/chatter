@@ -13,22 +13,14 @@ export default {
     },
     methods: {
         cancel() {
-            this.$swal.fire({
-                title: "Are you sure you want to abandon this comment without saving it?",
-                icon: 'warning',
-                showCancelButton: true,
-            }).then(result => {
-                if (result.isConfirmed) {
-                    this.$emit('close_comment_editor')
-                }
-            });
+            this.$bvModal.show('abandon_edit');
+        },
+        handle_cancel_ok() {
+            this.$emit('close_comment_editor')
         },
         async submit() {
             if (!this.$refs['commentEditor'].hasContents()) {
-                this.$swal.fire({
-                    title: "Looks like you forgot to write your comment.",
-                    icon: 'warning'
-                });
+                this.$bvModal.show('missing_comment');
                 return;
             }
             this.comment_body = this.$refs['commentEditor'].getContents()
@@ -49,6 +41,18 @@ export default {
 
 <template>
     <div>
+        <b-modal id="missing_comment" title="Missing Comment" :ok-only="true"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>It looks like you forgot to write your comment.</p>
+        </b-modal>
+        <b-modal id="abandon_edit" title="Abandon Edit?" @ok="handle_cancel_ok"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>Are you sure you want to abandon your edit without saving?</p>
+        </b-modal>
         <fieldset v-bind:disabled="save_pending">
         <wysiwyg-editor v-model="comment_body" ref="commentEditor"></wysiwyg-editor>
         <div class="form-group form-check">

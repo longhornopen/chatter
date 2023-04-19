@@ -13,16 +13,12 @@ export default {
     },
     methods: {
         alert_stale() {
-            this.$swal({
-                'html': 'Chatter has been open for a while, and you may not be looking at the most recent posts.  Click "OK" to refresh.',
-                'showCancelButton': true,
-            }).then(resolution => {
-                if (resolution.isConfirmed) {
-                    let homepage = new URL(document.location.href);
-                    homepage.hash = "";
-                    document.location.href = homepage.href;
-                }
-            })
+            this.$bvModal.show('course_stale');
+        },
+        handle_stale_ok() {
+            let homepage = new URL(document.location.href);
+            homepage.hash = "";
+            document.location.href = homepage.href;
         }
     },
     computed: {
@@ -50,6 +46,9 @@ export default {
     <div style="height: 100%;">
         <b-modal id="course_closed" title="Chatter Closed" :ok-only="true">
             <p>Your teacher has closed this Chatter.  You can still view existing conversations.</p>
+        </b-modal>
+        <b-modal id="course_stale" title="Refresh?" @ok="handle_stale_ok">
+            <p>Chatter has been open for a while, and you may not be looking at the most recent posts.  Click "OK" to refresh.</p>
         </b-modal>
         <div class="row no-gutters">
             <div class="app-title-bar">

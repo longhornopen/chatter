@@ -28,17 +28,11 @@ export default {
     methods: {
         async submit_new_post() {
             if (this.title.trim().length === 0) {
-                this.$swal.fire({
-                    title: "Looks like you forgot to write your post title.",
-                    icon: 'warning'
-                });
+                this.$bvModal.show('missing_title');
                 return;
             }
             if (!this.$refs['postEditor'].hasContents()) {
-                this.$swal.fire({
-                    title: "Looks like you forgot to write your post body.",
-                    icon: 'warning'
-                });
+                this.$bvModal.show('missing_body');
                 return;
             }
             this.body = this.$refs['postEditor'].getContents()
@@ -54,22 +48,17 @@ export default {
             await this.$router.push('/post/'+post.id);
         },
         close_post_editor() {
-            this.$swal.fire({
-                title: "Are you sure you want to abandon this post without saving it?",
-                icon: 'warning',
-                showCancelButton: true,
-            }).then(result => {
-                if (result.isConfirmed) {
-                    if (this.in_mobile_mode) {
-                        this.$store.dispatch('switchScreen', {
-                            view_post_create: false,
-                            view_post_list: true,
-                            view_post_display: false,
-                        })
-                    }
-                    this.$router.push('/')
-                }
-            });
+            this.$bvModal.show('abandon_post');
+        },
+        handle_close_post_editor_ok() {
+            if (this.in_mobile_mode) {
+                this.$store.dispatch('switchScreen', {
+                    view_post_create: false,
+                    view_post_list: true,
+                    view_post_display: false,
+                })
+            }
+            this.$router.push('/')
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -87,6 +76,24 @@ export default {
 
 <template>
     <div class="new-post">
+        <b-modal id="missing_title" title="Missing Title" :ok-only="true"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>It looks like you forgot to write your post title.</p>
+        </b-modal>
+        <b-modal id="missing_body" title="Missing Body" :ok-only="true"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>It looks like you forgot to write your post body.</p>
+        </b-modal>
+        <b-modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>Are you sure you want to abandon this post without saving it?</p>
+        </b-modal>
         <fieldset v-bind:disabled="save_pending">
             <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
                 <font-awesome-icon class="back-icon" icon="chevron-left" size="2x"/>

@@ -97,7 +97,7 @@ export default {
                 this.upvote_promise_pending = false;
             }
         },
-        toggle_reply_editor: function(shown) {
+        toggle_reply_editor(shown) {
             this.reply_editor_visible = shown
             if (shown) {
                 this.$nextTick(() => {this.$refs['replyEditor'].$el.scrollIntoView()})
@@ -109,35 +109,27 @@ export default {
             }
             return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
-        mute_comment: function(action) {
+        mute_comment(action) {
             this.$store.dispatch('muteComment', {
                 comment_id: this.comment.id,
                 muted: action,
             })
         },
-        show_comment_editor: function() {
+        show_comment_editor() {
             this.edited_comment_body = this.comment.body
             this.comment_editor_visible = true
             this.$nextTick(() => {this.$refs['commentEditor'].$el.scrollIntoView()})
         },
         hide_comment_editor: function() {
-            this.$swal.fire({
-                icon: 'warning',
-                title: 'Do you want to abandon your edit without saving?',
-                showCancelButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.edited_comment_body = null;
-                    this.comment_editor_visible = false
-                }
-            });
+            this.$bvModal.show('abandon_edit');
+        },
+        handle_hide_comment_editor_ok() {
+            this.edited_comment_body = null
+            this.comment_editor_visible = false
         },
         async save_comment() {
             if (!this.$refs['commentEditor'].hasContents()) {
-                this.$swal.fire({
-                    title: "Looks like you forgot to write your comment.",
-                    icon: 'warning'
-                });
+                this.$bvModal.show('missing_comment');
                 return;
             }
             this.edited_comment_body = this.$refs['commentEditor'].getContents()
@@ -158,6 +150,18 @@ export default {
 
 <template>
     <div class="single-comment">
+        <b-modal id="missing_comment" title="Missing Comment" :ok-only="true"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>It looks like you forgot to write your comment.</p>
+        </b-modal>
+        <b-modal id="abandon_edit" title="Abandon Edit?" @ok="handle_hide_comment_editor_ok"
+                 header-bg-variant="warning"
+                 header-text-variant="light"
+        >
+            <p>Are you sure you want to abandon your edit without saving?</p>
+        </b-modal>
         <div>
             <div class="comment-top-row">
                 <div class="comment-metadata">
