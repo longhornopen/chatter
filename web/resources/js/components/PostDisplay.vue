@@ -28,7 +28,7 @@ export default {
             return this.$store.state.currently_viewed_post
         },
         post_loaded() {
-            return !_.isEmpty(this.post);
+             return !_.isEmpty(this.post);
         },
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
@@ -118,6 +118,10 @@ export default {
             })
             this.post_editor_visible = false;
             this.edit_save_pending = false;
+            await this.$router.push({
+                path:'/post/'+this.post.id,
+                query: { edited: Date.now() }
+            });            
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -182,7 +186,10 @@ export default {
                         ></formatted-date>
                         <span v-if="post.edited_at">
                         <i style="font-size:90%;">
-                            (Edited)
+                            (Edited) 
+                            <formatted-date
+                            :date-iso="post.edited_at"
+                        ></formatted-date>
                         </i>
                         </span>
                     </div>
