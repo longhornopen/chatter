@@ -28,7 +28,7 @@ services:
     links:
       - "db:db"
     ports:
-      - '${HTTP_EXPOSED_PORT}:80'
+      - '${HTTP_EXPOSED_PORT:-}:80'
   db:
     image: mysql:8
     environment:
