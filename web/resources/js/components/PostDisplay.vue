@@ -182,7 +182,11 @@ export default {
                         ></formatted-date>
                         <span v-if="post.edited_at">
                         <i style="font-size:90%;">
-                            (Edited)
+                            (Edited 
+                            <formatted-date
+                            :date-iso="post.edited_at"
+                        ></formatted-date>
+                            )
                         </i>
                         </span>
                     </div>
