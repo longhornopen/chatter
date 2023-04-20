@@ -117,11 +117,7 @@ export default {
                 body: new_body,
             })
             this.post_editor_visible = false;
-            this.edit_save_pending = false;
-            await this.$router.push({
-                path:'/post/'+this.post.id,
-                query: { edited: Date.now() }
-            });            
+            this.edit_save_pending = false;   
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -186,10 +182,11 @@ export default {
                         ></formatted-date>
                         <span v-if="post.edited_at">
                         <i style="font-size:90%;">
-                            (Edited) 
+                            (Edited 
                             <formatted-date
                             :date-iso="post.edited_at"
                         ></formatted-date>
+                            )
                         </i>
                         </span>
                     </div>

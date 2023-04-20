@@ -142,9 +142,11 @@ const mutations = {
   editPost (state, payload) {
     let post_id = payload.post_id
     let body = payload.body
+    let edited_at = payload.edited_at
 
     if (state.currently_viewed_post.id === post_id) {
       state.currently_viewed_post.body = body
+      state.currently_viewed_post.edited_at = edited_at
     }
   },
   pinPost (state, payload) {
@@ -288,7 +290,7 @@ const actions = {
   },
   async editPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id, payload)
-    commit('editPost', { post_id: payload.post_id, body: payload.body })
+    commit('editPost', { post_id: payload.post_id, body: payload.body, edited_at: response.data.edited_at })
     return response.data
   },
   async pinPost ({ commit }, payload) {

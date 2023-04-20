@@ -28,6 +28,7 @@ class Post extends Model
 
     protected $casts = [
         'last_comment_at' => 'datetime',
+        'edited_at' => 'datetime',
     ];
 
     public function course(): BelongsTo
