@@ -141,7 +141,8 @@ TAG
                 } else {
                     $posts = $posts->where(function ($query) use ($search_term) {
                         $query->where('title', 'like', '%' . $search_term . '%')
-                            ->orWhere('body', 'like', '%' . $search_term . '%');
+                        ->orWhere('body', 'like', '%' . $search_term . '%')
+                        ->orWhere('author_user_name', 'like', '%' . $search_term . '%');
                     });
                 }
             }
