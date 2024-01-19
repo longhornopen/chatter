@@ -1,14 +1,15 @@
 <script>
-import UserName from './UserName'
-import FormattedDate from './FormattedDate'
-import PostTagBadge from './PostTagBadge'
+import UserName from './UserName.vue'
+import FormattedDate from './FormattedDate.vue'
+import PostTagBadge from './PostTagBadge.vue'
 import _ from 'lodash'
-import WysiwygEditor from './WysiwygEditor'
-import WysiwygViewer from './WysiwygViewer'
+import WysiwygEditor from './WysiwygEditor.vue'
+import WysiwygViewer from './WysiwygViewer.vue'
 import component_mixins from '../component_mixins'
+import Modal from './Modal.vue'
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge, Modal },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         post_id: { type: Number, required: true },
@@ -137,24 +138,24 @@ export default {
 
 <template>
     <div>
-        <b-modal id="missing_body" title="Missing Body" :ok-only="true"
+        <modal id="missing_body" title="Missing Body" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>It looks like you forgot to write your post body.</p>
-        </b-modal>
-        <b-modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+        </modal>
+        <modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>Are you sure you want to abandon this post without saving it?</p>
-        </b-modal>
-        <b-modal id="delete_post" title="Remove Post?" @ok="handle_remove_ok"
+        </modal>
+        <modal id="delete_post" title="Remove Post?" @ok="handle_remove_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>Are you sure you want to remove this post and all its comments?</p>
-        </b-modal>
+        </modal>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
@@ -182,7 +183,7 @@ export default {
                         ></formatted-date>
                         <span v-if="post.edited_at">
                         <i style="font-size:90%;">
-                            (Edited 
+                            (Edited
                             <formatted-date
                             :date-iso="post.edited_at"
                         ></formatted-date>

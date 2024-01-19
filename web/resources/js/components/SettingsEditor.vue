@@ -1,5 +1,8 @@
 <script>
+import Modal from './Modal.vue'
+
 export default {
+    components: { Modal },
     data () {
         return {
             user_name: '',
@@ -105,7 +108,7 @@ export default {
 
 <template>
     <div>
-        <b-modal
+        <modal
             id="edit_post_tag_modal"
             @ok="alter_post_tag_after_edit"
         >
@@ -149,7 +152,7 @@ export default {
                     </div>
                 </b-form-group>
             </b-form>
-        </b-modal>
+        </modal>
     <div style="padding:20px;">
         <h2>My Info</h2>
         <form>

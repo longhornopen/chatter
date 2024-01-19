@@ -1,9 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
 import axios from 'axios'
 
-Vue.use(Vuex)
+import { createStore } from 'vuex';
 
 /**
 @typedef {object} Course
@@ -351,10 +348,9 @@ const actions = {
   }
 }
 
-export default new Vuex.Store({
+export const store = createStore({
   state,
   getters,
   actions,
   mutations
-})
-
+});

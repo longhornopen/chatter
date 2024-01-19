@@ -1,12 +1,13 @@
 <script>
-import UserName from './UserName'
-import FormattedDate from './FormattedDate'
-import WysiwygEditor from './WysiwygEditor'
-import WysiwygViewer from './WysiwygViewer'
+import UserName from './UserName.vue'
+import FormattedDate from './FormattedDate.vue'
+import WysiwygEditor from './WysiwygEditor.vue'
+import WysiwygViewer from './WysiwygViewer.vue'
 import component_mixins from '../component_mixins'
+import Modal from './Modal.vue'
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, Modal },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         comment: {
@@ -150,18 +151,18 @@ export default {
 
 <template>
     <div class="single-comment">
-        <b-modal id="missing_comment" title="Missing Comment" :ok-only="true"
+        <modal id="missing_comment" title="Missing Comment" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>It looks like you forgot to write your comment.</p>
-        </b-modal>
-        <b-modal id="abandon_edit" title="Abandon Edit?" @ok="handle_hide_comment_editor_ok"
+        </modal>
+        <modal id="abandon_edit" title="Abandon Edit?" @ok="handle_hide_comment_editor_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>Are you sure you want to abandon your edit without saving?</p>
-        </b-modal>
+        </modal>
         <div>
             <div class="comment-top-row">
                 <div class="comment-metadata">

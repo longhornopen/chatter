@@ -1,31 +1,75 @@
 import Vuex from 'vuex'
 
-require('./bootstrap');
+import './bootstrap';
 
-import Vue from 'vue';
+import { createApp } from 'vue';
 
-import AppFramework from './components/AppFramework.vue';
+/*
+
 import AppHeader from './components/AppHeader.vue';
 import PostList from './components/PostList.vue';
-import PostDisplay from './components/PostDisplay.vue';
-import PostCreate from './components/PostCreate.vue';
 import CommentCreate from './components/CommentCreate.vue';
 import CommentDisplay from './components/CommentDisplay.vue';
 import FormattedDate from './components/FormattedDate.vue';
-import SplashPage from './components/SplashPage';
 
-
-Vue.component('app-framework', AppFramework);
 Vue.component('app-header', AppHeader);
 Vue.component('post-list', PostList);
-Vue.component('post-display', PostDisplay);
-Vue.component('post-create', PostCreate);
 Vue.component('comment-create', CommentCreate);
 Vue.component('comment-display', CommentDisplay)
 Vue.component('formatted-date', FormattedDate);
+*/
 
-Vue.use(Vuex);
-import store from './store';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+import {
+  faCog,
+  faTimesCircle,
+  faPlus,
+  faReply,
+  faAward,
+  faThumbtack,
+  faLock,
+  faArrowCircleUp,
+  faCommentAlt,
+  faEye,
+  faEyeSlash,
+  faCaretSquareRight,
+  faEllipsisH,
+  faChevronLeft,
+  faSpinner,
+  faQuestion,
+  faEdit,
+  faTimes,
+  faSearch,
+  faSearchPlus,
+  faChalkboardTeacher,
+} from '@fortawesome/free-solid-svg-icons'
+library.add(
+  faCog,
+  faTimesCircle,
+  faPlus,
+  faReply,
+  faAward,
+  faThumbtack,
+  faLock,
+  faArrowCircleUp,
+  faCommentAlt,
+  faEye,
+  faEyeSlash,
+  faCaretSquareRight,
+  faEllipsisH,
+  faChevronLeft,
+  faSpinner,
+  faQuestion,
+  faEdit,
+  faTimes,
+  faSearch,
+  faSearchPlus,
+  faChalkboardTeacher,
+);
+
+import { store } from './store';
 
 let onResize = function() {
   const w = window.innerWidth
@@ -39,9 +83,15 @@ let onResize = function() {
   })
 }
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-const router = new VueRouter({
+import PostDisplay from './components/PostDisplay.vue';
+import PostCreate from './components/PostCreate.vue';
+import SplashPage from './components/SplashPage.vue';
+// Vue.component('post-display', PostDisplay);
+// Vue.component('post-create', PostCreate);
+
+import { createRouter, createWebHashHistory } from 'vue-router';
+const router = createRouter({
+  history: createWebHashHistory(),
   routes: [
     { path: '/', component: SplashPage},
     { path: '/post/new', component: PostCreate},
@@ -55,19 +105,21 @@ const router = new VueRouter({
   ],
 })
 
-store.dispatch('init', {course_id:window.course_id}).then(()=> {
-  const app = new Vue({
-    el: '#app',
-    store: store,
-    router,
-    mounted () {
-      onResize()
-      window.addEventListener('resize', onResize)
-      document.getElementById('loading-splash').remove();
-    },
-    beforeDestroy () {
-      window.removeEventListener('resize', onResize)
-    }
-  })
-})
-
+import AppFramework from './components/AppFramework.vue';
+const app = createApp({
+  mounted () {
+    onResize()
+    window.addEventListener('resize', onResize)
+    document.getElementById('loading-splash').remove();
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', onResize)
+  }
+});
+app.component('app-framework', AppFramework);
+app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(store);
+app.use(router);
+store.dispatch('init', {course_id:window.course_id}).then(() => {
+  app.mount('#app');
+});

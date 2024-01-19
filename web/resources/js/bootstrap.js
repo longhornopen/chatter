@@ -1,67 +1,7 @@
-window._ = require('lodash');
 
-require('bootstrap');
-
-window.axios = require('axios');
+import axios from 'axios';
+window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-import Vue from 'vue';
-import { BootstrapVue } from 'bootstrap-vue'
-Vue.use(BootstrapVue);
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-import {
-  faCog,
-  faTimesCircle,
-  faPlus,
-  faReply,
-  faAward,
-  faThumbtack,
-  faLock,
-  faArrowCircleUp,
-  faCommentAlt,
-  faEye,
-  faEyeSlash,
-  faCaretSquareRight,
-  faEllipsisH,
-  faChevronLeft,
-  faSpinner,
-  faQuestion,
-  faEdit,
-  faTimes,
-  faSearch,
-  faSearchPlus,
-  faChalkboardTeacher,
-  } from '@fortawesome/free-solid-svg-icons'
-library.add(
-  faCog,
-  faTimesCircle,
-  faPlus,
-  faReply,
-  faAward,
-  faThumbtack,
-  faLock,
-  faArrowCircleUp,
-  faCommentAlt,
-  faEye,
-  faEyeSlash,
-  faCaretSquareRight,
-  faEllipsisH,
-  faChevronLeft,
-  faSpinner,
-  faQuestion,
-  faEdit,
-  faTimes,
-  faSearch,
-  faSearchPlus,
-  faChalkboardTeacher,
-);
-
-Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.config.productionTip = false;
 
 window.axios.interceptors.response.use(response => {
   return response;

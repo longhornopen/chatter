@@ -1,9 +1,10 @@
 <script>
-import HelpViewer from './HelpViewer'
-import SettingsEditor from './SettingsEditor'
+import HelpViewer from './HelpViewer.vue'
+import SettingsEditor from './SettingsEditor.vue'
+import Modal from './Modal.vue'
 
 export default {
-    components: { SettingsEditor, HelpViewer },
+    components: { SettingsEditor, HelpViewer, Modal },
     data() {
         return {
             search_term: "",
@@ -32,10 +33,10 @@ export default {
             this.$store.dispatch('search')
         },
         open_settings() {
-            this.$bvModal.show('settings-modal')
+            this.$refs['settings-modal'].show()
         },
         open_help() {
-            this.$bvModal.show('help-modal')
+            this.$refs['help-modal'].show()
         },
         open_advanced_search() {
             this.advanced_search_text = ""
@@ -57,25 +58,27 @@ export default {
 <template>
     <div class="app-header-bar">
 
-        <b-modal
+        <modal
             id="settings-modal"
+            ref="settings-modal"
             size="xl"
             title="Settings"
             ok-only
         >
             <settings-editor />
-        </b-modal>
+        </modal>
 
-        <b-modal
+        <modal
             id="help-modal"
+            ref="help-modal"
             size="xl"
             title="Help"
             ok-only
         >
             <help-viewer />
-        </b-modal>
+        </modal>
 
-        <b-modal
+        <modal
             id="advanced-search-modal"
             size="xl"
             title="Advanced Search"
@@ -108,7 +111,7 @@ export default {
                     </b-form-radio-group>
                 </b-form-group>
             </b-form>
-        </b-modal>
+        </modal>
 
         <div class="d-flex justify-content-between">
             <div class="header-col">

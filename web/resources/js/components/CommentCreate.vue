@@ -1,8 +1,9 @@
 <script>
-import WysiwygEditor from './WysiwygEditor'
+import WysiwygEditor from './WysiwygEditor.vue'
+import Modal from './Modal.vue'
 
 export default {
-    components: { WysiwygEditor },
+    components: { WysiwygEditor, Modal },
     props: ['parent_comment_id', 'post_id'],
     data() {
         return {
@@ -41,18 +42,18 @@ export default {
 
 <template>
     <div>
-        <b-modal id="missing_comment" title="Missing Comment" :ok-only="true"
+        <modal id="missing_comment" title="Missing Comment" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>It looks like you forgot to write your comment.</p>
-        </b-modal>
-        <b-modal id="abandon_edit" title="Abandon Edit?" @ok="handle_cancel_ok"
+        </modal>
+        <modal id="abandon_edit" title="Abandon Edit?" @ok="handle_cancel_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>Are you sure you want to abandon your edit without saving?</p>
-        </b-modal>
+        </modal>
         <fieldset v-bind:disabled="save_pending">
         <wysiwyg-editor v-model="comment_body" ref="commentEditor"></wysiwyg-editor>
         <div class="form-group form-check">

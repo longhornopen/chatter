@@ -1,8 +1,9 @@
 <script>
-import WysiwygEditor from './WysiwygEditor'
+import WysiwygEditor from './WysiwygEditor.vue'
+import Modal from './Modal.vue'
 
 export default {
-    components: { WysiwygEditor },
+    components: { WysiwygEditor, Modal },
     data() {
         return {
             title: '',
@@ -76,24 +77,24 @@ export default {
 
 <template>
     <div class="new-post">
-        <b-modal id="missing_title" title="Missing Title" :ok-only="true"
+        <modal id="missing_title" title="Missing Title" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>It looks like you forgot to write your post title.</p>
-        </b-modal>
-        <b-modal id="missing_body" title="Missing Body" :ok-only="true"
+        </modal>
+        <modal id="missing_body" title="Missing Body" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>It looks like you forgot to write your post body.</p>
-        </b-modal>
-        <b-modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+        </modal>
+        <modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <p>Are you sure you want to abandon this post without saving it?</p>
-        </b-modal>
+        </modal>
         <fieldset v-bind:disabled="save_pending">
             <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
                 <font-awesome-icon class="back-icon" icon="chevron-left" size="2x"/>

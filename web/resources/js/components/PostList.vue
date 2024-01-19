@@ -1,6 +1,6 @@
 <script>
-import FormattedDate from './FormattedDate'
-import PostTagBadge from './PostTagBadge'
+import FormattedDate from './FormattedDate.vue'
+import PostTagBadge from './PostTagBadge.vue'
 import component_mixins from '../component_mixins'
 
 export default {
