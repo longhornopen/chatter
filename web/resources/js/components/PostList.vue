@@ -127,7 +127,7 @@ export default {
                 :class="post_class(post)">
                 <div @click="open_post(post.id)" class="post-clickable-container">
                     <div>
-                        <div class="post-misc-info">
+                        <div class="post-misc-info d-flex justify-content-between">
                             <span>{{ poster_name(post) }}</span>
                             <formatted-date :dateIso="post.created_at" italicized="true"></formatted-date>
                         </div>

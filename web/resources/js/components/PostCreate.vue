@@ -81,19 +81,25 @@ export default {
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your post title.</p>
+            </template>
         </modal>
         <modal id="missing_body" title="Missing Body" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your post body.</p>
+            </template>
         </modal>
         <modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to abandon this post without saving it?</p>
+            </template>
         </modal>
         <fieldset v-bind:disabled="save_pending">
             <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
@@ -106,7 +112,11 @@ export default {
             </div>
             <div class="form-group">
                 <label for="post-tag">Tag post as:</label>
-                <b-form-select v-model="post_tag" :options="post_tag_options"></b-form-select>
+                <select class="form-select" v-model="post_tag">
+                    <option v-for="option in post_tag_options" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="post-body">Post Body</label>

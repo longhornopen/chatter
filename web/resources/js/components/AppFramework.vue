@@ -16,7 +16,7 @@ export default {
     },
     methods: {
         alert_stale() {
-            this.$bvModal.show('course_stale');
+            this.$refs['course_stale_modal'].show();
         },
         handle_stale_ok() {
             let homepage = new URL(document.location.href);
@@ -37,7 +37,7 @@ export default {
     },
     mounted() {
         if (this.course_is_closed) {
-            this.$bvModal.show('course_closed');
+            this.$refs['course_closed_modal'].show();
         }
         let alert_stale_minutes = 60;
         setTimeout(() => this.alert_stale(), alert_stale_minutes*60*1000);
@@ -47,11 +47,15 @@ export default {
 
 <template>
     <div style="height: 100%;">
-        <modal id="course_closed" title="Chatter Closed" :ok-only="true">
+        <modal id="course_closed" ref="course_closed_modal" title="Chatter Closed" :ok-only="true">
+            <template v-slot:body>
             <p>Your teacher has closed this Chatter.  You can still view existing conversations.</p>
+            </template>
         </modal>
-        <modal id="course_stale" title="Refresh?" @ok="handle_stale_ok">
+        <modal id="course_stale" ref="course_stale_modal" title="Refresh?" @ok="handle_stale_ok">
+            <template v-slot:body>
             <p>Chatter has been open for a while, and you may not be looking at the most recent posts.  Click "OK" to refresh.</p>
+            </template>
         </modal>
         <div class="row g-0">
             <div class="app-title-bar">

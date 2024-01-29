@@ -7,9 +7,11 @@ import WysiwygEditor from './WysiwygEditor.vue'
 import WysiwygViewer from './WysiwygViewer.vue'
 import component_mixins from '../component_mixins'
 import Modal from './Modal.vue'
+import CommentDisplay from "./CommentDisplay.vue";
+import CommentCreate from "./CommentCreate.vue";
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge, Modal },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge, Modal, CommentDisplay, CommentCreate },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         post_id: { type: Number, required: true },
@@ -142,19 +144,25 @@ export default {
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your post body.</p>
+            </template>
         </modal>
         <modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to abandon this post without saving it?</p>
+            </template>
         </modal>
         <modal id="delete_post" title="Remove Post?" @ok="handle_remove_ok"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to remove this post and all its comments?</p>
+            </template>
         </modal>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
             <div class="spinner-border" role="status">
@@ -194,7 +202,7 @@ export default {
                     <div
                         v-show="should_display_options_menu"
                     >
-                        <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="ellipsis" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <font-awesome-icon icon="ellipsis-h" />
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">

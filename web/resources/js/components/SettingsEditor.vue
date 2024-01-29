@@ -46,24 +46,24 @@ export default {
         async save_course_user_mail_digest_frequency_minutes() {
             this.course_user_mail_digest_frequency_save_state = 'pending'
             await this.$store.dispatch('updateCourseUser', {mail_digest_frequency_minutes: this.edited_course_user_mail_digest_frequency_minutes})
-            this.$bvToast.toast('Email frequency saved.', {title:'Save successful', autoHideDelay: 5000})
+            window.addToast('Email frequency saved.', 'success');
             this.course_user_mail_digest_frequency_save_state = ''
         },
         async save_course_close_date() {
-            // assume times are always end-of-day for now; maybe add a timepicker control here later
-            if (this.course_close_datetime) {
-                this.course_close_datetime.setHours(23, 59, 0)
+            if (this.course_close_datetime && typeof this.course_close_datetime === 'string') {
+                let parts = this.course_close_datetime.split(/\D/);
+                this.course_close_datetime = new Date(parts[0], parts[1]-1, parts[2], 23, 59, 0);
             }
 
             this.course_close_date_save_state = 'pending'
             await this.$store.dispatch('updateCourse', {close_date: this.course_close_datetime})
-            this.$bvToast.toast('Course close date saved.', {title:'Save successful', autoHideDelay: 5000})
+            window.addToast('Course close date saved.', 'success')
             this.course_close_date_save_state = ''
         },
         async save_course_post_tags() {
             this.course_post_tags_save_state = 'pending'
             await this.$store.dispatch('updateCourse', {post_tags: this.course_post_tags})
-            this.$bvToast.toast('Post tags saved.', {title:'Save successful', autoHideDelay: 5000})
+            window.addToast('Post tags saved.', 'success')
             this.course_post_tags_save_state = ''
         },
         add_post_tag() {
@@ -74,12 +74,12 @@ export default {
                 'fgcolor':'#FFFFFF',
                 'teacher_only':false
             }
-            this.$bvModal.show('edit_post_tag_modal')
+            this.$refs['edit_post_tag_modal'].show()
         },
         edit_post_tag(post_tag_ix) {
             this.post_tag_being_edited_posn = post_tag_ix
             this.post_tag_being_edited = {...this.course_post_tags[post_tag_ix]}
-            this.$bvModal.show('edit_post_tag_modal')
+            this.$refs['edit_post_tag_modal'].show()
         },
         delete_post_tag(post_tag_ix) {
             this.$bvModal.msgBoxConfirm('Are you sure you want to delete this post tag?').then(ok => {
@@ -107,167 +107,149 @@ export default {
 </script>
 
 <template>
-    <div>
-        <modal
-            id="edit_post_tag_modal"
-            @ok="alter_post_tag_after_edit"
-        >
-            <b-form>
-                <b-form-group
-                    label="Label:"
-                    label-for="edit_post_tag"
-                >
-                    <b-form-input
-                        id="edit_post_tag"
-                        v-model="post_tag_being_edited.name"
-                        required
-                    ></b-form-input>
-                </b-form-group>
-                <b-form-group
-                    label="Color:"
-                    label-for="edit_post_color"
-                >
-                    <b-form-select
-                        id="edit_post_color"
-                        v-model="post_tag_being_edited.bgcolor"
-                        :options="post_tag_bgcolor_choices"
-                        required
-                    ></b-form-select>
-                </b-form-group>
-                <b-form-group
-                    label="Teacher Only:"
-                    label-for="edit_post_teacher_only"
-                >
-                    <b-form-checkbox
-                        id="edit_post_teacher_only"
-                        v-model="post_tag_being_edited.teacher_only"
-                    ></b-form-checkbox>
-                </b-form-group>
-
-                <b-form-group
-                    label="Tag Preview"
-                >
-                    <div>
-                        <b-badge :style="'background-color:'+post_tag_being_edited.bgcolor">{{post_tag_being_edited.name}}</b-badge>
-                    </div>
-                </b-form-group>
-            </b-form>
-        </modal>
-    <div style="padding:20px;">
-        <h2>My Info</h2>
+    <modal
+        id="edit_post_tag_modal"
+        ref="edit_post_tag_modal"
+        @ok="alter_post_tag_after_edit"
+    >
+        <template v-slot:body>
         <form>
-            <div class="form-group">
-                <label for="name">My name:</label>
-                <input type="text" class="form-control" id="name"
-                       :value="user_name"
-                       disabled
-                >
+            <div class="mb-3">
+                <label for="edit_post_tag" class="form-label">Label:</label>
+                <input type="text" class="form-control" id="edit_post_tag" v-model="post_tag_being_edited.name" required>
             </div>
-            <div class="form-group">
-                <label for="email">My email address:</label>
-                <input type="text" class="form-control" id="email"
-                       :value="user_email"
-                       disabled
-                >
+            <div class="mb-3">
+                <label for="edit_post_color" class="form-label">Color:</label>
+                <select class="form-select" id="edit_post_color" v-model="post_tag_being_edited.bgcolor" required>
+                    <option v-for="option in post_tag_bgcolor_choices" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="edit_post_teacher_only" v-model="post_tag_being_edited.teacher_only">
+                <label class="form-check-label" for="edit_post_teacher_only">Teacher Only:</label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tag Preview</label>
+                <div>
+                    <span :style="'background-color:'+post_tag_being_edited.bgcolor" class="badge">{{post_tag_being_edited.name}}</span>
+                </div>
             </div>
         </form>
+        </template>
+    </modal>
+    <div style="padding:20px;">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2>My Info</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="name">My name:</label>
+                        <input type="text" class="form-control" id="name"
+                               :value="user_name"
+                               disabled
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="email">My email address:</label>
+                        <input type="text" class="form-control" id="email"
+                               :value="user_email"
+                               disabled
+                        >
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div v-if="has_feature_mail_activity_digest">
-            <b-card>
-                <b-card-text>
+            <div class="card mb-3">
+                <div class="card-body">
                 <h3>Email Updates</h3>
-                <b-form>
-                    <b-form-group label="Receive an update of new activity by email:" v-slot="{ ariaDescribedby }">
-                        <b-form-radio-group
-                            v-model="edited_course_user_mail_digest_frequency_minutes"
-                            :aria-describedby="ariaDescribedby"
-                            name="mail-digest-frequency"
-                            @change="course_user_mail_digest_frequency_save_state='enabled'"
-                        >
-                            <b-form-radio value="-1">Never</b-form-radio>
-                            <b-form-radio value="1440">Rarely <i>(every day)</i></b-form-radio>
-                            <b-form-radio value="120">Often <i>(every two hours)</i></b-form-radio>
-                            <b-form-radio value="15">As soon as possible <i>(every fifteen minutes)</i></b-form-radio>
-                        </b-form-radio-group>
-                    </b-form-group>
-                </b-form>
-                </b-card-text>
-                <b-button
-                    variant="primary"
-                    :disabled="course_user_mail_digest_frequency_save_state!=='enabled'"
-                    @click="save_course_user_mail_digest_frequency_minutes()"
-                ><font-awesome-icon v-if="course_user_mail_digest_frequency_save_state==='pending'" icon="spinner" spin /> Save changes</b-button>
-            </b-card>
+                    <form>
+                        <div>
+                            <label for="mail-digest-frequency" class="form-label">Receive an update of new activity by email:</label>
+                        </div>
+                        <div class="form-check ms-3">
+                            <input class="form-check-input" type="radio" name="mail-digest-frequency" id="mail-digest-frequency-1" value="-1" v-model="edited_course_user_mail_digest_frequency_minutes" @change="course_user_mail_digest_frequency_save_state='enabled'">
+                            <label class="form-check-label" for="mail-digest-frequency-1">
+                                Never
+                            </label>
+                        </div>
+                        <div class="form-check ms-3">
+                            <input class="form-check-input" type="radio" name="mail-digest-frequency" id="mail-digest-frequency-2" value="1440" v-model="edited_course_user_mail_digest_frequency_minutes" @change="course_user_mail_digest_frequency_save_state='enabled'">
+                            <label class="form-check-label" for="mail-digest-frequency-2">
+                                Rarely <i>(every day)</i>
+                            </label>
+                        </div>
+                        <div class="form-check ms-3">
+                            <input class="form-check-input" type="radio" name="mail-digest-frequency" id="mail-digest-frequency-3" value="120" v-model="edited_course_user_mail_digest_frequency_minutes" @change="course_user_mail_digest_frequency_save_state='enabled'">
+                            <label class="form-check-label" for="mail-digest-frequency-3">
+                                As soon as possible <i>(every two hours)</i>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <button class="btn btn-primary"
+                        :disabled="course_user_mail_digest_frequency_save_state!=='enabled'"
+                        @click="save_course_user_mail_digest_frequency_minutes()"
+                ><font-awesome-icon v-if="course_user_mail_digest_frequency_save_state==='pending'" icon="spinner" spin /> Save changes</button>
+            </div>
         </div>
 
         <div v-if="user_is_instructor" style="margin-top:12px;">
             <h2>Instructor Settings</h2>
-            <b-card>
-                <b-card-text>
+            <div class="card mb-1">
+                <div class="card-body">
                     <h3>Course close date</h3>
                     <p>Closing a course will remove students' ability to create or edit posts and comments.  Students will not be able to participate in this course after the date listed here.</p>
                     <label for="closeat">Close course at end of day:</label>
-                    <b-input-group size="sm">
-                        <b-form-datepicker id="closeat"
-                                           v-model="course_close_datetime"
-                                           value-as-date
-                                           reset-button
-                                           label-reset-button="Clear"
-                                           @input="course_close_date_save_state='enabled'"
-                        ></b-form-datepicker>
-                    </b-input-group>
-                </b-card-text>
-                <b-button
-                    variant="primary"
-                    :disabled="course_close_date_save_state!=='enabled'"
-                    @click="save_course_close_date()"
-                ><font-awesome-icon v-if="course_close_date_save_state==='pending'" icon="spinner" spin /> Save changes</b-button>
-            </b-card>
+                    <div class="input-group input-group-sm">
+                        <input type="date" class="form-control" id="closeat" v-model="course_close_datetime" @input="course_close_date_save_state='enabled'">
+                        <button class="btn btn-outline-secondary" type="button" @click="course_close_datetime = null">Clear</button>
+                    </div>
+                </div>
+                <button class="btn btn-primary" :disabled="course_close_date_save_state!=='enabled'" @click="save_course_close_date()">
+                    <span v-if="course_close_date_save_state==='pending'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Save changes
+                </button>
+            </div>
 
             <br>
-            <b-card>
-                <b-card-text>
-                    <h3>Post Tags <b-button variant="secondary"
-                                             size="sm"
-                                             @click="add_post_tag()"
-                    ><font-awesome-icon icon="plus"/> Add new</b-button></h3>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h3>Post Tags <button class="btn btn-sm btn-secondary"
+                                          @click="add_post_tag()"
+                    ><font-awesome-icon icon="plus"/> Add new</button></h3>
                     <table class="table">
                         <tbody>
                         <tr v-for="(post_tag,post_tag_ix) in course_post_tags">
                             <td>
-                                <b-button variant="secondary"
-                                          size="sm"
-                                          @click="edit_post_tag(post_tag_ix)"
+                                <button class="btn btn-sm btn-secondary"
+                                        @click="edit_post_tag(post_tag_ix)"
                                 ><font-awesome-icon icon="edit"/> Edit
-                                </b-button>
-                                <b-button variant="outline-danger"
-                                          size="sm"
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger"
                                           @click="delete_post_tag(post_tag_ix)"
                                 ><font-awesome-icon icon="times"/> Delete
-                                </b-button>
+                                </button>
 
                             </td>
                             <td>
-                                <b-badge :style="'background-color:'+post_tag.bgcolor">{{post_tag.name}}</b-badge>
-                                <span v-if="post_tag.teacher_only">(teacher only)</span>
+                                <span class="badge" :style="'background-color:'+post_tag.bgcolor">{{post_tag.name}}</span>
+                                <span v-if="post_tag.teacher_only" class="ms-1">(teacher only)</span>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                </b-card-text>
-                <b-button
-                    variant="primary"
+                </div>
+                <button
+                    class="btn btn-primary"
                     :disabled="course_post_tags_save_state!=='enabled'"
                     @click="save_course_post_tags()"
-                ><font-awesome-icon v-if="course_post_tags_save_state==='pending'" icon="spinner" spin /> Save changes</b-button>
-            </b-card>
-
-            <div v-if="false">
-            <h2>Course Overview</h2>
-            Stuff here - number of posts, comments?  Downloads of per-student statistics?
+                ><font-awesome-icon v-if="course_post_tags_save_state==='pending'" icon="spinner" spin /> Save changes</button>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
