@@ -44,6 +44,7 @@ export default {
             this.$refs['advanced-search-modal'].show()
         },
         do_advanced_search() {
+            console.log('do_advanced_search');
             this.search_term = this.advanced_search_text
             if (this.advanced_search_tag) {
                 this.search_term += ' tag:' + this.advanced_search_tag
@@ -87,8 +88,6 @@ export default {
             ref="advanced-search-modal"
             size="xl"
             title="Advanced Search"
-            ok-title="Search"
-            @ok="do_advanced_search()"
         >
             <template v-slot:body>
                 <form>
@@ -109,6 +108,9 @@ export default {
                     </div>
                 </form>
             </template>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" @click="do_advanced_search()">Search</button>
+            </template>
         </modal>
 
         <div class="d-flex justify-content-between">
@@ -122,6 +124,7 @@ export default {
                                 aria-label="Search"
                             >
                             <button class="btn btn-secondary clear-search-icon"
+                                type="button"
                                 @click="clear_search()"
                                 aria-label="Clear">
                                 <font-awesome-icon
@@ -138,6 +141,7 @@ export default {
 
                         <button
                             class="btn btn-search-submit"
+                            type="button"
                             title="Advanced Search"
                             aria-label="Advanced Search"
                             @click="open_advanced_search()"

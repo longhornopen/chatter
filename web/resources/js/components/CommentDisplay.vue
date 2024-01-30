@@ -3,11 +3,12 @@ import UserName from './UserName.vue'
 import FormattedDate from './FormattedDate.vue'
 import WysiwygEditor from './WysiwygEditor.vue'
 import WysiwygViewer from './WysiwygViewer.vue'
+import CommentCreate from './CommentCreate.vue'
 import component_mixins from '../component_mixins'
 import Modal from './Modal.vue'
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, Modal },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, CommentCreate, Modal },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         comment: {
@@ -205,12 +206,13 @@ export default {
                     </div>
                 </div>
                 <div
+                    class="dropdown"
                     v-show="should_display_options_menu"
-                >
-                    <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    >
+                    <div class="ellipsis" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                         <font-awesome-icon icon="ellipsis-h" />
                     </div>
-                    <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <button
                             @click="show_comment_editor()"
                             class="dropdown-item"
@@ -268,8 +270,8 @@ export default {
                         </div>
                         <div class="comment-actions">
                             <div class="left-actions">
-                                <b-button
-                                    class="no-shadow endorse-action"
+                                <button
+                                    class="btn btn-secondary no-shadow endorse-action"
                                     v-if="can_endorse"
                                     @click="endorse(!comment_is_endorsed)"
                                     ref="endorse_button"
@@ -280,15 +282,15 @@ export default {
                                         icon="award"
                                         v-if="!endorse_promise_pending"
                                     />
-                                    <b-spinner small
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                         v-if="endorse_promise_pending"
-                                    ></b-spinner>
+                                    ></span>
                                     <span class="left-action-button-text">
                                         {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
                                     </span>
-                                </b-button>
-                                <b-button
-                                    class="no-shadow upvote-action"
+                                </button>
+                                <button
+                                    class="btn btn-secondary no-shadow upvote-action"
                                     v-if="can_upvote"
                                     @click="upvote(!comment_is_upvoted_by_user)"
                                     ref="upvote_button"
@@ -299,13 +301,13 @@ export default {
                                         icon="arrow-circle-up"
                                         v-if="!upvote_promise_pending"
                                     />
-                                    <b-spinner small
-                                               v-if="upvote_promise_pending"
-                                    ></b-spinner>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                                          v-if="upvote_promise_pending"
+                                    ></span>
                                     <span class="left-action-button-text">
                                         {{comment_is_upvoted_by_user ? 'Upvoted' : 'Upvote'}}
                                     </span>
-                                </b-button>
+                                </button>
                             </div>
                             <div class="right-actions">
                                 <div
@@ -439,6 +441,8 @@ export default {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+.reply-action {
     cursor: pointer;
 }
 .single-comment {

@@ -27,7 +27,6 @@ import katex from 'katex/dist/katex';
 
 import Modal from './Modal.vue';
 
-// export
 export default {
     components: { Modal },
     props: {
