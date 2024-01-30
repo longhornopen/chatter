@@ -73,7 +73,7 @@ export default {
             this.pin_pending = false;
         },
         remove() {
-            this.$bvModal.show('delete_post');
+            this.$refs['delete_post'].show();
         },
         handle_remove_ok() {
             this.$store.dispatch('deletePost', {
@@ -101,15 +101,16 @@ export default {
             this.edited_post_body = "" + this.post.body; //copy
         },
         close_post_editor() {
-            this.$bvModal.show('abandon_post');
+            this.$refs['abandon_post'].show();
         },
         handle_close_post_editor_ok() {
             this.edited_post_body = null;
             this.post_editor_visible = false;
+            this.$refs['abandon_post'].hide();
         },
         async save_post() {
             if (!this.$refs['postEditor'].hasContents()) {
-                this.$bvModal.show('missing_body');
+                this.$refs['missing_body'].show();
                 return;
             }
             let new_body = this.$refs['postEditor'].getContents()
@@ -140,7 +141,7 @@ export default {
 
 <template>
     <div>
-        <modal id="missing_body" title="Missing Body" :ok-only="true"
+        <modal ref="missing_body" title="Missing Body" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
@@ -148,20 +149,26 @@ export default {
             <p>It looks like you forgot to write your post body.</p>
             </template>
         </modal>
-        <modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+        <modal ref="abandon_post" title="Abandon Post?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <template v-slot:body>
             <p>Are you sure you want to abandon this post without saving it?</p>
             </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_close_post_editor_ok()">Ok</button>
+            </template>
         </modal>
-        <modal id="delete_post" title="Remove Post?" @ok="handle_remove_ok"
+        <modal ref="delete_post" title="Remove Post?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <template v-slot:body>
             <p>Are you sure you want to remove this post and all its comments?</p>
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_remove_ok()">Ok</button>
             </template>
         </modal>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
@@ -229,7 +236,7 @@ export default {
                         <div class="left"></div>
                         <div class="right">
                             <button
-                                class="btn btn-tertiary"
+                                class="btn btn-tertiary me-1"
                                 @click="close_post_editor()">Cancel</button>
                             <button
                                 class="btn btn-secondary"

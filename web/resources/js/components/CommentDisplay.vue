@@ -123,25 +123,25 @@ export default {
             this.$nextTick(() => {this.$refs['commentEditor'].$el.scrollIntoView()})
         },
         hide_comment_editor: function() {
-            this.$bvModal.show('abandon_edit');
+            this.$refs['abandon_edit'].show();
         },
         handle_hide_comment_editor_ok() {
             this.edited_comment_body = null
             this.comment_editor_visible = false
+            this.$refs['abandon_edit'].hide();
         },
         async save_comment() {
             if (!this.$refs['commentEditor'].hasContents()) {
-                this.$bvModal.show('missing_comment');
+                this.$refs['missing_comment'].show();
                 return;
             }
             this.edited_comment_body = this.$refs['commentEditor'].getContents()
             this.$refs['commentEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
-            let comment = await this.$store.dispatch('editComment', {
+            await this.$store.dispatch('editComment', {
                 comment_id: this.comment.id,
                 body: this.edited_comment_body,
             })
-            this.comment = comment
             this.edit_save_pending = false;
             this.edited_comment_body = null;
             this.comment_editor_visible = false;
@@ -152,7 +152,7 @@ export default {
 
 <template>
     <div class="single-comment">
-        <modal id="missing_comment" title="Missing Comment" :ok-only="true"
+        <modal ref="missing_comment" title="Missing Comment" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
@@ -160,12 +160,15 @@ export default {
             <p>It looks like you forgot to write your comment.</p>
             </template>
         </modal>
-        <modal id="abandon_edit" title="Abandon Edit?" @ok="handle_hide_comment_editor_ok"
+        <modal ref="abandon_edit" title="Abandon Edit?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
             <template v-slot:body>
             <p>Are you sure you want to abandon your edit without saving?</p>
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_hide_comment_editor_ok()">Ok</button>
             </template>
         </modal>
         <div>

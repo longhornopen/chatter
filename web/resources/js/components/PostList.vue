@@ -117,7 +117,7 @@ export default {
         <div class="app-post-list-body">
             <div v-if="!posts_loaded" class="d-flex justify-content-center mt-5">
                 <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
             <div
@@ -138,13 +138,15 @@ export default {
                     <div class="post-btn-group">
                         <div>
                             <font-awesome-icon
-                            class="pin-icon"
-                            :class="post.pinned ? '' : 'd-none'"
-                            icon="thumbtack" />
+                                class="pin-icon"
+                                :class="post.pinned ? '' : 'd-none'"
+                                icon="thumbtack"
+                            />
                             <font-awesome-icon
-                            class="lock-icon"
-                            :class="post.locked ? '' : 'd-none'"
-                            icon="lock" />
+                                class="lock-icon"
+                                :class="post.locked ? '' : 'd-none'"
+                                icon="lock"
+                            />
                         </div>
                         <div v-if="post.num_unread_comments === 0">
                             <div class="btn-group" role="group" :aria-label="post.num_comments + 'comments'">
