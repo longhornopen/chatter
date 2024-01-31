@@ -15,6 +15,7 @@
         "@toast-ui/editor-plugin-code-syntax-highlight": "^3.0.0",
         "@vitejs/plugin-vue": "^4.5.0",
         "@vue/compiler-sfc": "^3.1.0",
+        "@vuepic/vue-datepicker": "^7.4.1",
         "axios": "^1.0.0",
         "bootstrap": "^5.0.0",
         "katex": "^0.13.13",

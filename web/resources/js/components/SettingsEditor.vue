@@ -1,8 +1,10 @@
 <script>
 import Modal from './Modal.vue'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 export default {
-    components: { Modal },
+    components: { Modal, VueDatePicker },
     data () {
         return {
             user_name: '',
@@ -216,10 +218,13 @@ export default {
                 <div class="card-body">
                     <h3>Course close date</h3>
                     <p>Closing a course will remove students' ability to create or edit posts and comments.  Students will not be able to participate in this course after the date listed here.</p>
-                    <label for="closeat">Close course at end of day:</label>
+                    <label for="closeat">Close course at:</label>
                     <div class="input-group input-group-sm">
-                        <input type="date" class="form-control" id="closeat" v-model="course_close_datetime" @input="course_close_date_save_state='enabled'">
-                        <button class="btn btn-outline-secondary" type="button" @click="course_close_datetime = null">Clear</button>
+                        <VueDatePicker v-model="course_close_datetime"
+                                       :time-picker-inline="true"
+                                       :is-24="false"
+                                       @update:model-value="course_close_date_save_state='enabled'"
+                        ></VueDatePicker>
                     </div>
                 </div>
                 <button class="btn btn-primary" :disabled="course_close_date_save_state!=='enabled'" @click="save_course_close_date()">
