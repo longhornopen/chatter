@@ -2,7 +2,6 @@
 import UserName from './UserName.vue'
 import FormattedDate from './FormattedDate.vue'
 import PostTagBadge from './PostTagBadge.vue'
-import _ from 'lodash'
 import WysiwygEditor from './WysiwygEditor.vue'
 import WysiwygViewer from './WysiwygViewer.vue'
 import component_mixins from '../component_mixins'
@@ -24,14 +23,12 @@ export default {
             edit_save_pending: false,
             pin_pending: false,
             lock_pending: false,
+            post_loaded: false,
         };
     },
     computed: {
         post() {
             return this.$store.state.currently_viewed_post
-        },
-        post_loaded() {
-            return !_.isEmpty(this.post);
         },
         user_is_teacher() {
             return this.$store.getters.user.role === 'teacher';
@@ -135,6 +132,7 @@ export default {
     },
     async mounted() {
         await this.$store.dispatch('setCurrentlyViewedPost', {'post_id': this.post_id});
+        this.post_loaded = true;
     },
 }
 </script>

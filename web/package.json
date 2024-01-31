@@ -21,7 +21,6 @@
         "katex": "^0.13.13",
         "laravel-echo": "^1.10.0",
         "laravel-vite-plugin": "^0.8.0",
-        "lodash": "^4.17.19",
         "sass": "^1.35.2",
         "vite": "^4.0.0",
         "vue": "^3.1",

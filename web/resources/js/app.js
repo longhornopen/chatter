@@ -4,21 +4,6 @@ import './bootstrap';
 
 import { createApp } from 'vue';
 
-/*
-
-import AppHeader from './components/AppHeader.vue';
-import PostList from './components/PostList.vue';
-import CommentCreate from './components/CommentCreate.vue';
-import CommentDisplay from './components/CommentDisplay.vue';
-import FormattedDate from './components/FormattedDate.vue';
-
-Vue.component('app-header', AppHeader);
-Vue.component('post-list', PostList);
-Vue.component('comment-create', CommentCreate);
-Vue.component('comment-display', CommentDisplay)
-Vue.component('formatted-date', FormattedDate);
-*/
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -86,8 +71,6 @@ let onResize = function() {
 import PostDisplay from './components/PostDisplay.vue';
 import PostCreate from './components/PostCreate.vue';
 import SplashPage from './components/SplashPage.vue';
-// Vue.component('post-display', PostDisplay);
-// Vue.component('post-create', PostCreate);
 
 import { createRouter, createWebHashHistory } from 'vue-router';
 const router = createRouter({

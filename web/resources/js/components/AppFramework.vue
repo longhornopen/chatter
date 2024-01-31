@@ -1,13 +1,11 @@
 <script>
-import SplashPage from './SplashPage.vue';
-import SettingsEditor from './SettingsEditor.vue';
 import AppHeader from './AppHeader.vue';
 import PostList from './PostList.vue';
 import Modal from './Modal.vue';
 import component_mixins from '../component_mixins'
 
 export default {
-    components: { SplashPage, SettingsEditor, AppHeader, PostList, Modal },
+    components: { AppHeader, PostList, Modal },
     mixins: [component_mixins.course_closed_mixin],
     data() {
         return {
