@@ -36,7 +36,7 @@ export default {
         </ul>
 
         <p>
-            Check out what’s new in your Post Dashboard to the left, where you’ll see All, Pinned, Unread, and My Posts.
+            Check out what’s new in your Post Dashboard to the left, where you’ll see All, Unread, and My Posts.
             Click a post to begin.
             <br>
             You can also search all Posts for content using the search function,

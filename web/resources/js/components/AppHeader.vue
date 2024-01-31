@@ -1,9 +1,10 @@
 <script>
-import HelpViewer from './HelpViewer'
-import SettingsEditor from './SettingsEditor'
+import HelpViewer from './HelpViewer.vue'
+import SettingsEditor from './SettingsEditor.vue'
+import Modal from './Modal.vue'
 
 export default {
-    components: { SettingsEditor, HelpViewer },
+    components: { SettingsEditor, HelpViewer, Modal },
     data() {
         return {
             search_term: "",
@@ -18,7 +19,7 @@ export default {
         advanced_search_tag_options() {
             let post_tags = this.$store.getters.course_summary.post_tags
                 .map(t => {return { value: t.name, text: t.name }})
-            post_tags.unshift({ value: null, text: '(any tag)' })
+            post_tags.unshift({ value: null, text: "(any tag)" });
             return post_tags
         },
     },
@@ -32,23 +33,24 @@ export default {
             this.$store.dispatch('search')
         },
         open_settings() {
-            this.$bvModal.show('settings-modal')
+            this.$refs['settings-modal'].show()
         },
         open_help() {
-            this.$bvModal.show('help-modal')
+            this.$refs['help-modal'].show()
         },
         open_advanced_search() {
             this.advanced_search_text = ""
             this.advanced_search_tag = null
-            this.$bvModal.show('advanced-search-modal')
+            this.$refs['advanced-search-modal'].show()
         },
         do_advanced_search() {
+            console.log('do_advanced_search');
             this.search_term = this.advanced_search_text
             if (this.advanced_search_tag) {
                 this.search_term += ' tag:' + this.advanced_search_tag
             }
             this.search()
-            this.$bvModal.hide('advanced-search-modal')
+            this.$refs['advanced-search-modal'].hide()
         }
     }
 }
@@ -57,101 +59,99 @@ export default {
 <template>
     <div class="app-header-bar">
 
-        <b-modal
+        <modal
             id="settings-modal"
+            ref="settings-modal"
             size="xl"
             title="Settings"
             ok-only
         >
+            <template v-slot:body>
             <settings-editor />
-        </b-modal>
+            </template>
+        </modal>
 
-        <b-modal
+        <modal
             id="help-modal"
+            ref="help-modal"
             size="xl"
             title="Help"
             ok-only
         >
+            <template v-slot:body>
             <help-viewer />
-        </b-modal>
+            </template>
+        </modal>
 
-        <b-modal
+        <modal
             id="advanced-search-modal"
+            ref="advanced-search-modal"
             size="xl"
             title="Advanced Search"
-            ok-title="Search"
-            @ok="do_advanced_search()"
         >
-            <b-form>
-                <b-form-group
-                    id="advanced-search-group-text"
-                    label="Search Text:"
-                    description="Search for posts containing these words."
-                >
-                    <b-form-input
-                        id="advanced-search-text"
-                        v-model="advanced_search_text"
-                    ></b-form-input>
-                </b-form-group>
-                <b-form-group
-                    label="Search Tag:"
-                    description="Search for posts with these tags."
-                >
-                    <b-form-radio-group
-                        id="advanced-search-group-tag"
-                    >
-                        <b-form-radio-group
-                            id="advanced-search-tag"
-                            v-model="advanced_search_tag"
-                            :options="advanced_search_tag_options"
-                        ></b-form-radio-group>
-                    </b-form-radio-group>
-                </b-form-group>
-            </b-form>
-        </b-modal>
+            <template v-slot:body>
+                <form>
+                    <div class="mb-3">
+                        <label for="advanced-search-text" class="form-label">Search Text:</label>
+                        <input type="text" class="form-control" id="advanced-search-text" v-model="advanced_search_text">
+                        <div id="advanced-search-group-text" class="form-text">Search for posts containing these words.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Search Tag:</label>
+                        <div id="advanced-search-group-tag" class="form-text">Search for posts with these tags.</div>
+                        <div class="d-flex flex-row">
+                            <div class="form-check form-check-inline" v-for="tag in advanced_search_tag_options" :key="tag.value">
+                                <input class="form-check-input" type="radio" :id="tag.value" :value="tag.value" v-model="advanced_search_tag">
+                                <label class="form-check-label" :for="tag.value">{{tag.text}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </template>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" @click="do_advanced_search()">Search</button>
+            </template>
+        </modal>
 
         <div class="d-flex justify-content-between">
             <div class="header-col">
-                <b-form inline
-                    @submit.stop.prevent="search()"
-                >
-                    <b-input-group class="input-group">
-                        <b-form-input
-                            class="search-input"
-                            placeholder="Search posts..."
-                            autocomplete="off"
-                            v-model="search_term"
-                            aria-label="Search"
-                        ></b-form-input>
-                        <b-input-group-append>
-                        <b-button
-                            class="bg-transparent clear-search-icon"
-                            @click="clear_search()"
-                            aria-label="Clear">
+                <form class="row search-form" @submit.prevent="search()">
+                    <div class="col-12 d-flex">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-input" placeholder="Search posts..."
+                                autocomplete="off"
+                                v-model="search_term"
+                                aria-label="Search"
+                            >
+                            <button class="btn btn-secondary clear-search-icon"
+                                type="button"
+                                @click="clear_search()"
+                                aria-label="Clear">
+                                <font-awesome-icon
+                                    class="times-icon"
+                                    icon="times-circle"
+                                    size="lg"/>
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-search-submit"
+                        ><font-awesome-icon color="white" icon="search"/> Search</button>
+
+                        <button
+                            class="btn btn-search-submit"
+                            type="button"
+                            title="Advanced Search"
+                            aria-label="Advanced Search"
+                            @click="open_advanced_search()"
+                        >
                             <font-awesome-icon
-                                class="times-icon"
-                                icon="times-circle"
-                                size="lg"/>
-                        </b-button>
-                        </b-input-group-append>
-                    </b-input-group>
-
-                    <b-button
-                        type="submit"
-                        class="btn-search-submit"
-                    ><font-awesome-icon color="white" icon="search"/> Search</b-button>
-
-                    <button
-                        class="btn btn-search-submit"
-                        title="Advanced Search"
-                        aria-label="Advanced Search"
-                        @click="open_advanced_search()"
-                    >
-                        <font-awesome-icon
-                            icon="search-plus"
-                        />
-                    </button>
-                </b-form>
+                                icon="search-plus"
+                            />
+                        </button>
+                    </div>
+                </form>
             </div>
             <div class="header-col middle">
                 <div class="course-name">{{ course_name }}</div>
@@ -219,14 +219,17 @@ export default {
             height: 70px;
         }
     }
-    .form-inline {
+    .search-form {
         flex-flow: nowrap;
-        .form-control, .form-control:focus {
+        .search-input, .search-input:focus {
             background-color: $darkgray;
             border-radius: 6px;
             border: none;
             color: $white;
-            margin: 0 10px 0 0;
+        }
+        .search-input::placeholder {
+            color: #6c757d;
+            opacity: 1;
         }
 
         .btn-search-submit {
@@ -240,25 +243,26 @@ export default {
         .btn-search-submit:hover {
             background-color: $primary;
         }
+        .clear-search-icon {
+            background-color: $darkgray;
+            display: flex;
+            align-items: center;
+            margin-left: -50px;
+            z-index: 100;
+            box-shadow: none;
+            border: 0;
+            .times-icon {
+                color: $bg-dark;
+            }
+        }
+        .clear-search-icon:focus {
+            box-shadow: none;
+        }
     }
     .settings-control {
         font-size: 1.5rem;
         margin-left: 5px;
         margin-right: 5px;
-    }
-    .clear-search-icon {
-        display: flex;
-        align-items: center;
-        margin-left: -50px;
-        z-index: 100;
-        box-shadow: none;
-        border: 0;
-        .times-icon {
-            color: $bg-dark;
-        }
-    }
-    .clear-search-icon:focus {
-        box-shadow: none;
     }
 }
 

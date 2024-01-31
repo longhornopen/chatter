@@ -1,9 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
 import axios from 'axios'
 
-Vue.use(Vuex)
+import { createStore } from 'vuex';
 
 /**
 @typedef {object} Course
@@ -212,7 +209,7 @@ const mutations = {
       comment.num_upvotes = comment.num_upvotes + 1
     }
   },
-  removeCommentUpvote ({ commit }, payload) {
+  removeCommentUpvote (state, payload) {
     state.user_upvoted_comment_ids = state.user_upvoted_comment_ids
       .filter(id => id !== payload.comment_id)
     let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
@@ -351,10 +348,9 @@ const actions = {
   }
 }
 
-export default new Vuex.Store({
+export const store = createStore({
   state,
   getters,
   actions,
   mutations
-})
-
+});

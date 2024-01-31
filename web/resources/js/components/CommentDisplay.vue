@@ -1,12 +1,14 @@
 <script>
-import UserName from './UserName'
-import FormattedDate from './FormattedDate'
-import WysiwygEditor from './WysiwygEditor'
-import WysiwygViewer from './WysiwygViewer'
+import UserName from './UserName.vue'
+import FormattedDate from './FormattedDate.vue'
+import WysiwygEditor from './WysiwygEditor.vue'
+import WysiwygViewer from './WysiwygViewer.vue'
+import CommentCreate from './CommentCreate.vue'
 import component_mixins from '../component_mixins'
+import Modal from './Modal.vue'
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, CommentCreate, Modal },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         comment: {
@@ -121,25 +123,25 @@ export default {
             this.$nextTick(() => {this.$refs['commentEditor'].$el.scrollIntoView()})
         },
         hide_comment_editor: function() {
-            this.$bvModal.show('abandon_edit');
+            this.$refs['abandon_edit'].show();
         },
         handle_hide_comment_editor_ok() {
             this.edited_comment_body = null
             this.comment_editor_visible = false
+            this.$refs['abandon_edit'].hide();
         },
         async save_comment() {
             if (!this.$refs['commentEditor'].hasContents()) {
-                this.$bvModal.show('missing_comment');
+                this.$refs['missing_comment'].show();
                 return;
             }
             this.edited_comment_body = this.$refs['commentEditor'].getContents()
             this.$refs['commentEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
-            let comment = await this.$store.dispatch('editComment', {
+            await this.$store.dispatch('editComment', {
                 comment_id: this.comment.id,
                 body: this.edited_comment_body,
             })
-            this.comment = comment
             this.edit_save_pending = false;
             this.edited_comment_body = null;
             this.comment_editor_visible = false;
@@ -150,18 +152,25 @@ export default {
 
 <template>
     <div class="single-comment">
-        <b-modal id="missing_comment" title="Missing Comment" :ok-only="true"
+        <modal ref="missing_comment" title="Missing Comment" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your comment.</p>
-        </b-modal>
-        <b-modal id="abandon_edit" title="Abandon Edit?" @ok="handle_hide_comment_editor_ok"
+            </template>
+        </modal>
+        <modal ref="abandon_edit" title="Abandon Edit?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to abandon your edit without saving?</p>
-        </b-modal>
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_hide_comment_editor_ok()">Ok</button>
+            </template>
+        </modal>
         <div>
             <div class="comment-top-row">
                 <div class="comment-metadata">
@@ -200,12 +209,13 @@ export default {
                     </div>
                 </div>
                 <div
+                    class="dropdown"
                     v-show="should_display_options_menu"
-                >
-                    <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    >
+                    <div class="ellipsis" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                         <font-awesome-icon icon="ellipsis-h" />
                     </div>
-                    <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <button
                             @click="show_comment_editor()"
                             class="dropdown-item"
@@ -263,8 +273,8 @@ export default {
                         </div>
                         <div class="comment-actions">
                             <div class="left-actions">
-                                <b-button
-                                    class="no-shadow endorse-action"
+                                <button
+                                    class="btn btn-secondary no-shadow endorse-action"
                                     v-if="can_endorse"
                                     @click="endorse(!comment_is_endorsed)"
                                     ref="endorse_button"
@@ -275,15 +285,15 @@ export default {
                                         icon="award"
                                         v-if="!endorse_promise_pending"
                                     />
-                                    <b-spinner small
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                         v-if="endorse_promise_pending"
-                                    ></b-spinner>
+                                    ></span>
                                     <span class="left-action-button-text">
                                         {{comment_is_endorsed ? 'Unendorse' : 'Endorse'}}
                                     </span>
-                                </b-button>
-                                <b-button
-                                    class="no-shadow upvote-action"
+                                </button>
+                                <button
+                                    class="btn btn-secondary no-shadow upvote-action"
                                     v-if="can_upvote"
                                     @click="upvote(!comment_is_upvoted_by_user)"
                                     ref="upvote_button"
@@ -294,13 +304,13 @@ export default {
                                         icon="arrow-circle-up"
                                         v-if="!upvote_promise_pending"
                                     />
-                                    <b-spinner small
-                                               v-if="upvote_promise_pending"
-                                    ></b-spinner>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                                          v-if="upvote_promise_pending"
+                                    ></span>
                                     <span class="left-action-button-text">
                                         {{comment_is_upvoted_by_user ? 'Upvoted' : 'Upvote'}}
                                     </span>
-                                </b-button>
+                                </button>
                             </div>
                             <div class="right-actions">
                                 <div
@@ -434,6 +444,8 @@ export default {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+.reply-action {
     cursor: pointer;
 }
 .single-comment {

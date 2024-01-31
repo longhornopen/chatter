@@ -1,14 +1,17 @@
 <script>
-import UserName from './UserName'
-import FormattedDate from './FormattedDate'
-import PostTagBadge from './PostTagBadge'
+import UserName from './UserName.vue'
+import FormattedDate from './FormattedDate.vue'
+import PostTagBadge from './PostTagBadge.vue'
 import _ from 'lodash'
-import WysiwygEditor from './WysiwygEditor'
-import WysiwygViewer from './WysiwygViewer'
+import WysiwygEditor from './WysiwygEditor.vue'
+import WysiwygViewer from './WysiwygViewer.vue'
 import component_mixins from '../component_mixins'
+import Modal from './Modal.vue'
+import CommentDisplay from "./CommentDisplay.vue";
+import CommentCreate from "./CommentCreate.vue";
 
 export default {
-    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge },
+    components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge, Modal, CommentDisplay, CommentCreate },
     mixins: [component_mixins.course_closed_mixin],
     props: {
         post_id: { type: Number, required: true },
@@ -70,7 +73,7 @@ export default {
             this.pin_pending = false;
         },
         remove() {
-            this.$bvModal.show('delete_post');
+            this.$refs['delete_post'].show();
         },
         handle_remove_ok() {
             this.$store.dispatch('deletePost', {
@@ -98,15 +101,16 @@ export default {
             this.edited_post_body = "" + this.post.body; //copy
         },
         close_post_editor() {
-            this.$bvModal.show('abandon_post');
+            this.$refs['abandon_post'].show();
         },
         handle_close_post_editor_ok() {
             this.edited_post_body = null;
             this.post_editor_visible = false;
+            this.$refs['abandon_post'].hide();
         },
         async save_post() {
             if (!this.$refs['postEditor'].hasContents()) {
-                this.$bvModal.show('missing_body');
+                this.$refs['missing_body'].show();
                 return;
             }
             let new_body = this.$refs['postEditor'].getContents()
@@ -137,24 +141,36 @@ export default {
 
 <template>
     <div>
-        <b-modal id="missing_body" title="Missing Body" :ok-only="true"
+        <modal ref="missing_body" title="Missing Body" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your post body.</p>
-        </b-modal>
-        <b-modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+            </template>
+        </modal>
+        <modal ref="abandon_post" title="Abandon Post?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to abandon this post without saving it?</p>
-        </b-modal>
-        <b-modal id="delete_post" title="Remove Post?" @ok="handle_remove_ok"
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_close_post_editor_ok()">Ok</button>
+            </template>
+        </modal>
+        <modal ref="delete_post" title="Remove Post?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to remove this post and all its comments?</p>
-        </b-modal>
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_remove_ok()">Ok</button>
+            </template>
+        </modal>
         <div v-if="!post_loaded" class="d-flex justify-content-center mt-5">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
@@ -182,7 +198,7 @@ export default {
                         ></formatted-date>
                         <span v-if="post.edited_at">
                         <i style="font-size:90%;">
-                            (Edited 
+                            (Edited
                             <formatted-date
                             :date-iso="post.edited_at"
                         ></formatted-date>
@@ -193,7 +209,7 @@ export default {
                     <div
                         v-show="should_display_options_menu"
                     >
-                        <div class="ellipsis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="ellipsis" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <font-awesome-icon icon="ellipsis-h" />
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -220,7 +236,7 @@ export default {
                         <div class="left"></div>
                         <div class="right">
                             <button
-                                class="btn btn-tertiary"
+                                class="btn btn-tertiary me-1"
                                 @click="close_post_editor()">Cancel</button>
                             <button
                                 class="btn btn-secondary"

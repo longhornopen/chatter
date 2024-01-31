@@ -22,7 +22,7 @@ export default {
 
 <template>
     <span v-if="_post_tag">
-        <b-badge :style="'background-color:'+_post_tag.bgcolor">{{_post_tag.name}}</b-badge>
+        <span :style="'background-color:'+_post_tag.bgcolor" class="badge">{{_post_tag.name}}</span>
     </span>
 </template>
 

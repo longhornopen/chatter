@@ -1,8 +1,9 @@
 <script>
-import WysiwygEditor from './WysiwygEditor'
+import WysiwygEditor from './WysiwygEditor.vue'
+import Modal from './Modal.vue'
 
 export default {
-    components: { WysiwygEditor },
+    components: { WysiwygEditor, Modal },
     data() {
         return {
             title: '',
@@ -28,11 +29,11 @@ export default {
     methods: {
         async submit_new_post() {
             if (this.title.trim().length === 0) {
-                this.$bvModal.show('missing_title');
+                this.$refs['missing_title'].show();
                 return;
             }
             if (!this.$refs['postEditor'].hasContents()) {
-                this.$bvModal.show('missing_body');
+                this.$refs['missing_body'].show();
                 return;
             }
             this.body = this.$refs['postEditor'].getContents()
@@ -48,7 +49,7 @@ export default {
             await this.$router.push('/post/'+post.id);
         },
         close_post_editor() {
-            this.$bvModal.show('abandon_post');
+            this.$refs['abandon_post'].show();
         },
         handle_close_post_editor_ok() {
             if (this.in_mobile_mode) {
@@ -76,24 +77,33 @@ export default {
 
 <template>
     <div class="new-post">
-        <b-modal id="missing_title" title="Missing Title" :ok-only="true"
+        <modal ref="missing_title" title="Missing Title" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your post title.</p>
-        </b-modal>
-        <b-modal id="missing_body" title="Missing Body" :ok-only="true"
+            </template>
+        </modal>
+        <modal ref="missing_body" title="Missing Body" :ok-only="true"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>It looks like you forgot to write your post body.</p>
-        </b-modal>
-        <b-modal id="abandon_post" title="Abandon Post?" @ok="handle_close_post_editor_ok"
+            </template>
+        </modal>
+        <modal ref="abandon_post" title="Abandon Post?"
                  header-bg-variant="warning"
                  header-text-variant="light"
         >
+            <template v-slot:body>
             <p>Are you sure you want to abandon this post without saving it?</p>
-        </b-modal>
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_close_post_editor_ok()">Ok</button>
+            </template>
+        </modal>
         <fieldset v-bind:disabled="save_pending">
             <div class="back-group" v-if="in_mobile_mode" @click="switch_screen()">
                 <font-awesome-icon class="back-icon" icon="chevron-left" size="2x"/>
@@ -105,7 +115,11 @@ export default {
             </div>
             <div class="form-group">
                 <label for="post-tag">Tag post as:</label>
-                <b-form-select v-model="post_tag" :options="post_tag_options"></b-form-select>
+                <select class="form-select" v-model="post_tag">
+                    <option v-for="option in post_tag_options" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="post-body">Post Body</label>

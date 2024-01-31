@@ -17,7 +17,7 @@ import katex from 'katex/dist/katex';
 // export
 export default {
     props: {
-        value: {
+        modelValue: {
             type: String,
             default: "",
         }
@@ -31,7 +31,7 @@ export default {
     mounted() {
         this.viewer = new Viewer({
             el: this.$refs.viewer.querySelector('div'),
-            initialValue: this.value,
+            initialValue: this.modelValue,
             usageStatistics: false,
             plugins: [[codeSyntaxHighlight, { highlighter: Prism }]],
             customHTMLRenderer: {
