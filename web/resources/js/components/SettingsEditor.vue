@@ -28,6 +28,7 @@ export default {
             ],
             post_tag_being_edited: {},
             post_tag_being_edited_posn: null,
+            post_tag_being_deleted_ix: null,
             course_post_tags_save_state: '',
         }
     },
@@ -81,18 +82,20 @@ export default {
             this.post_tag_being_edited = {...this.course_post_tags[post_tag_ix]}
             this.$refs['edit_post_tag_modal'].show()
         },
-        delete_post_tag(post_tag_ix) {
-            this.$bvModal.msgBoxConfirm('Are you sure you want to delete this post tag?').then(ok => {
-                if (ok) {
-                    this.course_post_tags.splice(post_tag_ix, 1)
-                    this.course_post_tags_save_state = 'enabled'
-                }
-            });
+        confirm_delete_post_tag(post_tag_ix) {
+            this.post_tag_being_deleted_ix = post_tag_ix
+            this.$refs['delete_post_tag_confirm_modal'].show()
+        },
+        delete_post_tag() {
+            this.course_post_tags.splice(this.post_tag_being_deleted_ix, 1)
+            this.course_post_tags_save_state = 'enabled'
+            this.$refs['delete_post_tag_confirm_modal'].hide()
         },
         alter_post_tag_after_edit() {
             if (!this.post_tag_being_edited.name) { return; }
             this.course_post_tags.splice(this.post_tag_being_edited_posn, 1, this.post_tag_being_edited)
             this.course_post_tags_save_state = 'enabled'
+            this.$refs['edit_post_tag_modal'].hide()
         },
     },
     async mounted() {
@@ -108,9 +111,19 @@ export default {
 
 <template>
     <modal
+        ref="delete_post_tag_confirm_modal"
+
+    >
+        <template v-slot:body>
+            <p>Are you sure you want to delete this post tag?</p>
+        </template>
+        <template v-slot:footer>
+            <button class="btn btn-primary" @click="delete_post_tag()">Ok</button>
+        </template>
+    </modal>
+    <modal
         id="edit_post_tag_modal"
         ref="edit_post_tag_modal"
-        @ok="alter_post_tag_after_edit"
     >
         <template v-slot:body>
         <form>
@@ -137,6 +150,9 @@ export default {
                 </div>
             </div>
         </form>
+        </template>
+        <template v-slot:footer>
+            <button class="btn btn-primary" @click="alter_post_tag_after_edit()">Ok</button>
         </template>
     </modal>
     <div style="padding:20px;">
@@ -230,7 +246,7 @@ export default {
                                 ><font-awesome-icon icon="edit"/> Edit
                                 </button>
                                 <button class="btn btn-sm btn-outline-danger"
-                                          @click="delete_post_tag(post_tag_ix)"
+                                          @click="confirm_delete_post_tag(post_tag_ix)"
                                 ><font-awesome-icon icon="times"/> Delete
                                 </button>
 

@@ -52,9 +52,12 @@ export default {
             <p>Your teacher has closed this Chatter.  You can still view existing conversations.</p>
             </template>
         </modal>
-        <modal id="course_stale" ref="course_stale_modal" title="Refresh?" @ok="handle_stale_ok">
+        <modal id="course_stale" ref="course_stale_modal" title="Refresh?">
             <template v-slot:body>
             <p>Chatter has been open for a while, and you may not be looking at the most recent posts.  Click "OK" to refresh.</p>
+            </template>
+            <template v-slot:footer>
+                <button class="btn btn-primary" @click="handle_stale_ok()">Ok</button>
             </template>
         </modal>
         <div class="row g-0">
