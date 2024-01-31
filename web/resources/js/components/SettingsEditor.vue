@@ -36,9 +36,6 @@ export default {
         user_is_instructor() {
             return this.$store.getters.user_is_teacher;
         },
-        has_feature_mail_activity_digest() {
-            return true; // FIXME refactor out
-        },
         course_user_mail_digest_frequency_minutes() {
             return this.$store.getters.user.mail_digest_frequency_minutes;
         },
@@ -178,7 +175,7 @@ export default {
             </div>
         </div>
 
-        <div v-if="has_feature_mail_activity_digest">
+        <div>
             <div class="card mb-3">
                 <div class="card-body">
                 <h3>Email Updates</h3>
