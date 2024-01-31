@@ -90,18 +90,17 @@ class ApiController extends Controller
             $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));
             $course->help_url = env('APP_HELP_URL');
         }
+        // FIXME Remove unused $app_settings
         $app_settings = ['feature_flags'=>[]];
-
-        $response = [];
-        $response['course'] = $course;
-        $response['app_settings'] = $app_settings;
 
         $upvoted_comment_ids = CommentUpvote::where('course_user_id', $course_user->course_id)
             ->pluck('comment_id');
 
-        $response['user_upvoted_comment_ids'] = $upvoted_comment_ids;
-
-        return $response;
+        return [
+            'course' => $course,
+            'app_settings' => $app_settings,
+            'user_upvoted_comment_ids' => $upvoted_comment_ids,
+        ];
     }
 
     public function getCoursePosts(Request $request, $course_id)
@@ -115,21 +114,16 @@ class ApiController extends Controller
         $posts = Post::where('course_id', $course_user->course_id)
             ->orderBy('created_at', 'desc');
         if ($filter==='unread') {
-            // FIXME clunky
-            $fully_read_posts = DB::select(<<<'TAG'
-SELECT posts.id as id, max(posts.last_comment_at) as comment_date, max(flags.updated_at) as flag_date
-from posts,course_user_post_last_read_flags as flags
-where flags.post_id = posts.id
-  and posts.course_id = ?
-  and flags.course_user_id = ?
-group by posts.id
-TAG
-                , [$course_user->course_id,$course_user_id]);
-            $fully_read_posts = array_filter($fully_read_posts, function($post) {
-                return $post->flag_date >= $post->comment_date;
-            });
-            $post_ids = array_values(array_column($fully_read_posts, 'id'));
-            $posts = $posts->whereNotIn('id', $post_ids);
+            $fully_read_posts = DB::table('posts')
+                ->join('course_user_post_last_read_flags as flags', 'flags.post_id', '=', 'posts.id')
+                ->where('posts.course_id', $course_user->course_id)
+                ->where('flags.course_user_id', $course_user_id)
+                ->select('posts.id as id', DB::raw('max(posts.last_comment_at) as comment_date'), DB::raw('max(flags.updated_at) as flag_date'))
+                ->groupBy('posts.id')
+                ->havingRaw('max(flags.updated_at) >= max(posts.last_comment_at)')
+                ->pluck('id');
+
+            $posts = $posts->whereNotIn('id', $fully_read_posts);
         } elseif ($filter==='my_posts') {
             $posts = $posts->where('author_user_id', $course_user->id);
         }
