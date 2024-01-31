@@ -209,7 +209,7 @@ const mutations = {
       comment.num_upvotes = comment.num_upvotes + 1
     }
   },
-  removeCommentUpvote ({ commit }, payload) {
+  removeCommentUpvote (state, payload) {
     state.user_upvoted_comment_ids = state.user_upvoted_comment_ids
       .filter(id => id !== payload.comment_id)
     let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
