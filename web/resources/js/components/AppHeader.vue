@@ -113,6 +113,8 @@ export default {
             </template>
         </modal>
 
+        <div class="course-name mobile">{{ course_name }}</div>
+
         <div class="d-flex justify-content-between">
             <div class="header-col">
                 <form class="row search-form" @submit.prevent="search()">
@@ -137,11 +139,13 @@ export default {
                         <button
                             type="submit"
                             class="btn btn-search-submit"
+                            id="search-submit-button"
                         ><font-awesome-icon color="white" icon="search"/> Search</button>
 
                         <button
                             class="btn btn-search-submit"
                             type="button"
+                            id="advanced-search-button"
                             title="Advanced Search"
                             aria-label="Advanced Search"
                             @click="open_advanced_search()"
@@ -173,7 +177,6 @@ export default {
                 </div>
             </div>
         </div>
-        <div class="course-name mobile">{{ course_name }}</div>
 
     </div>
 </template>
@@ -269,7 +272,7 @@ export default {
 @media screen and (max-width: 1077px) {
     .app-header-bar {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         .course-name.mobile {
             display: flex;
             justify-content: center;
@@ -278,6 +281,12 @@ export default {
             padding: 10px 10px;
         }
         .header-col.middle {
+            display: none;
+        }
+        #search-submit-button {
+            display: none;
+        }
+        #advanced-search-button {
             display: none;
         }
     }
