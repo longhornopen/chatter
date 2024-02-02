@@ -278,35 +278,8 @@ export default {
             cursor: pointer;
         }
     }
-    @media screen and (max-width: 1152px){
-        .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1152)} - #{$post-list-padding} - #{$write-post-btn-height});
-        }
-    }
-    @media screen and (max-width: 1077px) {
-        .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1077)} - #{map-get($tabs-height, 1077)} - #{$post-list-padding} - #{$write-post-btn-height});
-        }
-    }
-    @media screen and (max-width: 900px) {
-        .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 900)} - #{map-get($tabs-height, 900)} - #{$post-list-padding} - #{$write-post-btn-height});
-        }
-    }
-    @media screen and (max-width: 884px) {
-        .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 884)} - #{map-get($tabs-height, 884)} - #{$post-list-padding} - #{$write-post-btn-height});
-        }
-    }
-    @media screen and (max-width: 767px) {
-        .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 767)} - #{map-get($tabs-height, 767)} - #{$post-list-padding} - #{$write-post-btn-height});
-        }
-    }
-    @media screen and (max-width: 384px) {
-        .app-post-list-body {
-            height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 384)} - #{map-get($tabs-height, 384)} - #{$post-list-padding} - #{$write-post-btn-height});
-        }
+    .app-post-list-body {
+        height: 100%;
     }
 }
 </style>
