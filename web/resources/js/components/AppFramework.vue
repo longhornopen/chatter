@@ -108,7 +108,7 @@ export default {
     .app-title.large {
         font-size: xxx-large;
     }
-    margin: 10px 20px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
 }
