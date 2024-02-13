@@ -423,9 +423,6 @@ class ApiController extends Controller
     }
 
     public function uploadFile(Request $request, $course_id) {
-        ini_set('post_max_size', '10M');
-        ini_set('upload_max_filesize', '10M');
-
         $this->getCourseUserFromSession($request, $course_id);
 
         $uploaded_image = $request->file('image');
