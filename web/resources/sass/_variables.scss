@@ -41,18 +41,6 @@ $full-width: 100vw;
 $title-bar-height: 60px;
 $post-list-padding: 10px;
 $write-post-btn-height: 37px;
-$course-name-height: 70px; // only starting max-width 1077px
-
-// map for tabs height
-$tabs-height: (
-    1920: 39px,
-    1152: 62px,
-    1077: 62px,
-    900: 62px,
-    884: 78px,
-    767: 39px,
-    384: 62px,
-);
 
 $app-header-height: (
     1920: 58px,

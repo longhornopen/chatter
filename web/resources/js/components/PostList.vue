@@ -226,8 +226,9 @@ export default {
     }
     .app-post-list-body {
         background-color: $body-bg;
-        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1920)} - #{map-get($tabs-height, 1920)} - #{$post-list-padding} - #{$write-post-btn-height});
+        height: 100%;
         overflow-y: auto;
+        padding-bottom: $write-post-btn-height;
         .post {
             background-color: $body-bg;
             padding: 10px;
@@ -277,9 +278,6 @@ export default {
         .post-clickable-container {
             cursor: pointer;
         }
-    }
-    .app-post-list-body {
-        height: 100%;
     }
 }
 </style>

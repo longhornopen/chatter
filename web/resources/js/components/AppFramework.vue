@@ -68,7 +68,7 @@ export default {
             <div class="col-md-12"><app-header></app-header></div>
         </div>
         <div class="row main-app-area g-0">
-            <div v-if="show_post_list" class="col-md-4"><post-list></post-list></div>
+            <div v-if="show_post_list" class="col-md-4" style="height: 100%"><post-list></post-list></div>
             <div v-if="show_post_display || show_post_create" class="col-md-8">
                 <router-view :key="$route.fullPath"></router-view>
             </div>
@@ -86,6 +86,12 @@ export default {
     }
     .col-md-8 {
         padding-left: 0;
+    }
+}
+
+@media screen and (max-width: 1077px) {
+    .main-app-area{
+        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1077)});
     }
 }
 
