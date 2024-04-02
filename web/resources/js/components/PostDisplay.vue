@@ -24,6 +24,7 @@ export default {
             pin_pending: false,
             lock_pending: false,
             post_loaded: false,
+            post_tag: null,
         };
     },
     computed: {
@@ -58,7 +59,15 @@ export default {
         },
         in_mobile_mode() {
             return this.$store.getters.mobile;
-        }
+        },
+        post_tag_options() {
+            let user_is_teacher = this.$store.getters.user.role === 'teacher'
+            let post_tags = this.$store.getters.course_summary.post_tags
+                .filter(t => {return user_is_teacher || !t.teacher_only})
+                .map(t => {return { value: t.name, text: t.name }})
+            post_tags.unshift({ value: null, text: '(no tag)' })
+            return post_tags;
+        },
     },
     methods: {
         async pin(pinned) {
@@ -96,12 +105,15 @@ export default {
             this.post_editor_visible = true;
             this.comment_editor_visible = false;
             this.edited_post_body = "" + this.post.body; //copy
+            // include tag if post has one
+            this.edited_post_tag = this.post.tag;
         },
         close_post_editor() {
             this.$refs['abandon_post'].show();
         },
         handle_close_post_editor_ok() {
             this.edited_post_body = null;
+            this.edited_post_tag - null;
             this.post_editor_visible = false;
             this.$refs['abandon_post'].hide();
         },
@@ -116,6 +128,7 @@ export default {
             await this.$store.dispatch('editPost', {
                 post_id: this.post_id,
                 body: new_body,
+                tag: this.edited_post_tag,
             })
             this.post_editor_visible = false;
             this.edit_save_pending = false;
@@ -229,6 +242,14 @@ export default {
 
                 <div v-if="post_editor_visible">
                     <fieldset v-bind:disabled="edit_save_pending">
+                    <div>
+                        <label for="post-tag">Tag post as:</label>
+                        <select class="form-select" v-model="edited_post_tag">
+                            <option v-for="option in post_tag_options" :key="option.value" :value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
                     <wysiwyg-editor v-model="edited_post_body" ref="postEditor"></wysiwyg-editor>
                     <div class="btn-groups">
                         <div class="left"></div>
