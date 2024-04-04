@@ -70,20 +70,10 @@ export default {
             return this.$store.getters.mobile;
         },
         post_tag_options() {
-            let user_is_teacher = this.$store.getters.user.role === 'teacher'
-            let post_tags = this.$store.getters.course_summary.post_tags
-                .filter(t => {return user_is_teacher || !t.teacher_only})
-                .map(t => {return { value: t.name, text: t.name }})
-            post_tags.unshift({ value: null, text: '(no tag)' })
-            return post_tags;
+            return this.get_tags_available_for_role(this.$store.getters.user.role);
         },
         edit_tag_options() {
-            let author_is_teacher = this.post.author_user_role === 'teacher'
-            let post_tags = this.$store.getters.course_summary.post_tags
-                .filter(t => {return author_is_teacher || !t.teacher_only})
-                .map(t => {return { value: t.name, text: t.name }})
-            post_tags.unshift({ value: null, text: '(no tag)' })
-            return post_tags;
+            return this.get_tags_available_for_role(this.post.author_user_role);
         },
     },
     methods: {
@@ -176,6 +166,13 @@ export default {
                     view_post_create: false,
                 })
             }
+        },
+        get_tags_available_for_role(role) {
+            let post_tags = this.$store.getters.course_summary.post_tags
+               .filter(t => {return role === 'teacher' || !t.teacher_only})
+               .map(t => {return { value: t.name, text: t.name }})
+            post_tags.unshift({ value: null, text: '(no tag)' })
+            return post_tags;
         },
     },
     async mounted() {
