@@ -137,12 +137,13 @@ const mutations = {
     state.currently_viewed_post = payload
   },
   editPost (state, payload) {
-    console.log("edit post in store");
-    console.log(payload);
     let post_id = payload.post_id
     let body = payload.body
     let tag = payload.tag
     let edited_at = payload.edited_at
+
+    let edited_post = state.posts.findIndex(post => post.id === post_id);
+    state.posts[edited_post].tag = tag;
 
     if (state.currently_viewed_post.id === post_id) {
       state.currently_viewed_post.body = body
