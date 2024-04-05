@@ -264,6 +264,40 @@ class ApiController extends Controller
             ->first();
     }
 
+    public function editTag(Request $request, $course_id, $post_id)
+    {
+        $course_user = $this->getCourseUserFromSession($request, $course_id);
+        $this->checkCourseCloseDate($course_id);
+
+        $post = Post::findOrFail($post_id);
+        if ($post->course_id !== (int)$course_user->course_id) {
+            throw new UnauthorizedException("Unauthorized: Course ID mismatch.");
+        }
+
+        if ($course_user->role !== 'teacher') {
+            throw new UnauthorizedException("Unauthorized: Only teachers may perform this action.");
+        }
+
+        if ($request->get('tag')) {
+            $post_tags = Course::findOrFail($course_id)->post_tags;
+            $post_tag = collect($post_tags)->first(function ($t) use ($request) {
+                return $t['name'] === $request->get('tag');
+            });
+            $post_author_role = Post::select('author_user_role')->where('id', $post_id)->get();
+            if ($post_author_role !== 'teacher' && $post_tag && $post_tag['teacher_only']) {
+                throw new UnauthorizedException("Unauthorized: Only teachers may perform this action.");
+            }
+        }
+
+        $post->tag = $request->json('tag');
+        $post->edited_at = new Carbon();
+        $post->save();
+
+        return Post::where('id',$post->id)
+            ->with(['comments'])
+            ->first();
+    }
+
     public function deletePost(Request $request, $course_id, $post_id)
     {
         $course_user = $this->getCourseUserFromSession($request, $course_id);

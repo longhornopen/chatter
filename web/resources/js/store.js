@@ -139,10 +139,15 @@ const mutations = {
   editPost (state, payload) {
     let post_id = payload.post_id
     let body = payload.body
+    let tag = payload.tag
     let edited_at = payload.edited_at
+
+    let edited_post = state.posts.findIndex(post => post.id === post_id);
+    state.posts[edited_post].tag = tag;
 
     if (state.currently_viewed_post.id === post_id) {
       state.currently_viewed_post.body = body
+      state.currently_viewed_post.tag = tag
       state.currently_viewed_post.edited_at = edited_at
     }
   },
@@ -287,7 +292,12 @@ const actions = {
   },
   async editPost ({ commit }, payload) {
     let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id, payload)
-    commit('editPost', { post_id: payload.post_id, body: payload.body, edited_at: response.data.edited_at })
+    commit('editPost', { post_id: payload.post_id, body: payload.body, tag: payload.tag, edited_at: response.data.edited_at })
+    return response.data
+  },
+  async editTag ({ commit }, payload) {
+    let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id + '/tag', payload)
+    commit('editPost', { post_id: payload.post_id, tag: payload.tag, edited_at: response.data.edited_at })
     return response.data
   },
   async pinPost ({ commit }, payload) {

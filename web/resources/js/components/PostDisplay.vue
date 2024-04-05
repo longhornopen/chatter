@@ -19,11 +19,16 @@ export default {
         return {
             comment_editor_visible: false,
             post_editor_visible: false,
+            tag_editor_visible: false,
             edited_post_body: null,
+            edited_post_tag: null,
+            edited_tag: null,
             edit_save_pending: false,
+            tag_save_pending: false,
             pin_pending: false,
             lock_pending: false,
             post_loaded: false,
+            post_tag: null,
         };
     },
     computed: {
@@ -35,6 +40,11 @@ export default {
         },
         can_edit() {
             return this.post.author_user_id === this.$store.getters.user.id
+                && !this.course_is_closed
+        },
+        can_edit_tag() {
+            return this.user_is_teacher
+                && this.post.author_user_id !== this.$store.getters.user.id
                 && !this.course_is_closed
         },
         can_delete() {
@@ -58,7 +68,13 @@ export default {
         },
         in_mobile_mode() {
             return this.$store.getters.mobile;
-        }
+        },
+        post_tag_options() {
+            return this.get_tags_available_for_role(this.$store.getters.user.role);
+        },
+        edit_tag_options() {
+            return this.get_tags_available_for_role(this.post.author_user_role);
+        },
     },
     methods: {
         async pin(pinned) {
@@ -96,14 +112,26 @@ export default {
             this.post_editor_visible = true;
             this.comment_editor_visible = false;
             this.edited_post_body = "" + this.post.body; //copy
+            this.edited_post_tag = this.post.tag;
         },
         close_post_editor() {
             this.$refs['abandon_post'].show();
         },
         handle_close_post_editor_ok() {
             this.edited_post_body = null;
+            this.edited_post_tag = null;
             this.post_editor_visible = false;
+            this.edited_tag = null;
+            this.tag_editor_visible = false;
             this.$refs['abandon_post'].hide();
+        },
+        open_tag_editor() {
+            this.tag_editor_visible = true;
+            this.comment_editor_visible = false;
+            this.edited_tag = this.post.tag;
+        },
+        close_tag_editor() {
+            this.$refs['abandon_post'].show();
         },
         async save_post() {
             if (!this.$refs['postEditor'].hasContents()) {
@@ -116,9 +144,19 @@ export default {
             await this.$store.dispatch('editPost', {
                 post_id: this.post_id,
                 body: new_body,
+                tag: this.edited_post_tag,
             })
             this.post_editor_visible = false;
             this.edit_save_pending = false;
+        },
+        async save_tag() {
+            this.tag_save_pending = true;
+            await this.$store.dispatch('editTag', {
+                post_id: this.post_id,
+                tag: this.edited_tag,
+            })
+            this.tag_editor_visible = false;
+            this.tag_save_pending = false;
         },
         switch_screen() {
             if (this.$store.getters.mobile) {
@@ -128,6 +166,13 @@ export default {
                     view_post_create: false,
                 })
             }
+        },
+        get_tags_available_for_role(role) {
+            let post_tags = this.$store.getters.course_summary.post_tags
+               .filter(t => {return role === 'teacher' || !t.teacher_only})
+               .map(t => {return { value: t.name, text: t.name }})
+            post_tags.unshift({ value: null, text: '(no tag)' })
+            return post_tags;
         },
     },
     async mounted() {
@@ -218,6 +263,12 @@ export default {
                                 v-show="can_edit"
                             >Edit</button>
                             <button
+                                @click="open_tag_editor()"
+                                class="dropdown-item"
+                                type="button"
+                                v-show="can_edit_tag"
+                            >Edit tag</button>
+                            <button
                                 @click="remove()"
                                 class="dropdown-item"
                                 type="button"
@@ -227,8 +278,40 @@ export default {
                     </div>
                 </div>
 
+                <div v-if="tag_editor_visible">
+                    <fieldset v-bind:disabled="tag_save_pending">
+                    <div>
+                        <label for="post-tag">Tag post as:</label>
+                        <select class="form-select" v-model="edited_tag">
+                            <option v-for="option in edit_tag_options" :key="option.value" :value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="btn-groups">
+                        <div class="left"></div>
+                        <div class="right">
+                            <button
+                                class="btn btn-tertiary me-1"
+                                @click="close_tag_editor()">Cancel</button>
+                            <button
+                                class="btn btn-secondary"
+                                @click="save_tag()"
+                            ><font-awesome-icon v-if="tag_save_pending" icon="spinner" spin /> Save tag</button>
+                        </div>
+                    </div>
+                    </fieldset>
+                </div>
                 <div v-if="post_editor_visible">
                     <fieldset v-bind:disabled="edit_save_pending">
+                    <div>
+                        <label for="post-tag">Tag post as:</label>
+                        <select class="form-select" v-model="edited_post_tag">
+                            <option v-for="option in post_tag_options" :key="option.value" :value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
                     <wysiwyg-editor v-model="edited_post_body" ref="postEditor"></wysiwyg-editor>
                     <div class="btn-groups">
                         <div class="left"></div>

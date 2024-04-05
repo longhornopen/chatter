@@ -24,6 +24,7 @@ Route::get('/course/{course_id}/posts', [ApiController::class, 'getCoursePosts']
 Route::get('/course/{course_id}/post/{post_id}', [ApiController::class, 'getPost']);
 Route::post('/course/{course_id}/post/new', [ApiController::class, 'createPost']);
 Route::post('/course/{course_id}/post/{post_id}', [ApiController::class, 'editPost']);
+Route::post('/course/{course_id}/post/{post_id}/tag', [ApiController::class, 'editTag']);
 Route::delete('/course/{course_id}/post/{post_id}', [ApiController::class, 'deletePost']);
 Route::post('/course/{course_id}/post/{post_id}/pin/{pinned}', [ApiController::class, 'pinPost']);
 Route::post('/course/{course_id}/post/{post_id}/lock/{locked}', [ApiController::class, 'lockPost']);
@@ -33,4 +34,3 @@ Route::post('/course/{course_id}/comment/{comment_id}/endorse/{endorsed}', [ApiC
 Route::post('/course/{course_id}/comment/{comment_id}/mute/{muted}', [ApiController::class, 'muteComment']);
 Route::post('/course/{course_id}/comment/{comment_id}/upvote/{upvoted}', [ApiController::class, 'upvoteComment']);
 Route::post('/course/{course_id}/upload_file', [ApiController::class, 'uploadFile']);
-
