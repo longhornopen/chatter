@@ -378,4 +378,34 @@ export default {
 <style lang="scss" scoped>
 @import '../../sass/_variables.scss';
 
+.app-post-display {
+    padding: 5% 10%;
+    overflow-y: auto;
+
+    .post-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .ellipsis {
+            border: none;
+        }
+    }
+    .post-display-body {
+        border-radius: 6px;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        padding: 10px;
+        margin: 10px 0;
+
+    }
+    .post-display-body p:last-child {
+        margin-bottom: 0;
+    }
+    .comments {
+        margin: 20px 0;
+    }
+}
+@media screen and (max-width: 1077px) {
+    .app-post-display {
+    }
+}
 </style>

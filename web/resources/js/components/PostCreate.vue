@@ -148,4 +148,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../sass/_variables.scss';
 
+.new-post {
+    padding: 30px;
+}
 </style>

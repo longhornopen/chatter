@@ -44,7 +44,7 @@ export default {
 </script>
 
 <template>
-    <div style="height: 100%;">
+    <div class="app-framework-container">
         <modal id="course_closed" ref="course_closed_modal" title="Chatter Closed" :ok-only="true">
             <template v-slot:body>
             <p>Your teacher has closed this Chatter.  You can still view existing conversations.</p>
@@ -58,18 +58,18 @@ export default {
                 <button class="btn btn-primary" @click="handle_stale_ok()">Ok</button>
             </template>
         </modal>
-        <div class="row g-0">
+        <div class="g-0">
             <div class="app-title-bar">
                 <img class="app-logo" src="/images/logo/logo.svg" alt="Chatter logo">
                 <span class="app-title">CHATTER</span>
             </div>
         </div>
-        <div class="row g-0">
+        <div class="g-0">
             <div class="col-md-12"><app-header></app-header></div>
         </div>
-        <div class="row main-app-area g-0">
-            <div v-if="show_post_list" class="col-md-4" style="height: 100%"><post-list></post-list></div>
-            <div v-if="show_post_display || show_post_create" class="col-md-8">
+        <div class="main-app-area g-0">
+            <div v-if="show_post_list" class="post-list-area"><post-list></post-list></div>
+            <div v-if="show_post_display || show_post_create" class="post-display-area">
                 <router-view :key="$route.fullPath"></router-view>
             </div>
         </div>
@@ -79,20 +79,35 @@ export default {
 <style lang="scss" scoped>
 @import '../../sass/_variables.scss';
 
+.app-framework-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
 .main-app-area {
-    height: calc(#{$full-height} - #{$title-bar-height} - map-get($app-header-height, 1920));
-    .col-md-4 {
-        padding-right: 0;
-    }
-    .col-md-8 {
-        padding-left: 0;
-    }
+    flex: 1;
+    display: flex;
+    overflow-y: hidden;
+}
+
+.post-list-area {
+    height: 100%;
+    width: 33.333%;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1077px) {
-    .main-app-area{
-        height: calc(#{$full-height} - #{$title-bar-height} - #{map-get($app-header-height, 1077)});
+    .post-list-area{
+        width: 100%;
     }
+}
+
+.post-display-area {
+    height: 100%;
+    overflow-y: scroll;
+    flex: 1;
 }
 
 .app-title-bar {

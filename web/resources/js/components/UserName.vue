@@ -74,4 +74,21 @@ export default {
     border-radius: 3px;
     padding: 3px;
 }
+
+.anon {
+    .icon {
+        margin: 0 2px;
+        color: $tertiary;
+        cursor: pointer;
+    }
+    .deanon-label {
+        background-color: $tertiary;
+        color: white;
+        padding: 0 5px;
+        border-radius: 2px;
+    }
+    .invisible {
+        background-color: $white;
+    }
+}
 </style>

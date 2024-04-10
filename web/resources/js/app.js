@@ -58,7 +58,7 @@ import { store } from './store';
 
 let onResize = function() {
   const w = window.innerWidth
-  let is_mobile = w < 768
+  let is_mobile = w < 1077
   store.dispatch('toggleMobile', {
     mobile: is_mobile,
   })
