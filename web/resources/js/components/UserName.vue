@@ -15,27 +15,23 @@ export default {
             return !this.anonymous && this.role==='teacher'
         },
         display_user_name() {
-            if (this.anonymous) {
-                return "Anonymous";
-            }
-            return this.name;
+            return this.anonymous ? "Anonymous" : this.name;
         },
         deanon_label() {
             return this.temp_shown ? this.deanon_user_name : "";
         }
     },
     methods: {
-        handle_deanon_click() {
-            this.$store.dispatch('deanonUserId', {
+        async handle_deanon_click() {
+            let user_info = await this.$store.dispatch('deanonUserId', {
                 user_id: this.userId,
-            }).then((user_info) => {
-                this.deanon_user_name = user_info.name
-                this.temp_shown = true
-                window.setTimeout(() => {
-                    this.temp_shown = false;
-                    this.deanon_user_name = ""
-                }, 3000);
-            });
+            })
+            this.deanon_user_name = user_info.name
+            this.temp_shown = true
+            window.setTimeout(() => {
+                this.temp_shown = false;
+                this.deanon_user_name = ""
+            }, 3000);
         }
     }
 }

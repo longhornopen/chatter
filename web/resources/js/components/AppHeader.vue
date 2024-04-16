@@ -44,7 +44,6 @@ export default {
             this.$refs['advanced-search-modal'].show()
         },
         do_advanced_search() {
-            console.log('do_advanced_search');
             this.search_term = this.advanced_search_text
             if (this.advanced_search_tag) {
                 this.search_term += ' tag:' + this.advanced_search_tag
