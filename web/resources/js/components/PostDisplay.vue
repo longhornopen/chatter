@@ -4,14 +4,12 @@ import FormattedDate from './FormattedDate.vue'
 import PostTagBadge from './PostTagBadge.vue'
 import WysiwygEditor from './WysiwygEditor.vue'
 import WysiwygViewer from './WysiwygViewer.vue'
-import component_mixins from '../component_mixins'
 import Modal from './Modal.vue'
 import CommentDisplay from "./CommentDisplay.vue";
 import CommentCreate from "./CommentCreate.vue";
 
 export default {
     components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge, Modal, CommentDisplay, CommentCreate },
-    mixins: [component_mixins.course_closed_mixin],
     props: {
         post_id: { type: Number, required: true },
     },
@@ -32,6 +30,9 @@ export default {
         };
     },
     computed: {
+        course_is_closed() {
+            return this.$store.getters.course_is_closed;
+        },
         post() {
             return this.$store.state.currently_viewed_post
         },

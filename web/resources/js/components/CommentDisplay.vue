@@ -4,12 +4,10 @@ import FormattedDate from './FormattedDate.vue'
 import WysiwygEditor from './WysiwygEditor.vue'
 import WysiwygViewer from './WysiwygViewer.vue'
 import CommentCreate from './CommentCreate.vue'
-import component_mixins from '../component_mixins'
 import Modal from './Modal.vue'
 
 export default {
     components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, CommentCreate, Modal },
-    mixins: [component_mixins.course_closed_mixin],
     props: {
         comment: {
             type: Object,
@@ -27,6 +25,9 @@ export default {
         };
     },
     computed: {
+        course_is_closed() {
+            return this.$store.getters.course_is_closed;
+        },
         comment_is_endorsed() {
             return this.comment.endorsed;
         },

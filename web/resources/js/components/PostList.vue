@@ -1,16 +1,17 @@
 <script>
 import FormattedDate from './FormattedDate.vue'
 import PostTagBadge from './PostTagBadge.vue'
-import component_mixins from '../component_mixins'
 
 export default {
     components: { FormattedDate, PostTagBadge },
-    mixins: [component_mixins.course_closed_mixin],
     data () {
         return {
         }
     },
     computed: {
+        course_is_closed() {
+            return this.$store.getters.course_is_closed;
+        },
         post_order() {
             return this.$store.getters.filter_order;
         },

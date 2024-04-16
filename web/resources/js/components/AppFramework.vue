@@ -2,11 +2,9 @@
 import AppHeader from './AppHeader.vue';
 import PostList from './PostList.vue';
 import Modal from './Modal.vue';
-import component_mixins from '../component_mixins'
 
 export default {
     components: { AppHeader, PostList, Modal },
-    mixins: [component_mixins.course_closed_mixin],
     data() {
         return {
 
@@ -23,6 +21,9 @@ export default {
         }
     },
     computed: {
+        course_is_closed() {
+            return this.$store.getters.course_is_closed;
+        },
         show_post_list() {
             return this.$store.getters.show_post_list
         },
