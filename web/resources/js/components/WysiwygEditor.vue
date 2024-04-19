@@ -27,6 +27,8 @@ import katex from 'katex/dist/katex';
 
 import Modal from './Modal.vue';
 
+import { chatterApi } from '@/api';
+
 export default {
     components: { Modal },
     props: {
@@ -76,11 +78,10 @@ export default {
             ],
             hooks: {
                 addImageBlobHook: (blob, callback) => {
-                    const url = '/api/course/' + comp.$store.getters.user.course_id + '/upload_file'
                     const payload = new FormData();
                     payload.append('image', blob);
-                    axios.post(url, payload).then(resp=>{
-                        callback(resp.data.url,'image')
+                    chatterApi.uploadImage(payload).then(resp=>{
+                        callback(resp.url,'image')
                     });
                 }
             },

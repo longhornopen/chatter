@@ -1,6 +1,6 @@
-import axios from 'axios'
 
-import { createStore } from 'vuex';
+import { createStore } from 'vuex'
+import { chatterApi } from './api'
 
 /**
 @typedef {object} Course
@@ -137,7 +137,7 @@ const mutations = {
     state.currently_viewed_post = payload
   },
   editPost (state, payload) {
-    let post_id = payload.post_id
+    let post_id = payload.id
     let body = payload.body
     let tag = payload.tag
     let edited_at = payload.edited_at
@@ -152,7 +152,7 @@ const mutations = {
     }
   },
   pinPost (state, payload) {
-    let post_id = payload.post_id
+    let post_id = payload.id
     let pinned = payload.pinned
 
     state.posts.find(p => p.id === post_id).pinned = pinned
@@ -161,7 +161,7 @@ const mutations = {
     }
   },
   lockPost (state, payload) {
-    let post_id = payload.post_id
+    let post_id = payload.id
     let locked = payload.locked
 
     state.posts.find(p => p.id === post_id).locked = locked
@@ -171,7 +171,7 @@ const mutations = {
   },
   deletePost (state, payload) {
     state.currently_viewed_post = {}
-    state.posts = state.posts.filter(p => p.id !== payload.post_id)
+    state.posts = state.posts.filter(p => p.id !== payload.id)
   },
   endorseComment (state, payload) {
     let endorsed = payload.endorsed
@@ -202,22 +202,22 @@ const mutations = {
     }
   },
   editComment (state, payload) {
-    let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+    let comment = this.getters.currently_viewed_comment_by_id(payload.id)
     if (comment) {
       comment.body = payload.body
     }
   },
   addCommentUpvote (state, payload) {
-    state.user_upvoted_comment_ids.push(payload.comment_id)
-    let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+    state.user_upvoted_comment_ids.push(payload.id)
+    let comment = this.getters.currently_viewed_comment_by_id(payload.id)
     if (comment) {
       comment.num_upvotes = comment.num_upvotes + 1
     }
   },
   removeCommentUpvote (state, payload) {
     state.user_upvoted_comment_ids = state.user_upvoted_comment_ids
-      .filter(id => id !== payload.comment_id)
-    let comment = this.getters.currently_viewed_comment_by_id(payload.comment_id)
+      .filter(id => id !== payload.id)
+    let comment = this.getters.currently_viewed_comment_by_id(payload.id)
     if (comment) {
       comment.num_upvotes = comment.num_upvotes - 1
     }
@@ -234,36 +234,28 @@ const mutations = {
 
 const actions = {
   async init ({ commit }, payload) {
-    axios.interceptors.request.use(function(config) {
-      config.headers['X-Chatter-CourseID'] = payload.course_id;
-      return config;
-    })
     commit('setPostsLoading', { loading: true })
-    let user_response = await axios.get('/api/user/self')
-    commit('setUser', { user: user_response.data })
-    let course_id = user_response.data.course_id
-    let [course_response, posts_response] = await axios.all([
-      axios.get('/api/course/' + course_id + '/summary'),
-      axios.get('/api/course/' + course_id + '/posts')
-    ])
-    commit('setCourseSummary', course_response.data)
-    commit('setPosts', { posts: posts_response.data })
+    let user_self = await chatterApi.getUserSelf()
+    commit('setUser', { user: user_self })
+    let course_response = await chatterApi.getCourseSummary()
+    let posts_response = await chatterApi.getCoursePosts()
+    commit('setCourseSummary', course_response)
+    commit('setPosts', { posts: posts_response })
     commit('setPostsLoading', { loading: false })
   },
   /** @return Course */
   async getCourse ({commit}) {
-    let response = await axios.get('/api/course/' + this.state.user.course_id)
-    return response.data
+    return await chatterApi.getCourse()
   },
   async updateCourse ({commit}, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id, payload)
-    commit('updateCourseSummary', response.data)
-    return response.data
+    const course = await chatterApi.updateCourse(payload)
+    commit('updateCourseSummary', course)
+    return course
   },
   async updateCourseUser ({commit}, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/user/' + this.state.user.id, payload);
-    commit('updateCourseUser', response.data)
-    return response.data
+    const user = await chatterApi.updateUser(this.state.user.id, payload)
+    commit('updateCourseUser', user)
+    return user
   },
 
 
@@ -276,79 +268,80 @@ const actions = {
   async search ({ commit }) {
     commit('setPostsLoading', { loading: true })
     let params = { filter: this.state.filter_order, search: this.state.search_string }
-    let response = await axios.get('/api/course/' + this.state.user.course_id + '/posts', { params: params })
-    commit('setFilteredPosts', { posts: response.data })
+    const posts = await chatterApi.searchCoursePosts(params)
+    commit('setFilteredPosts', { posts: posts })
     commit('setPostsLoading', { loading: false })
-    return response
+    return posts
   },
   async setCurrentlyViewedPost({commit}, payload) {
-    let response = await axios.get('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id)
-    commit('setCurrentlyViewedPost', { post: response.data })
+    let post = await chatterApi.getPost(payload.post_id)
+    commit('setCurrentlyViewedPost', { post: post })
   },
   async createPost ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/new', payload)
-    commit('addPost', response.data)
-    return response.data
+    let post = await chatterApi.createPost(payload)
+    commit('addPost', post)
+    return post
   },
   async editPost ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id, payload)
-    commit('editPost', { post_id: payload.post_id, body: payload.body, tag: payload.tag, edited_at: response.data.edited_at })
-    return response.data
+    let post = await chatterApi.editPost(payload.post_id, payload)
+    commit('editPost', post)
+    return post
   },
   async editTag ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id + '/tag', payload)
-    commit('editPost', { post_id: payload.post_id, tag: payload.tag, edited_at: response.data.edited_at })
-    return response.data
+    let post = await chatterApi.editPostTag(payload.post_id, payload)
+    commit('editPost', post)
+    return post
   },
   async pinPost ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id + '/pin/' + payload.pinned)
-    commit('pinPost', { post_id: payload.post_id, pinned: payload.pinned })
+    let post = await chatterApi.pinPost(payload.post_id, payload.pinned)
+    commit('pinPost', post)
+    return post
   },
   async lockPost ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id + '/lock/' + payload.locked)
-    commit('lockPost', { post_id: payload.post_id, locked: payload.locked })
+    let post = await chatterApi.lockPost(payload.post_id, payload.locked)
+    commit('lockPost', post)
+    return post
   },
   async deletePost ({ commit }, payload) {
-    let response = await axios.delete('/api/course/' + this.state.user.course_id + '/post/' + payload.post_id)
-    commit('deletePost', { post_id: payload.post_id })
+    await chatterApi.deletePost(payload.post_id)
+    commit('deletePost', { id: payload.post_id })
   },
   async endorseComment ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id + '/endorse/' + payload.endorsed)
+    let comment = await chatterApi.endorseComment(payload.comment_id, payload.endorsed)
     commit('endorseComment', {
-      comment_id: response.data.id,
-      post_id: response.data.post_id,
-      endorsed: response.data.endorsed
+      comment_id: comment.id,
+      post_id: comment.post_id,
+      endorsed: comment.endorsed
     })
   },
   async muteComment ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id + '/mute/' + payload.muted)
+    let comment = await chatterApi.muteComment(payload.comment_id, payload.muted)
     commit('muteComment', {
-      comment_id: response.data.id,
-      post_id: response.data.post_id,
-      muted_by_user_id: response.data.muted_by_user_id
+      comment_id: comment.id,
+      post_id: comment.post_id,
+      muted_by_user_id: comment.muted_by_user_id
     })
   },
   async addComment ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/new', payload)
-    commit('addComment', response.data)
-    return response.data
+    let comment = await chatterApi.createComment(payload)
+    commit('addComment', comment)
+    return comment
   },
   async editComment ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id, payload)
-    commit('editComment', { comment_id: payload.comment_id, body: payload.body })
-    return response.data
+    let comment = await chatterApi.editComment(payload.comment_id, payload)
+    commit('editComment', comment)
+    return comment
   },
   async addCommentUpvote ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id + '/upvote/true', payload)
-    commit('addCommentUpvote', payload)
+    let comment = await chatterApi.upvoteComment(payload.comment_id, true)
+    commit('addCommentUpvote', comment)
   },
   async removeCommentUpvote ({ commit }, payload) {
-    let response = await axios.post('/api/course/' + this.state.user.course_id + '/comment/' + payload.comment_id + '/upvote/false', payload)
-    commit('removeCommentUpvote', payload)
+    let comment = await chatterApi.upvoteComment(payload.comment_id, false)
+    commit('removeCommentUpvote', comment)
   },
   async deanonUserId ({ commit }, payload) {
-    let response = await axios.get('/api/course/' + this.state.user.course_id + '/user/' + payload.user_id)
-    return response.data
+    return await chatterApi.getUser(payload.user_id)
   },
   switchScreen ({ commit }, payload) {
     commit('switchScreen', payload)
