@@ -2,7 +2,13 @@
 import WysiwygEditor from './WysiwygEditor.vue'
 import Modal from './Modal.vue'
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { WysiwygEditor, Modal },
     props: ['parent_comment_id', 'post_id'],
     data() {
@@ -27,7 +33,7 @@ export default {
             this.comment_body = this.$refs['commentEditor'].getContents()
             this.$refs['commentEditor'].$el.scrollIntoView();
             this.save_pending = true;
-            await this.$store.dispatch('addComment', {
+            await this.store.addComment( {
                 post_id: this.post_id,
                 parent_comment_id: this.parent_comment_id,
                 author_anonymous: this.anonymous,

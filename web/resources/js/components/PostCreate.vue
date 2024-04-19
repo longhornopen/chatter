@@ -2,7 +2,13 @@
 import WysiwygEditor from './WysiwygEditor.vue'
 import Modal from './Modal.vue'
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { WysiwygEditor, Modal },
     data() {
         return {
@@ -15,11 +21,11 @@ export default {
     },
     computed: {
         in_mobile_mode() {
-            return this.$store.getters.mobile;
+            return this.store.mobile;
         },
         post_tag_options() {
-            let user_is_teacher = this.$store.getters.user.role === 'teacher'
-            let post_tags = this.$store.getters.course_summary.post_tags
+            let user_is_teacher = this.store.user.role === 'teacher'
+            let post_tags = this.store.course_summary.post_tags
                 .filter(t => {return user_is_teacher || !t.teacher_only})
                 .map(t => {return { value: t.name, text: t.name }})
             post_tags.unshift({ value: null, text: '(no tag)' })
@@ -39,7 +45,7 @@ export default {
             this.body = this.$refs['postEditor'].getContents()
             this.$refs['postEditor'].$el.scrollIntoView();
             this.save_pending = true;
-            let post = await this.$store.dispatch('createPost', {
+            let post = await this.store.createPost({
                 title: this.title,
                 body: this.body,
                 tag: this.post_tag,
@@ -53,7 +59,7 @@ export default {
         },
         handle_close_post_editor_ok() {
             if (this.in_mobile_mode) {
-                this.$store.dispatch('switchScreen', {
+                this.store.switchScreen({
                     view_post_create: false,
                     view_post_list: true,
                     view_post_display: false,
@@ -62,8 +68,8 @@ export default {
             this.$router.push('/')
         },
         switch_screen() {
-            if (this.$store.getters.mobile) {
-                this.$store.dispatch('switchScreen', {
+            if (this.store.mobile) {
+                this.store.switchScreen({
                     view_post_list: true,
                     view_post_display: false,
                     view_post_create: false,

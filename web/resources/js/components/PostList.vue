@@ -2,7 +2,13 @@
 import FormattedDate from './FormattedDate.vue'
 import PostTagBadge from './PostTagBadge.vue'
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { FormattedDate, PostTagBadge },
     data () {
         return {
@@ -10,19 +16,19 @@ export default {
     },
     computed: {
         course_is_closed() {
-            return this.$store.getters.course_is_closed;
+            return this.store.course_is_closed;
         },
         post_order() {
-            return this.$store.getters.filter_order;
+            return this.store.filter_order;
         },
         search_returned_zero_posts() {
-            return this.$store.getters.search_results_available
-                && this.$store.getters.filtered_posts.length === 0;
+            return this.store.search_results_available
+                && this.store.filtered_posts.length === 0;
         },
         posts() {
-            let posts = this.$store.getters.search_results_available
-                ? this.$store.getters.filtered_posts
-                : this.$store.getters.posts;
+            let posts = this.store.search_results_available
+                ? this.store.filtered_posts
+                : this.store.posts;
             return posts.sort((a,b) => {
                 if (a.pinned && !b.pinned) { return -1; }
                 if (b.pinned && !a.pinned) { return 1; }
@@ -30,20 +36,20 @@ export default {
             });
         },
         posts_loaded() {
-            return !this.$store.getters.posts_loading;
+            return !this.store.posts_loading;
         },
         currently_viewed_post_id() {
-            return this.$store.state.currently_viewed_post?.id;
+            return this.store.currently_viewed_post?.id;
         },
     },
     methods: {
         set_post_sort_order(order) {
-            this.$store.dispatch('setFilterOrder', {filter_order: order});
-            this.$store.dispatch('search');
+            this.store.setFilterOrder({filter_order: order})
+            this.store.search()
         },
         open_post(post_id) {
-            if (this.$store.getters.mobile) {
-                this.$store.dispatch('switchScreen', {
+            if (this.store.mobile) {
+                this.store.switchScreen( {
                     view_post_list: false,
                     view_post_display: true,
                     view_post_create: false,
@@ -56,8 +62,8 @@ export default {
             });
         },
         open_new_post_editor() {
-            if (this.$store.getters.mobile) {
-                this.$store.dispatch('switchScreen', {
+            if (this.store.mobile) {
+                this.store.switchScreen( {
                     view_post_list: false,
                     view_post_display: false,
                     view_post_create: true,

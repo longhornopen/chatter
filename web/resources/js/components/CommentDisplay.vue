@@ -6,7 +6,13 @@ import WysiwygViewer from './WysiwygViewer.vue'
 import CommentCreate from './CommentCreate.vue'
 import Modal from './Modal.vue'
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, CommentCreate, Modal },
     props: {
         comment: {
@@ -26,27 +32,27 @@ export default {
     },
     computed: {
         course_is_closed() {
-            return this.$store.getters.course_is_closed;
+            return this.store.course_is_closed;
         },
         comment_is_endorsed() {
             return this.comment.endorsed;
         },
         comment_is_upvoted_by_user() {
-            return this.$store.state.user_upvoted_comment_ids
+            return this.store.user_upvoted_comment_ids
                 .includes(this.comment.id)
         },
         add_comment_allowed() {
-            return !this.$store.state.currently_viewed_post.locked
+            return !this.store.currently_viewed_post.locked
                 && !this.course_is_closed
         },
         user_is_teacher() {
-            return this.$store.state.user.role === 'teacher'
+            return this.store.user.role === 'teacher'
         },
         comment_is_muted() {
             return !(this.comment.muted_by_user_id === null)
         },
         can_edit() {
-            return this.comment.author_user_id === this.$store.getters.user.id
+            return this.comment.author_user_id === this.store.user.id
                 && !this.course_is_closed
         },
         can_hide_unhide() {
@@ -74,7 +80,7 @@ export default {
             }
             this.endorse_promise_pending = true;
             try {
-                let store_promise = this.$store.dispatch('endorseComment', {
+                let store_promise = this.store.endorseComment({
                     comment_id: this.comment.id,
                     endorsed: endorse_action
                 })
@@ -90,12 +96,18 @@ export default {
             }
             this.upvote_promise_pending = true;
             try {
-                let action_name = upvoted ? 'addCommentUpvote' : 'removeCommentUpvote';
-                let store_promise =  this.$store.dispatch(action_name, {
-                    comment_id: this.comment.id,
-                })
-                let mintimer_promise = new Promise((resolve, reject) => (setTimeout(() => resolve(true), 1000)))
-                await Promise.all([store_promise, mintimer_promise])
+                let store_promise
+                if (upvoted) {
+                    store_promise = this.store.addCommentUpvote({
+                        comment_id: this.comment.id,
+                    })
+                } else {
+                    store_promise = this.store.removeCommentUpvote({
+                        comment_id: this.comment.id,
+                    })
+                }
+                let mintimer_promise2 = new Promise((resolve, reject) => (setTimeout(() => resolve(true), 1000)))
+                await Promise.all([store_promise, mintimer_promise2])
             } finally {
                 this.upvote_promise_pending = false;
             }
@@ -107,13 +119,13 @@ export default {
             }
         },
         post_comments_with_parent_comment_id(pcid) {
-            if (!this.$store.state.currently_viewed_post.comments) {
+            if (!this.store.currently_viewed_post.comments) {
                 return [];
             }
-            return this.$store.state.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
+            return this.store.currently_viewed_post.comments.filter(c => c.parent_comment_id === pcid);
         },
         mute_comment(action) {
-            this.$store.dispatch('muteComment', {
+            this.store.muteComment({
                 comment_id: this.comment.id,
                 muted: action,
             })
@@ -139,7 +151,7 @@ export default {
             this.edited_comment_body = this.$refs['commentEditor'].getContents()
             this.$refs['commentEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
-            await this.$store.dispatch('editComment', {
+            await this.store.editComment({
                 comment_id: this.comment.id,
                 body: this.edited_comment_body,
             })

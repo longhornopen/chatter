@@ -3,7 +3,13 @@ import HelpViewer from './HelpViewer.vue'
 import SettingsEditor from './SettingsEditor.vue'
 import Modal from './Modal.vue'
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { SettingsEditor, HelpViewer, Modal },
     data() {
         return {
@@ -14,10 +20,10 @@ export default {
     },
     computed: {
         course_name() {
-            return this.$store.getters.course_summary.name
+            return this.store.course_summary.name
         },
         advanced_search_tag_options() {
-            let post_tags = this.$store.getters.course_summary.post_tags
+            let post_tags = this.store.course_summary.post_tags
                 .map(t => {return { value: t.name, text: t.name }})
             post_tags.unshift({ value: null, text: "(any tag)" });
             return post_tags
@@ -29,8 +35,8 @@ export default {
             this.search()
         },
         search() {
-            this.$store.dispatch('setSearchString', {search_string: this.search_term})
-            this.$store.dispatch('search')
+            this.store.setSearchString({search_string: this.search_term})
+            this.store.search()
         },
         open_settings() {
             this.$refs['settings-modal'].show()

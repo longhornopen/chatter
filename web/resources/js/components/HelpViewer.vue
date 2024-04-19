@@ -1,12 +1,18 @@
 <script>
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     name: 'HelpViewer',
     computed: {
         help_url() {
-            return this.$store.state.course_summary.help_url;
+            return this.store.course_summary.help_url;
         },
         help_url_display() {
-            return this.$store.state.course_summary.help_url_text;
+            return this.store.course_summary.help_url_text;
         },
     },
 }

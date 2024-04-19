@@ -3,7 +3,13 @@ import Modal from './Modal.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { Modal, VueDatePicker },
     data () {
         return {
@@ -36,16 +42,16 @@ export default {
     },
     computed: {
         user_is_instructor() {
-            return this.$store.getters.user_is_teacher;
+            return this.store.user_is_teacher;
         },
         course_user_mail_digest_frequency_minutes() {
-            return this.$store.getters.user.mail_digest_frequency_minutes;
+            return this.store.user.mail_digest_frequency_minutes;
         },
     },
     methods: {
         async save_course_user_mail_digest_frequency_minutes() {
             this.course_user_mail_digest_frequency_save_state = 'pending'
-            await this.$store.dispatch('updateCourseUser', {mail_digest_frequency_minutes: this.edited_course_user_mail_digest_frequency_minutes})
+            await this.store.updateCourseUser({mail_digest_frequency_minutes: this.edited_course_user_mail_digest_frequency_minutes})
             window.addToast('Email frequency saved.', 'success');
             this.course_user_mail_digest_frequency_save_state = ''
         },
@@ -56,13 +62,13 @@ export default {
             }
 
             this.course_close_date_save_state = 'pending'
-            await this.$store.dispatch('updateCourse', {close_date: this.course_close_datetime})
+            await this.store.updateCourse({close_date: this.course_close_datetime})
             window.addToast('Course close date saved.', 'success')
             this.course_close_date_save_state = ''
         },
         async save_course_post_tags() {
             this.course_post_tags_save_state = 'pending'
-            await this.$store.dispatch('updateCourse', {post_tags: this.course_post_tags})
+            await this.store.updateCourse({post_tags: this.course_post_tags})
             window.addToast('Post tags saved.', 'success')
             this.course_post_tags_save_state = ''
         },
@@ -98,9 +104,9 @@ export default {
         },
     },
     async mounted() {
-        this.user_name = this.$store.getters.user.name
-        this.user_email = this.$store.getters.user.email
-        this.course = await this.$store.dispatch('getCourse')
+        this.user_name = this.store.user.name
+        this.user_email = this.store.user.email
+        this.course = await this.store.getCourse()
         this.course_close_datetime = this.course.close_date ? new Date(this.course.close_date) : null
         this.course_post_tags = this.course.post_tags ?? []
         this.edited_course_user_mail_digest_frequency_minutes = this.course_user_mail_digest_frequency_minutes;

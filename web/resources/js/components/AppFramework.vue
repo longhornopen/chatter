@@ -3,7 +3,13 @@ import AppHeader from './AppHeader.vue';
 import PostList from './PostList.vue';
 import Modal from './Modal.vue';
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { AppHeader, PostList, Modal },
     data() {
         return {
@@ -22,16 +28,16 @@ export default {
     },
     computed: {
         course_is_closed() {
-            return this.$store.getters.course_is_closed;
+            return this.store.course_is_closed;
         },
         show_post_list() {
-            return this.$store.getters.show_post_list
+            return this.store.view_post_list
         },
         show_post_display() {
-            return this.$store.getters.show_post_display
+            return this.store.view_post_display
         },
         show_post_create() {
-            return this.$store.getters.show_post_create
+            return this.store.view_post_create
         }
     },
     mounted() {

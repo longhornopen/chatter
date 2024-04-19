@@ -1,5 +1,11 @@
 <script>
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     props: ['name', 'role', 'anonymous', 'userId'],
     data() {
         return {
@@ -9,7 +15,7 @@ export default {
     },
     computed: {
         show_deanon_button() {
-            return this.anonymous && this.$store.state.user.role==='teacher';
+            return this.anonymous && this.store.user.role==='teacher';
         },
         should_show_teacher_icon() {
             return !this.anonymous && this.role==='teacher'
@@ -23,7 +29,7 @@ export default {
     },
     methods: {
         async handle_deanon_click() {
-            let user_info = await this.$store.dispatch('deanonUserId', {
+            let user_info = await this.store.deanonUserId( {
                 user_id: this.userId,
             })
             this.deanon_user_name = user_info.name

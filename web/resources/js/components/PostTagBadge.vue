@@ -1,5 +1,11 @@
 <script>
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     props: {
         post_tag_name: {
             type: String,
@@ -13,7 +19,7 @@ export default {
             if (this.post_tag) {
                 return this.post_tag
             }
-            return this.$store.getters.course_summary.post_tags
+            return this.store.course_summary.post_tags
                 .find(t => t.name === this.post_tag_name)
         }
     },

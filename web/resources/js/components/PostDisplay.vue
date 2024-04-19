@@ -8,7 +8,13 @@ import Modal from './Modal.vue'
 import CommentDisplay from "./CommentDisplay.vue";
 import CommentCreate from "./CommentCreate.vue";
 
+import { useMainStore } from '@/store'
+
 export default {
+    setup() {
+        const store = useMainStore()
+        return { store }
+    },
     components: { UserName, FormattedDate, WysiwygEditor, WysiwygViewer, PostTagBadge, Modal, CommentDisplay, CommentCreate },
     props: {
         post_id: { type: Number, required: true },
@@ -31,21 +37,21 @@ export default {
     },
     computed: {
         course_is_closed() {
-            return this.$store.getters.course_is_closed;
+            return this.store.course_is_closed;
         },
         post() {
-            return this.$store.state.currently_viewed_post
+            return this.store.currently_viewed_post
         },
         user_is_teacher() {
-            return this.$store.getters.user.role === 'teacher';
+            return this.store.user.role === 'teacher';
         },
         can_edit() {
-            return this.post.author_user_id === this.$store.getters.user.id
+            return this.post.author_user_id === this.store.user.id
                 && !this.course_is_closed
         },
         can_edit_tag() {
             return this.user_is_teacher
-                && this.post.author_user_id !== this.$store.getters.user.id
+                && this.post.author_user_id !== this.store.user.id
                 && !this.course_is_closed
         },
         can_delete() {
@@ -68,10 +74,10 @@ export default {
                 && !this.course_is_closed
         },
         in_mobile_mode() {
-            return this.$store.getters.mobile;
+            return this.store.mobile;
         },
         post_tag_options() {
-            return this.get_tags_available_for_role(this.$store.getters.user.role);
+            return this.get_tags_available_for_role(this.store.user.role);
         },
         edit_tag_options() {
             return this.get_tags_available_for_role(this.post.author_user_role);
@@ -80,7 +86,7 @@ export default {
     methods: {
         async pin(pinned) {
             this.pin_pending = true;
-            await this.$store.dispatch('pinPost', {
+            await this.store.pinPost({
                 post_id: this.post_id,
                 pinned: pinned
             });
@@ -90,14 +96,14 @@ export default {
             this.$refs['delete_post'].show();
         },
         handle_remove_ok() {
-            this.$store.dispatch('deletePost', {
+            this.store.deletePost({
                 post_id: this.post_id,
             });
             this.$router.push('/')
         },
         async lock(locked) {
             this.lock_pending = true;
-            await this.$store.dispatch('lockPost', {
+            await this.store.lockPost({
                 post_id: this.post_id,
                 locked: locked
             });
@@ -142,7 +148,7 @@ export default {
             let new_body = this.$refs['postEditor'].getContents()
             this.$refs['postEditor'].$el.scrollIntoView();
             this.edit_save_pending = true;
-            await this.$store.dispatch('editPost', {
+            await this.store.editPost({
                 post_id: this.post_id,
                 body: new_body,
                 tag: this.edited_post_tag,
@@ -152,7 +158,7 @@ export default {
         },
         async save_tag() {
             this.tag_save_pending = true;
-            await this.$store.dispatch('editTag', {
+            await this.store.editTag({
                 post_id: this.post_id,
                 tag: this.edited_tag,
             })
@@ -160,8 +166,8 @@ export default {
             this.tag_save_pending = false;
         },
         switch_screen() {
-            if (this.$store.getters.mobile) {
-                this.$store.dispatch('switchScreen', {
+            if (this.store.mobile) {
+                this.store.switchScreen({
                     view_post_list: true,
                     view_post_display: false,
                     view_post_create: false,
@@ -169,7 +175,7 @@ export default {
             }
         },
         get_tags_available_for_role(role) {
-            let post_tags = this.$store.getters.course_summary.post_tags
+            let post_tags = this.store.course_summary.post_tags
                .filter(t => {return role === 'teacher' || !t.teacher_only})
                .map(t => {return { value: t.name, text: t.name }})
             post_tags.unshift({ value: null, text: '(no tag)' })
@@ -177,7 +183,7 @@ export default {
         },
     },
     async mounted() {
-        await this.$store.dispatch('setCurrentlyViewedPost', {'post_id': this.post_id});
+        await this.store.setCurrentlyViewedPost({'post_id': this.post_id});
         this.post_loaded = true;
     },
 }
