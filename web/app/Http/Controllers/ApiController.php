@@ -112,6 +112,10 @@ class ApiController extends Controller
         $search = $request->get('search');
 
         $posts = Post::where('course_id', $course_user->course_id)
+            ->with('comments')
+            ->with('course_user_post_last_read_flags', function($query) use ($course_user_id) {
+                $query->where('course_user_id', $course_user_id);
+            })
             ->orderBy('created_at', 'desc');
         if ($filter==='unread') {
             $fully_read_posts = DB::table('posts')
@@ -144,14 +148,10 @@ class ApiController extends Controller
         $posts = $posts
             ->get()
             ->map(function($post) use ($course_user_id) {
-                $post->makeHidden('readComments');
                 $post->makeHidden('comments'); // FIXME would be better to not get this from the DB in the first place...
                 $post->makeHidden('body'); // FIXME would be better to not get this from the DB in the first place...
                 $post->num_comments = $post->comments->count();
-                $post_last_read = CourseUserPostLastReadFlag
-                    ::where('post_id',$post->id)
-                    ->where('course_user_id',$course_user_id)
-                    ->first();
+                $post_last_read = $post->course_user_post_last_read_flags->first();
                 $unread_comments = $post->comments;
                 if ($post_last_read) {
                     $unread_comments = $unread_comments
@@ -170,7 +170,7 @@ class ApiController extends Controller
         $course_user_id = $course_user->id;
 
         $post = Post::where('id',$post_id)
-            ->with(['comments'])
+            ->with(['comments', 'comments.upvotes'])
             ->first();
         if ($post === null) {
             return response('Post not found.', 404);
