@@ -155,15 +155,26 @@ export default {
                                 icon="lock"
                             />
                         </div>
-                        <div v-if="post.num_unread_comments === 0">
-                            <div class="btn-group" role="group" :aria-label="post.num_comments + 'comments'">
-                                <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
+                        <div class="d-flex">
+                            <div class="me-1"
+                                 v-if="!post.has_response_by_instructor"
+                                 title="Awaiting instructor comment or endorsement"
+                            >
+                                <font-awesome-icon
+                                    class="unresponded-icon"
+                                    icon="question"
+                                ></font-awesome-icon>
                             </div>
-                        </div>
-                        <div v-if="post.num_unread_comments > 0">
-                            <div class="btn-group" role="group" :aria-label="post.num_unread_comments + ' unread comments'">
-                                <button type="button" class="btn btn-primary badge-unread" :title="post.num_unread_comments + ' unread comments'">{{ post.num_unread_comments }}</button>
-                                <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
+                            <div v-if="post.num_unread_comments === 0">
+                                <div class="btn-group" role="group" :aria-label="post.num_comments + 'comments'">
+                                    <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
+                                </div>
+                            </div>
+                            <div v-if="post.num_unread_comments > 0">
+                                <div class="btn-group" role="group" :aria-label="post.num_unread_comments + ' unread comments'">
+                                    <button type="button" class="btn btn-primary badge-unread" :title="post.num_unread_comments + ' unread comments'">{{ post.num_unread_comments }}</button>
+                                    <button type="button" class="btn badge-read" :title="post.num_comments + ' total comments'">{{ post.num_comments }}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,6 +196,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../sass/_variables.scss';
+
+.unresponded-icon {
+    color: $primary;
+}
 
 .app-post-list {
     background-color: $lightgray;
