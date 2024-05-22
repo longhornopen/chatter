@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,10 @@ class Post extends Model
         'edited_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'has_response_by_instructor'
+    ];
+
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
@@ -44,6 +49,28 @@ class Post extends Model
     public function course_user_post_last_read_flags(): HasMany
     {
         return $this->hasMany(CourseUserPostLastReadFlag::class);
+    }
+
+    public function hasResponseByInstructor(): Attribute
+    {
+        return Attribute::make(
+            get: function() {
+                if ($this->author_user_role === 'teacher') {
+                    // if a teacher made the post, they know about it
+                    return true;
+                }
+                if ($this->comments()->where('author_user_role', 'teacher')->count() > 0) {
+                    // if a teacher commented on the post, they know about it
+                    return true;
+                }
+                if ($this->comments()->where('endorsed', true)->count() > 0) {
+                    // if a teacher endorsed a comment in the post, they know about it
+                    return true;
+                }
+                return false;
+            }
+        );
+
     }
 
     public function toArray(): array
