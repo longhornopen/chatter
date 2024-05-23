@@ -41,6 +41,9 @@ export default {
         currently_viewed_post_id() {
             return this.store.currently_viewed_post?.id;
         },
+        user_is_teacher() {
+            return this.store.user.role === 'teacher';
+        },
     },
     methods: {
         set_post_sort_order(order) {
@@ -157,7 +160,7 @@ export default {
                         </div>
                         <div class="d-flex">
                             <div class="me-1"
-                                 v-if="!post.has_response_by_instructor"
+                                 v-if="user_is_teacher && !post.has_response_by_instructor"
                                  title="Awaiting instructor comment or endorsement"
                             >
                                 <font-awesome-icon
