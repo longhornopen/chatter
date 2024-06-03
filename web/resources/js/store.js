@@ -16,6 +16,7 @@ import {chatterApi} from './api'
 @property {string} body
 @property {boolean} pinned (boolean)
 @property {boolean} locked (boolean)
+@property {boolean} has_response_by_instructor (boolean)
 @property {string} created_at - date in ISO-8601 format
 @property {string} updated_at - date in ISO-8601 format
 
@@ -209,6 +210,7 @@ export const useMainStore = defineStore('main', {
       let comment1 = this.currently_viewed_comment_by_id(comment.id)
       if (comment1) {
         comment1.endorsed = endorsed
+        this.posts.find(p => p.id === comment.post_id).has_response_by_instructor = endorsed;
       }
     },
     async muteComment (payload) {
@@ -228,6 +230,9 @@ export const useMainStore = defineStore('main', {
       this.posts.find(p => p.id === comment.post_id).num_comments++;
       if (this.currently_viewed_post.id === comment.post_id) {
         this.currently_viewed_post.comments.push(comment)
+        if (comment.author_user_role == 'teacher') {
+          this.posts.find(p => p.id === comment.post_id).has_response_by_instructor = true;
+        }
       }
       return comment
     },
