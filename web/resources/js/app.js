@@ -28,7 +28,7 @@ import {
   faSearch,
   faSearchPlus,
   faChalkboardTeacher,
-  faConciergeBell,
+  faBell,
 } from '@fortawesome/free-solid-svg-icons'
 library.add(
   faCog,
@@ -52,7 +52,7 @@ library.add(
   faSearch,
   faSearchPlus,
   faChalkboardTeacher,
-  faConciergeBell,
+  faBell,
 );
 
 import PostDisplay from './components/PostDisplay.vue';
