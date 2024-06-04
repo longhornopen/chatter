@@ -165,7 +165,7 @@ export default {
                             >
                                 <font-awesome-icon
                                     class="unresponded-icon"
-                                    icon="question"
+                                    icon="concierge-bell"
                                 ></font-awesome-icon>
                             </div>
                             <div v-if="post.num_unread_comments === 0">
