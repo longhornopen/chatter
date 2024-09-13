@@ -191,6 +191,8 @@ class ApiController extends Controller
         $post_last_read->updated_at = new Carbon();
         $post_last_read->save();
 
+        $post->view_count = CourseUserPostLastReadFlag::where('post_id', $post_id)->count();
+
         return $post;
     }
 

@@ -232,9 +232,17 @@ export default {
                 <h5>Back</h5>
             </div>
             <div>
-                <h2>
-                    <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
-                </h2>
+                <div class="post-title-row d-flex justify-content-between">
+                    <h2>
+                        <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
+                    </h2>
+                    <div>
+                        <!-- badge showing number of viewers, with eye icon -->
+                        <span class="badge bg-dark">
+                            <font-awesome-icon icon="eye" /> {{ post.view_count }} people viewed this post
+                        </span>
+                    </div>
+                </div>
                 <div class="post-top-row">
                     <div>
                         <user-name
