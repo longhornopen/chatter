@@ -59,7 +59,7 @@ class ApiController extends Controller
     public function getCourse(Request $request, $course_id)
     {
         return Course::where('id', $course_id)
-            ->select(['id', 'name', 'close_date', 'post_tags'])
+            ->select(['id', 'name', 'close_date', 'post_tags', 'welcome_page'])
             ->firstOrFail();
     }
 
@@ -75,6 +75,9 @@ class ApiController extends Controller
         if ($request->has('post_tags')) {
             $course->post_tags = $request->input('post_tags');
         }
+        if ($request->has('welcome_page')) {
+            $course->welcome_page = $request->input('welcome_page');
+        }
         $course->save();
         return $course;
     }
@@ -84,7 +87,7 @@ class ApiController extends Controller
         $course_user = $this->getCourseUserFromSession($request, $course_id);
 
         $course = Course::where('id',$course_user->course_id)
-            ->select('id','name','close_date','post_tags')
+            ->select('id','name','close_date','post_tags','welcome_page')
             ->first();
         if (env('APP_HELP_URL')) {
             $course->help_url_text = env('APP_HELP_URL_TEXT', env('APP_HELP_URL'));

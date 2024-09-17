@@ -55,4 +55,17 @@ class Course extends Model
             JSON_THROW_ON_ERROR
         );
     }
+
+    public static function getDefaultWelcomePage()
+    {
+        return <<<MARKDOWN
+## Welcome to Chatter!
+
+Chatter is a discussion-board tool where students and instructors can communicate outside the classroom.
+
+Click a post to the left to read it and comment, or the 'Write a Post' button to start a new one!
+
+Check out the 'Help' icon, in the upper right, for more.
+MARKDOWN;
+    }
 }

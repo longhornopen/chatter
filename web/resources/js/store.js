@@ -36,7 +36,7 @@ import {chatterApi} from './api'
 export const useMainStore = defineStore('main', {
 
   state: () => ({
-    course: {},
+    course: {}, // FIXME is this unused?
     course_summary: {},
     app_settings: [],
     posts: [],

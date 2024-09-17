@@ -19,6 +19,7 @@ class DevSeeder extends Seeder
         DB::table('courses')->insert([
             'name'=>'Chatter test course',
             'post_tags'=>json_encode(Course::get_default_post_tags()),
+            'welcome_page'=>Course::getDefaultWelcomePage(),
         ]);
         DB::table('course_users')->insert([
             'course_id'=>1,

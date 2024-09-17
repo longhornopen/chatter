@@ -17,7 +17,10 @@ class LtiController extends Controller
         if ($tool->getLaunchType() === $tool::LAUNCH_TYPE_LAUNCH) {
             $course = Course::firstOrCreate(
                 ['lti_context_pk' => $tool->context->getRecordId()],
-                ['name' => $tool->context->title]
+                [
+                    'name' => $tool->context->title,
+                    'welcome_page' => Course::getDefaultWelcomePage(),
+                ]
             );
             $is_teacher = $tool->userResult->isAdmin() || $tool->userResult->isStaff();
             $course_user = CourseUser::firstOrCreate(

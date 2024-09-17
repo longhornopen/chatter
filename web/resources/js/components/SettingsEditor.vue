@@ -4,13 +4,26 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
 import { useMainStore } from '@/store'
+import WysiwygEditor from "./WysiwygEditor.vue";
+
+import { ref } from 'vue';
 
 export default {
     setup() {
         const store = useMainStore()
-        return { store }
+
+        const welcome_page_editor_visible = ref(false)
+        const course_welcome_page = ref(store.course_summary.welcome_page)
+        const course_welcome_page_save_state = ref('')
+
+        return {
+            store,
+            course_welcome_page,
+            welcome_page_editor_visible,
+            course_welcome_page_save_state,
+        }
     },
-    components: { Modal, VueDatePicker },
+    components: {WysiwygEditor, Modal, VueDatePicker },
     data () {
         return {
             user_name: '',
@@ -72,6 +85,13 @@ export default {
             window.addToast('Post tags saved.', 'success')
             this.course_post_tags_save_state = ''
         },
+        async save_course_welcome_page() {
+            this.course_welcome_page_save_state = 'pending'
+            this.course.welcome_page = this.$refs['welcome_page'].getContents()
+            await this.store.updateCourse({welcome_page: this.course.welcome_page})
+            window.addToast('Welcome page saved.', 'success')
+            this.course_welcome_page_save_state = ''
+        },
         add_post_tag() {
             this.post_tag_being_edited_posn = this.course_post_tags.length
             this.post_tag_being_edited = {
@@ -109,6 +129,8 @@ export default {
         this.course = await this.store.getCourse()
         this.course_close_datetime = this.course.close_date ? new Date(this.course.close_date) : null
         this.course_post_tags = this.course.post_tags ?? []
+        this.course_welcome_page = this.course.welcome_page ?? ''
+        this.welcome_page_editor_visible = true;
         this.edited_course_user_mail_digest_frequency_minutes = this.course_user_mail_digest_frequency_minutes;
     }
 }
@@ -272,6 +294,18 @@ export default {
                     :disabled="course_post_tags_save_state!=='enabled'"
                     @click="save_course_post_tags()"
                 ><font-awesome-icon v-if="course_post_tags_save_state==='pending'" icon="spinner" spin /> Save changes</button>
+            </div>
+
+            <br></br>
+            <div class="card mb-3" v-if="welcome_page_editor_visible">
+                <div class="card-body">
+                    <h3>Welcome Page</h3>
+                    <wysiwyg-editor ref="welcome_page" v-model="course_welcome_page"></wysiwyg-editor>
+                </div>
+                <button
+                    class="btn btn-primary"
+                    @click="save_course_welcome_page()"
+                ><font-awesome-icon v-if="course_welcome_page_save_state==='pending'" icon="spinner" spin /> Save changes</button>
             </div>
         </div>
     </div>
