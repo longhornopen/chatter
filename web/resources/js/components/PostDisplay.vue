@@ -239,7 +239,7 @@ export default {
                     <div>
                         <!-- badge showing number of viewers, with eye icon -->
                         <span class="badge bg-dark">
-                            <font-awesome-icon icon="eye" /> {{ post.view_count }} people viewed this post
+                            <font-awesome-icon icon="eye" /> {{ post.view_count }} {{ post.view_count===1 ? 'person' : 'people' }} viewed this post
                         </span>
                     </div>
                 </div>
