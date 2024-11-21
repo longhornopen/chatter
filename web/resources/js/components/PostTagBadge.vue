@@ -7,20 +7,14 @@ export default {
         return { store }
     },
     props: {
-        post_tag_name: {
+        post_tag_uuid: {
             type: String,
         },
-        post_tag: {
-            type: Object,
-        }
     },
     computed: {
         _post_tag() {
-            if (this.post_tag) {
-                return this.post_tag
-            }
             return this.store.course_summary.post_tags
-                .find(t => t.name === this.post_tag_name)
+                .find(t => t.uuid === this.post_tag_uuid)
         }
     },
 }

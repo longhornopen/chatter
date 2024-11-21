@@ -234,7 +234,7 @@ export default {
             <div>
                 <div class="post-title-row d-flex justify-content-between">
                     <h2>
-                        <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
+                        <post-tag-badge :post_tag_uuid="post.tag"/> {{ post.title }}
                     </h2>
                     <div>
                         <!-- badge showing number of viewers, with eye icon -->
