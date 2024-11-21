@@ -8,6 +8,12 @@ import WysiwygEditor from "./WysiwygEditor.vue";
 
 import { ref } from 'vue';
 
+function generateUUID() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
 export default {
     setup() {
         const store = useMainStore()
@@ -95,6 +101,7 @@ export default {
         add_post_tag() {
             this.post_tag_being_edited_posn = this.course_post_tags.length
             this.post_tag_being_edited = {
+                'uuid': generateUUID(),
                 'name':'label',
                 'bgcolor':this.post_tag_bgcolor_choices[0].value,
                 'fgcolor':'#FFFFFF',

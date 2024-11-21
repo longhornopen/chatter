@@ -25,14 +25,14 @@ export default {
             post_editor_visible: false,
             tag_editor_visible: false,
             edited_post_body: null,
-            edited_post_tag: null,
+            edited_post_tag_uuid: null,
             edited_tag: null,
             edit_save_pending: false,
             tag_save_pending: false,
             pin_pending: false,
             lock_pending: false,
             post_loaded: false,
-            post_tag: null,
+            post_tag_uuid: null,
         };
     },
     computed: {
@@ -119,14 +119,14 @@ export default {
             this.post_editor_visible = true;
             this.comment_editor_visible = false;
             this.edited_post_body = "" + this.post.body; //copy
-            this.edited_post_tag = this.post.tag;
+            this.edited_post_tag_uuid = this.post.tag;
         },
         close_post_editor() {
             this.$refs['abandon_post'].show();
         },
         handle_close_post_editor_ok() {
             this.edited_post_body = null;
-            this.edited_post_tag = null;
+            this.edited_post_tag_uuid = null;
             this.post_editor_visible = false;
             this.edited_tag = null;
             this.tag_editor_visible = false;
@@ -151,7 +151,7 @@ export default {
             await this.store.editPost({
                 post_id: this.post_id,
                 body: new_body,
-                tag: this.edited_post_tag,
+                tag: this.edited_post_tag_uuid,
             })
             this.post_editor_visible = false;
             this.edit_save_pending = false;
@@ -177,7 +177,7 @@ export default {
         get_tags_available_for_role(role) {
             let post_tags = this.store.course_summary.post_tags
                .filter(t => {return role === 'teacher' || !t.teacher_only})
-               .map(t => {return { value: t.name, text: t.name }})
+               .map(t => {return { value: t.uuid, text: t.name }})
             post_tags.unshift({ value: null, text: '(no tag)' })
             return post_tags;
         },
@@ -321,7 +321,7 @@ export default {
                     <fieldset v-bind:disabled="edit_save_pending">
                     <div>
                         <label for="post-tag">Tag post as:</label>
-                        <select class="form-select" v-model="edited_post_tag">
+                        <select class="form-select" v-model="edited_post_tag_uuid">
                             <option v-for="option in post_tag_options" :key="option.value" :value="option.value">
                                 {{ option.text }}
                             </option>
