@@ -142,7 +142,7 @@ export default {
                             <formatted-date :dateIso="post.created_at" italicized="true"></formatted-date>
                         </div>
                         <h5 class="post-title">
-                            <post-tag-badge :post_tag_name="post.tag"/> {{ post.title }}
+                            <post-tag-badge :post_tag_uuid="post.tag"/> {{ post.title }}
                         </h5>
                     </div>
                     <div class="post-btn-group">

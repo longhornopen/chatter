@@ -14,7 +14,7 @@ export default {
         return {
             title: '',
             body: '',
-            post_tag: null,
+            post_tag_uuid: null,
             anonymous: false,
             save_pending: false,
         };
@@ -27,7 +27,7 @@ export default {
             let user_is_teacher = this.store.user.role === 'teacher'
             let post_tags = this.store.course_summary.post_tags
                 .filter(t => {return user_is_teacher || !t.teacher_only})
-                .map(t => {return { value: t.name, text: t.name }})
+                .map(t => {return { value: t.uuid, text: t.name }})
             post_tags.unshift({ value: null, text: '(no tag)' })
             return post_tags;
         },
@@ -48,7 +48,7 @@ export default {
             let post = await this.store.createPost({
                 title: this.title,
                 body: this.body,
-                tag: this.post_tag,
+                tag: this.post_tag_uuid,
                 author_anonymous: this.anonymous,
             });
             this.save_pending = false;
@@ -121,7 +121,7 @@ export default {
             </div>
             <div class="form-group">
                 <label for="post-tag">Tag post as:</label>
-                <select class="form-select" v-model="post_tag">
+                <select class="form-select" v-model="post_tag_uuid">
                     <option v-for="option in post_tag_options" :key="option.value" :value="option.value">
                         {{ option.text }}
                     </option>

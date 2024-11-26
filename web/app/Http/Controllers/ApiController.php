@@ -108,6 +108,7 @@ class ApiController extends Controller
 
     public function getCoursePosts(Request $request, $course_id)
     {
+        $course = Course::findOrFail($course_id);
         $course_user = $this->getCourseUserFromSession($request, $course_id);
         $course_user_id = $course_user->id;
 
@@ -137,8 +138,10 @@ class ApiController extends Controller
         if ($search) {
             foreach (preg_split('/\s+/', $search) as $search_term) {
                 if (str_starts_with($search_term, 'tag:')) {
-                    $tag = explode('tag:', $search_term)[1];
-                    $posts = $posts->where('tag', $tag);
+                    $tag_name = explode('tag:', $search_term)[1];
+                    $tag = collect($course->post_tags)->firstWhere('name', $tag_name);
+                    $tag_uuid = $tag['uuid'];
+                    $posts = $posts->where('tag', $tag_uuid);
                 } else {
                     $posts = $posts->where(function ($query) use ($search_term) {
                         $query->where('title', 'like', '%' . $search_term . '%')
