@@ -21,7 +21,7 @@
         "laravel-vite-plugin": "^1.0.0",
         "pinia": "^2.1.7",
         "sass": "^1.35.2",
-        "vite": "^7.0.7",
+        "vite": "^7.0.8",
         "vue": "^3.1",
         "vue-router": "^4.0.0"
     }
