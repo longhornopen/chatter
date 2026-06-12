@@ -8,11 +8,11 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.5",
+        "laravel/tinker": "^3.00",
         "laravel/ui": "^4.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "longhornopen/laravel-celtic-lti": "^1.1.1",
@@ -21,11 +21,11 @@
         "sentry/sentry-laravel": "^4.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.13",
         "fakerphp/faker": "^1.9.1",
+        "fruitcake/laravel-debugbar": "^4.0",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^12.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "config": {
